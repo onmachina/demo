@@ -4,6 +4,7 @@ import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupWalletConnect } from "@near-wallet-selector/wallet-connect";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { distinctUntilChanged, map } from "rxjs";
+import * as nearAPI from 'near-api-js';
 
 import { Loading } from "../components/Loading";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
@@ -18,6 +19,7 @@ export const WalletSelectorContextProvider = ({ children }) => {
   const [selector, setSelector] = useState(null);
   const [modal, setModal] = useState(null);
   const [accounts, setAccounts] = useState([]);
+  const [authKey, setAuthKey] = useState(null);
 
   const init = useCallback(async () => {
     const _selector = await setupWalletSelector({
@@ -50,6 +52,56 @@ export const WalletSelectorContextProvider = ({ children }) => {
     setModal(_modal);
   }, []);
 
+
+  useEffect(() => {
+
+    const fetchCredentials = async () => {
+
+      const networkId = 'testnet';
+
+      const config = {
+        networkId,
+        keyStore: new nearAPI.keyStores.BrowserLocalStorageKeyStore(),
+        nodeUrl: 'https://rpc.testnet.near.org',
+      };
+
+      const near = await nearAPI.connect(config);
+      const signer = near.connection.signer;
+      const signerPublicKey = (
+        await signer.getPublicKey(accountId, config.networkId)
+      ).toString();
+
+      const account = new nearAPI.Account(near.connection, accountId);
+
+      const nonce = (await account.getAccessKeys())
+        .find((k) => k.public_key === signerPublicKey)
+        .access_key.nonce.toString();
+
+      const accountData = Buffer.from(JSON.stringify({ id: accountId, nonce }));
+      const signatureData = await signer.signMessage(
+        accountData,
+        accountId,
+        networkId
+      );
+
+      const publicKey = Buffer.from(signatureData.publicKey.toString());
+      const signature = Buffer.from(signatureData.signature);
+
+      const credentials = Buffer.from(
+        JSON.stringify({
+          account: accountData.toString('base64'),
+          publicKey: publicKey.toString('base64'),
+          signature: signature.toString('base64'),
+        })
+      ).toString('base64');
+
+      console.log('credentials',credentials);
+      setAuthKey(credentials);
+    }
+
+    fetchCredentials();
+  }, [accounts]);
+  
   useEffect(() => {
     init().catch((err) => {
       console.error(err);
@@ -97,6 +149,7 @@ export const WalletSelectorContextProvider = ({ children }) => {
         modal,
         accounts,
         accountId,
+        authKey
       }}
     >
       {children}

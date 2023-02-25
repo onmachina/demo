@@ -1,6 +1,6 @@
 import { HiOutlineDocument } from "react-icons/hi2";
-import { formatDate } from "@/lib/helper"
-import { formatFileSize } from "@/lib/helper";
+import { formatDate } from "../../../lib/utils.js"
+import { formatFileSize } from "../../../lib/utils.js";
 
 export default function ObjectTable({objects}) {
 

@@ -2,6 +2,7 @@ import OnmachinaLogo from "./svgs/OnmachinaLogo"
 import PrimaryNavigation from "./PrimaryNavigation"
 
 export default function Layout({children}) {
+
     return (
         <div className="flex h-screen">
             <div className="pt-4 w-[6em] h-full bg-gray-100 border-r border-gray-200 flex flex-col items-center">

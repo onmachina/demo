@@ -14,5 +14,8 @@ export default defineConfig({
       },
     },
     cors:false,
+  },
+  build: {
+    target: 'esnext'
   }
 })
