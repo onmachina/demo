@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Root from './routes/root';
-import KeyStore from './routes/keystore';
-import Upload, { action as uploadAction } from './routes/uploadObject';
-import DeleteObject, { loader as deleteLoader, action as deleteAction } from './routes/deleteObject';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+// Near wallet related imports
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import { setupModal } from '@near-wallet-selector/modal-ui';
 import { setupNearWallet } from '@near-wallet-selector/near-wallet';
@@ -12,13 +10,15 @@ import { Buffer } from 'buffer';
 import '@near-wallet-selector/modal-ui/styles.css';
 import * as nearAPI from 'near-api-js';
 
+// Imports for elements used for routes
+import Root from './routes/root';
+import Upload, { action as uploadAction } from './routes/uploadObject';
+import DeleteObject, { loader as deleteLoader, action as deleteAction } from './routes/deleteObject';
 import Details, { loader as detailsLoader } from './routes/objectDetails';
-
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
-
 import ContainerPage, { loader as containerLoader } from './routes/container';
-('./routes/container');
+
+// Styles (index.css handles tailwindcss imports)
+import './index.css';
 
 // buffer pollyfill needed by Near Wallet Selector
 globalThis.Buffer = Buffer;
@@ -119,7 +119,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: '/keystore', element: <KeyStore /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
