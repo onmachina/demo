@@ -1,50 +1,65 @@
-import { HiOutlineDocument } from "react-icons/hi2";
-import { formatDate } from "../../../lib/utils.js"
-import { formatFileSize } from "../../../lib/utils.js";
+import { HiOutlineDocument, HiOutlineTrash } from 'react-icons/hi2';
+import { formatDate } from '../../../lib/utils.js';
+import { formatFileSize } from '../../../lib/utils.js';
+import { Link } from 'react-router-dom';
 
-export default function ObjectTable({objects}) {
-
-    return (
-        <table className="min-w-full table-auto">
-            <thead>
-                <tr className="bg-gray-800">
-                    <th className="px-16 py-2">
-                        <span className="text-gray-200">File Name</span>
-                    </th>
-                    <th className="px-16 py-2">
-                        <span className="text-gray-200">Date Modified</span>
-                    </th>  
-                    <th className="px-16 py-2">
-                        <span className="text-gray-200">Size</span>
-                    </th>                                          
-                    <th className="px-16 py-2">
-                        <span className="text-gray-200">Type</span>
-                    </th>
-                </tr>                    
-            </thead>
-            <tbody>
-                {objects.map((object, index) => <Row {...object} key={index}/>)}
-            </tbody>
-        </table>
-    )
+export default function ObjectTable({ objects, selectedObject }) {
+  return (
+    <table className="min-w-full table-auto">
+      <thead>
+        <tr className="bg-gray-800">
+          <th className="px-16 py-2">
+            <span className="text-gray-200">File Name</span>
+          </th>
+          <th className="px-16 py-2">
+            <span className="text-gray-200">Date Modified</span>
+          </th>
+          <th className="px-16 py-2">
+            <span className="text-gray-200">Size</span>
+          </th>
+          <th className="px-16 py-2">
+            <span className="text-gray-200">Type</span>
+          </th>
+          <th className="px-16 py-2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {objects.map((object, index) => {
+          const selected = object.name === selectedObject;
+          return <Row {...object} key={index} selected={selected} />;
+        })}
+      </tbody>
+    </table>
+  );
 }
 
-function Row({hash, last_modified, bytes, name, content_type}){
-    return (
-        <tr className="bg-gray-50 text-center">
-            <td className="px-16 py-2 flex flex-row items-center">
-                <HiOutlineDocument size={22} />
-                <span className="text-center ml-2 font-semibold">{name || "Unknown"}</span>
-            </td>
-            <td className="px-16 py-2">
-                <span>{formatDate(last_modified)}</span>
-            </td>
-            <td className="px-16 py-2">
-                <span>{formatFileSize(bytes) || "0"}</span>
-            </td>
-            <td className="px-16 py-2">
-                <span>{content_type || "Unknown"}</span>
-            </td>
-        </tr>
-    )
+function Row({ last_modified, bytes, name, content_type, selected }) {
+  let selectedClass = selected ? 'bg-cyan-100' : 'bg-gray-50';
+
+  return (
+    <tr className={`text-center ${selectedClass}`}>
+      <td className="px-3 py-2 flex flex-row items-center">
+        <Link to={`${name}/`}>
+          <HiOutlineDocument size={22} />
+        </Link>
+        <Link to={`${name}/`}>
+          <span className="text-center ml-2 font-semibold">{name || 'Unknown'}</span>
+        </Link>
+      </td>
+      <td className="pl-10 py-2">
+        <span>{formatDate(last_modified)}</span>
+      </td>
+      <td className="pl-10 py-2">
+        <span>{formatFileSize(bytes) || '0'}</span>
+      </td>
+      <td className="pl-10 py-2">
+        <span>{content_type || 'Unknown'}</span>
+      </td>
+      <td className="text-right pr-4 text-red-600">
+        <Link to={`${name}/delete`}>
+          <HiOutlineTrash size={22} className="inline-block" />
+        </Link>
+      </td>
+    </tr>
+  );
 }

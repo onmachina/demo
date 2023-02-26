@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.jsx"
   },
   "dependencies": {
     "@near-wallet-selector/core": "^7.8.2",
@@ -15,8 +16,14 @@
     "@near-wallet-selector/wallet-connect": "^7.8.2",
     "bn.js": "^5.2.1",
     "buffer": "^6.0.3",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
     "jsonwebtoken": "^9.0.0",
     "near-api-js": "^1.1.0",
+    "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",

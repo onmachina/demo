@@ -95,7 +95,6 @@ export const WalletSelectorContextProvider = ({ children }) => {
         })
       ).toString('base64');
 
-      console.log('credentials',credentials);
       setAuthKey(credentials);
     }
 
@@ -120,8 +119,6 @@ export const WalletSelectorContextProvider = ({ children }) => {
         distinctUntilChanged()
       )
       .subscribe((nextAccounts) => {
-        console.log("Accounts Update", nextAccounts);
-
         setAccounts(nextAccounts);
       });
 
