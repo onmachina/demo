@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, useLoaderData, Link, useNavigate, redirect, Form, Outlet } from 'react-router-dom';
+import { useParams, useLoaderData, Link, useNavigate, Outlet } from 'react-router-dom';
 import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
 
@@ -44,6 +44,7 @@ export default function Details({ authKey }) {
             style={{ maxWidth: '400px', maxHeight: '300px' }}
             id="preview-image"
             src="/images/png.png"
+            alt={`preview for the object ${object}`}
           />
           <Link to="delete" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
             Delete

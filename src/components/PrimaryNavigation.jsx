@@ -1,6 +1,6 @@
 import { HiOutlineSquares2X2, HiOutlineCube, HiOutlineCog } from 'react-icons/hi2';
 
-export default function Nav({ props }) {
+export default function Nav() {
   return (
     <ul className="mt-8 text-gray-500 text-sm">
       <li>

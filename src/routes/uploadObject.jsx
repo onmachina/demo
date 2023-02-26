@@ -1,11 +1,11 @@
-import { useParams, Link, redirect, Form } from 'react-router-dom';
+import { useParams, redirect, Link, Form } from 'react-router-dom';
 
 export default function Upload({ authKey }) {
   let { container } = useParams();
 
   return (
     <div className="container mx-auto border border-cyan-300 bg-cyan-100 p-5 mb-5">
-      <h2 className="border-b pb-2 mb-2 border-cyan-300">Upload a new object to "{container}"</h2>
+      <h2 className="border-b pb-2 mb-2 border-cyan-300">Upload a new object to &quot;{container}&quot;</h2>
       <Form method="post" encType="multipart/form-data">
         <input name="file" type="file" />
         <input name="token" type="hidden" defaultValue={authKey} />
@@ -13,7 +13,7 @@ export default function Upload({ authKey }) {
           Upload
         </button>
       </Form>
-      {/* <Link to={`/${container}`}>Close</Link> */}
+      <Link to={`/${container}`}>Close</Link>
     </div>
   );
 }
