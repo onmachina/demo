@@ -1,6 +1,6 @@
 import { useParams, useLoaderData, Link, redirect, Form } from 'react-router-dom';
 
-export default function Details({ authKey }) {
+export default function DeleteObject({ authKey }) {
   let { container, object } = useParams();
   const objectData = useLoaderData();
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;

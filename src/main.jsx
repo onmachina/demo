@@ -13,8 +13,13 @@ import * as nearAPI from 'near-api-js';
 // Imports for elements used for routes
 import Root from './routes/root';
 import Upload, { action as uploadAction } from './routes/uploadObject';
-import DeleteObject, { loader as deleteLoader, action as deleteAction } from './routes/deleteObject';
+import DeleteObject, { loader as deleteObjectLoader, action as deleteObjectAction } from './routes/deleteObject';
+import DeleteContainer, {
+  loader as deleteContainerLoader,
+  action as deleteContainerAction,
+} from './routes/deleteContainer';
 import Details, { loader as detailsLoader } from './routes/objectDetails';
+import AccountPage, { loader as accountLoader } from './routes/account';
 import ContainerPage, { loader as containerLoader } from './routes/container';
 
 // Styles (index.css handles tailwindcss imports)
@@ -84,7 +89,14 @@ const x_auth_token = response.headers.get('x-auth-token');
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
+    element: (
+      <Root>
+        <AccountPage />
+      </Root>
+    ),
+    loader: async ({ params }) => {
+      return accountLoader(params, x_auth_token);
+    },
     children: [
       {
         path: ':container',
@@ -99,6 +111,14 @@ const router = createBrowserRouter([
             element: <Upload authKey={x_auth_token} />,
           },
           {
+            path: 'delete',
+            action: deleteContainerAction,
+            loader: async ({ params }) => {
+              return deleteContainerLoader(params, x_auth_token);
+            },
+            element: <DeleteContainer authKey={x_auth_token} />,
+          },
+          {
             path: ':object',
             element: <Details authKey={x_auth_token} />,
             loader: async ({ params }) => {
@@ -108,10 +128,10 @@ const router = createBrowserRouter([
               {
                 path: 'delete',
                 loader: async ({ params }) => {
-                  return deleteLoader(params, x_auth_token);
+                  return deleteObjectLoader(params, x_auth_token);
                 },
                 element: <DeleteObject authKey={x_auth_token} />,
-                action: deleteAction,
+                action: deleteObjectAction,
               },
             ],
           },

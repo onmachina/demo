@@ -1,9 +1,8 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 import '@near-wallet-selector/modal-ui/styles.css';
 import Layout from '../components/Layout';
 
-export default function Root() {
+export default function Root({ children }) {
   return (
     // <div>
     //     <h1>OnMachina Demo</h1>
@@ -22,8 +21,6 @@ export default function Root() {
     //     <Outlet />
 
     // </div>
-    <Layout>
-      <Outlet />
-    </Layout>
+    <Layout>{children}</Layout>
   );
 }
