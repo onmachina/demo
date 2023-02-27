@@ -1,4 +1,4 @@
-import { HiOutlineDocument, HiOutlineTrash } from 'react-icons/hi2';
+import { HiOutlineCube, HiOutlineTrash } from 'react-icons/hi2';
 import { formatDate } from '../../../lib/utils.js';
 import { formatFileSize } from '../../../lib/utils.js';
 import { Link } from 'react-router-dom';
@@ -41,7 +41,7 @@ function Row({ last_modified, bytes, name, count, selected }) {
     <tr className={`text-center ${selectedClass}`}>
       <td className="px-3 py-2 flex flex-row items-center">
         <Link to={`${name}/`}>
-          <HiOutlineDocument size={22} />
+          <HiOutlineCube size={22} />
         </Link>
         <Link to={`${name}/`}>
           <span className="text-center ml-2 font-semibold">{name || 'Unknown'}</span>

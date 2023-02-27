@@ -1,4 +1,5 @@
 import { HiOutlineSquares2X2, HiOutlineCube, HiOutlineCog } from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
 
 export default function Nav() {
   return (
@@ -12,12 +13,12 @@ export default function Nav() {
         </a>
       </li>
       <li>
-        <a href="#">
+        <Link to="/">
           <div className="bg-white rounded-full aspect-square w-10 flex justify-center items-center m-auto mt-8 mb-1 border border">
             <HiOutlineCube size={22} />
           </div>
           <span className="block text-center mb-8">Containers</span>
-        </a>
+        </Link>
       </li>
       <li>
         <a href="#">

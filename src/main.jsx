@@ -12,6 +12,7 @@ import * as nearAPI from 'near-api-js';
 
 // Imports for elements used for routes
 import Root from './routes/root';
+import AccountPage from './routes/account';
 import Upload, { action as uploadAction } from './routes/uploadObject';
 import DeleteObject, { loader as deleteObjectLoader, action as deleteObjectAction } from './routes/deleteObject';
 import DeleteContainer, {
@@ -19,7 +20,7 @@ import DeleteContainer, {
   action as deleteContainerAction,
 } from './routes/deleteContainer';
 import Details, { loader as detailsLoader } from './routes/objectDetails';
-import AccountPage, { loader as accountLoader } from './routes/account';
+import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
 
 // Styles (index.css handles tailwindcss imports)
@@ -37,12 +38,10 @@ const modal = setupModal(selector, {
   contractId: 'auth.onmachina.testnet',
 });
 
+if (!selector.isSignedIn()) modal.show();
+
 const selectorWallet = await selector.wallet();
 const selectorAccount = (await selectorWallet.getAccounts()).shift(); // Get the 1st account
-
-if (!selectorAccount) {
-  modal.show();
-}
 
 const accountId = selectorAccount.accountId;
 const networkId = 'testnet';
@@ -88,14 +87,22 @@ const x_auth_token = response.headers.get('x-auth-token');
 
 const router = createBrowserRouter([
   {
+    path: '/account/',
+    element: (
+      <Root>
+        <AccountPage wallet={selectorWallet} />
+      </Root>
+    ),
+  },
+  {
     path: '/',
     element: (
       <Root>
-        <AccountPage />
+        <ShardPage />
       </Root>
     ),
     loader: async ({ params }) => {
-      return accountLoader(params, x_auth_token);
+      return shardLoader(params, x_auth_token);
     },
     children: [
       {
