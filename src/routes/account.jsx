@@ -1,4 +1,4 @@
-export default function AccountPage({ wallet }) {
+export default function AccountPage({ wallet, accountId }) {
   const handleSignOut = () => {
     wallet.signOut();
   };
@@ -7,7 +7,7 @@ export default function AccountPage({ wallet }) {
     <div>
       <h2>Account Page</h2>
       <a href="#" onClick={handleSignOut}>
-        Logout
+        Logout of {accountId}
       </a>
     </div>
   );

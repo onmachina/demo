@@ -1,6 +1,7 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
 import { useLoaderData, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { getActiveAccount } from '@near-wallet-selector/core';
 
 export default function AccountPage() {
   const containers = useLoaderData();
@@ -34,14 +35,16 @@ export default function AccountPage() {
   return <Outlet />;
 }
 
-export async function loader(params, x_auth_token) {
-  const req = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/?format=json`, {
+export async function loader(params, accountId, x_auth_token) {
+
+
+  const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/?format=json`, {
     method: 'GET',
     headers: {
       'x-auth-token': x_auth_token,
     },
   });
   const containers = await req.json();
-  console.log(x_auth_token);
+  
   return containers;
 }

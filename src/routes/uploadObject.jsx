@@ -1,6 +1,6 @@
 import { useParams, redirect, Link, Form } from 'react-router-dom';
 
-export default function Upload({ authKey }) {
+export default function Upload({ accountId, authKey }) {
   let { container } = useParams();
 
   return (
@@ -9,6 +9,7 @@ export default function Upload({ authKey }) {
       <Form method="post" encType="multipart/form-data">
         <input name="file" type="file" />
         <input name="token" type="hidden" defaultValue={authKey} />
+        <input name="accountId" type="hidden" defaultValue={accountId} />
         <button className="px-4 py-2 font-semibold text-sm border border-cyan-300 bg-cyan-200 rounded-full shadow-sm">
           Upload
         </button>
@@ -26,7 +27,7 @@ export async function action({ request, params }) {
 }
 
 async function uploadFile(container, upload) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/${container}/${upload.file.name}`, {
+  const res = await fetch(`https://api.testnet.onmachina.io/v1/${upload.accountId}/${container}/${upload.file.name}`, {
     // Your POST endpoint
     method: 'PUT',
     headers: {

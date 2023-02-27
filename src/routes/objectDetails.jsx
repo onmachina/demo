@@ -3,7 +3,7 @@ import { useParams, useLoaderData, Link, useNavigate, Outlet } from 'react-route
 import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
 
-export default function Details({ authKey }) {
+export default function Details({ accountId, authKey }) {
   let { container, object } = useParams();
   const objectData = useLoaderData();
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
@@ -11,8 +11,8 @@ export default function Details({ authKey }) {
 
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
-    const fetchIamage = async () => {
-      const response = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/${container}/${object}`, {
+    const fetchImage = async () => {
+      const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
         method: 'GET',
         headers: {
           'x-auth-token': authKey,
@@ -24,7 +24,7 @@ export default function Details({ authKey }) {
       // Set the image src to the object URL.
       previewImage.src = objectUrl;
     };
-    if (fileType === 'image/jpeg' || fileType === 'image/png') fetchIamage();
+    if (fileType === 'image/jpeg' || fileType === 'image/png') fetchImage();
   }, [object]);
 
   UseEscape(() => {
@@ -56,9 +56,9 @@ export default function Details({ authKey }) {
   );
 }
 
-export async function loader(params, x_auth_token) {
+export async function loader(params, accountId, x_auth_token) {
   const response = await fetch(
-    `https://api.testnet.onmachina.io/v1/toddmorey.testnet/${params.container}/${params.object}`,
+    `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
     {
       method: 'HEAD',
       headers: {

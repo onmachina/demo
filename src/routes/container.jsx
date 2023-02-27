@@ -31,8 +31,8 @@ export default function ContainerPage() {
   );
 }
 
-export async function loader(params, x_auth_token) {
-  const req = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/${params.container}/?format=json`, {
+export async function loader(params, accountId, x_auth_token) {
+  const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
     method: 'GET',
     headers: {
       'x-auth-token': x_auth_token,

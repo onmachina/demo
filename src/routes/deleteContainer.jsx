@@ -1,8 +1,10 @@
 import { useParams, useLoaderData, Link, redirect, Form } from 'react-router-dom';
 
-export default function DeleteContainer({ authKey }) {
+export default function DeleteContainer({ accountId, authKey }) {
   let { container } = useParams();
   const containerData = useLoaderData();
+  const objectCount = containerData.find((obj) => obj.name === 'x-container-object-count').value;
+  const byteCount = containerData.find((obj) => obj.name === 'x-container-bytes-used').value;
   //   const fileType = containerData.find((obj) => obj.name === 'content-type').value;
   //   const fileSize = containerData.find((obj) => obj.name === 'content-length').value;
 
@@ -12,11 +14,12 @@ export default function DeleteContainer({ authKey }) {
         <div className="drop-shadow-xl border border-red-400 bg-red-100 p-5 mb-5">
           <h2 className="border-b pb-2 mb-2 border-red-400">Delete {container}</h2>
           <p>
-            Are you sure you want to delete the container <strong>{container}</strong>? It contains ____ objects
-            totalling ____ in data. This action cannot be undone.
+            Are you sure you want to delete the container <strong>{container}</strong>? It contains {objectCount} objects
+            totalling {byteCount} bytes in data. This action cannot be undone.
           </p>
           <Form method="POST" action={`/${container}/delete/`}>
             <input name="token" type="hidden" defaultValue={authKey} />
+            <input name="accountId" type="hidden" defaultValue={accountId} />
             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
               Yes, Delete
             </button>
@@ -28,8 +31,8 @@ export default function DeleteContainer({ authKey }) {
   );
 }
 
-export async function loader(params, x_auth_token) {
-  const response = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/${params.container}`, {
+export async function loader(params, accountId, x_auth_token) {
+  const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}`, {
     method: 'HEAD',
     headers: {
       'x-auth-token': x_auth_token,
@@ -45,12 +48,13 @@ export async function loader(params, x_auth_token) {
 export async function action({ request, params }) {
   const formData = await request.formData();
   const token = Object.fromEntries(formData).token;
-  await deleteContainer(params.container, token);
+  const accountId = Object.fromEntries(formData).accountId;
+  await deleteContainer(params.container, accountId, token);
   return redirect(`/`);
 }
 
-async function deleteContainer(container, token) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/${container}/`, {
+async function deleteContainer(container, accountId, token) {
+  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/`, {
     method: 'DELETE',
     headers: {
       'x-auth-token': token,

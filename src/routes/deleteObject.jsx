@@ -1,6 +1,6 @@
 import { useParams, useLoaderData, Link, redirect, Form } from 'react-router-dom';
 
-export default function DeleteObject({ authKey }) {
+export default function DeleteObject({ accountId, authKey }) {
   let { container, object } = useParams();
   const objectData = useLoaderData();
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
@@ -18,6 +18,7 @@ export default function DeleteObject({ authKey }) {
             Are you sure you want to delete the file {container}/{object}? This action cannot be undone.
           </p>
           <Form method="POST" action={`/${container}/${object}/delete/`}>
+            <input name="accountId" type="hidden" defaultValue={accountId} />
             <input name="token" type="hidden" defaultValue={authKey} />
             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
               Yes, Delete
@@ -30,9 +31,9 @@ export default function DeleteObject({ authKey }) {
   );
 }
 
-export async function loader(params, x_auth_token) {
+export async function loader(params, accountId, x_auth_token) {
   const response = await fetch(
-    `https://api.testnet.onmachina.io/v1/toddmorey.testnet/${params.container}/${params.object}`,
+    `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
     {
       method: 'HEAD',
       headers: {
@@ -50,12 +51,13 @@ export async function loader(params, x_auth_token) {
 export async function action({ request, params }) {
   const formData = await request.formData();
   const token = Object.fromEntries(formData).token;
-  await deleteFile(params.container, params.object, token);
+  const accountId = Object.fromEntries(formData).accountId;
+  await deleteFile(params.container, params.object, accountId, token);
   return redirect(`/${params.container}`);
 }
 
-async function deleteFile(container, object, token) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/toddmorey.testnet/${container}/${object}`, {
+async function deleteFile(container, object, accountId, token) {
+  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
     method: 'DELETE',
     headers: {
       'x-auth-token': token,
