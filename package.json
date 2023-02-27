@@ -10,10 +10,14 @@
     "lint": "eslint . --ext .js,.jsx"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@near-wallet-selector/core": "^7.8.2",
     "@near-wallet-selector/modal-ui": "^7.8.2",
     "@near-wallet-selector/near-wallet": "^7.8.2",
     "@near-wallet-selector/wallet-connect": "^7.8.2",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-inject": "^5.0.3",
     "bn.js": "^5.2.1",
     "buffer": "^6.0.3",
     "eslint": "^8.35.0",
@@ -28,6 +32,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.1",
+    "rollup-plugin-polyfill-node": "^0.12.0",
     "util": "^0.12.5"
   },
   "devDependencies": {
