@@ -6,7 +6,7 @@ This is a simple react demo application of a web client built with OnMachina Dec
 - You will need a Near Protocol testnet account. You can create one at https://testnet.mynearwallet.com/
 - Depending on when you test, your testnet account may need to be allowed into the private beta. Contact the OnMachina Association team directly to request this
 - To run locally, you will also need npm working
-- You may also be able to visit https://demoui.onmachina.io  
+- You may also be able to visit https://demo.onmachina.io  
     **Note:** this URL is not currently managed as a production-level resource so may not be available at all times
 
 # Local install instructions
