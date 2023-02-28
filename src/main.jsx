@@ -20,6 +20,7 @@ import AddContainer, { action as addContainerAction } from './routes/createConta
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
+import ShardList from './routes/shardList';
 
 nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
   const router = createBrowserRouter([
@@ -42,6 +43,10 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
         return shardLoader(params, accountId, x_auth_token);
       },
       children: [
+        {
+          path: 'shard-list',
+          element: <ShardList />,
+        },
         {
           path: 'new-container',
           element: <AddContainer accountId={accountId} authKey={x_auth_token} />,

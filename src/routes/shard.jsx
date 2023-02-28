@@ -1,12 +1,13 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
-import { useLoaderData, Outlet, useNavigate, useParams } from 'react-router-dom';
-import { getActiveAccount } from '@near-wallet-selector/core';
+import { useLoaderData, Outlet, useNavigate, useParams, useLocation } from 'react-router-dom';
 
 export default function AccountPage() {
   const containers = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
+  const location = useLocation();
+  const path = location.pathname;
 
   const selectedObject = params.object;
 
@@ -14,7 +15,7 @@ export default function AccountPage() {
     navigate('new-container');
   };
 
-  if (!params.container)
+  if (!params.container && !path.includes('shard-list'))
     return (
       <>
         <main className="container mx-auto">
@@ -26,7 +27,7 @@ export default function AccountPage() {
               className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm"
               onClick={handleAddContainer}
             >
-              <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
+              <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container {location.pathname}
             </button>
           </div>
           <ContainerTable containers={containers} />
