@@ -1,4 +1,4 @@
-import Logo from './svgs/OnmachinaLogo.jsx';
+import Logo from './svgs/OnMachinaLogo.jsx';
 import PrimaryNavigation from './PrimaryNavigation';
 import AccountBar from './AccountBar.jsx';
 
