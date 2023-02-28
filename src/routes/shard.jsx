@@ -10,8 +10,8 @@ export default function AccountPage() {
 
   const selectedObject = params.object;
 
-  const handleUpload = () => {
-    navigate('upload');
+  const handleAddContainer = () => {
+    navigate('new-container');
   };
 
   if (!params.container)
@@ -22,7 +22,10 @@ export default function AccountPage() {
             <h2 className="mr-4">
               {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
             </h2>
-            <button className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm" onClick={handleUpload}>
+            <button
+              className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm"
+              onClick={handleAddContainer}
+            >
               <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
             </button>
           </div>
@@ -36,8 +39,6 @@ export default function AccountPage() {
 }
 
 export async function loader(params, accountId, x_auth_token) {
-
-
   const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/?format=json`, {
     method: 'GET',
     headers: {
@@ -45,6 +46,6 @@ export async function loader(params, accountId, x_auth_token) {
     },
   });
   const containers = await req.json();
-  
+
   return containers;
 }
