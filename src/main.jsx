@@ -44,7 +44,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
       children: [
         {
           path: 'new-container',
-          element: <AddContainer />,
+          element: <AddContainer accountId={accountId} authKey={x_auth_token} />,
           action: addContainerAction,
         },
         {
