@@ -1,13 +1,23 @@
 import NearLogo from '../assets/near-logo.png';
+import UseEscape from '../hooks/useEscape';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function AccountCard({ wallet, accountId }) {
+  const navigate = useNavigate();
+
   const handleSignOut = () => {
     wallet.signOut();
   };
 
+  UseEscape(() => {
+    navigate(`/`);
+  });
+
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <div className="flex justify-end px-4 pt-4">Close</div>
+      <div className="flex justify-end px-4 pt-4">
+        <Link to="/">Close</Link>
+      </div>
       <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={NearLogo} alt="Bonnie image" />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{accountId}</h5>
