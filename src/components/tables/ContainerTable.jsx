@@ -54,7 +54,7 @@ function Row({ last_modified, bytes, name, count, selected }) {
         <span>{formatFileSize(bytes) || '0'}</span>
       </td>
       <td className="pl-10 py-2">
-        <span>{count || 'Unknown'}</span>
+        <span>{count || '0'}</span>
       </td>
       <td className="text-right pr-4 text-red-600">
         <Link to={`${name}/delete`}>
