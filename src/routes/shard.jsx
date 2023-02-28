@@ -27,7 +27,7 @@ export default function AccountPage() {
               className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm"
               onClick={handleAddContainer}
             >
-              <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container {location.pathname}
+              <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
             </button>
           </div>
           <ContainerTable containers={containers} />
