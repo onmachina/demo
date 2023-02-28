@@ -2,7 +2,7 @@ import React from 'react';
 import '@near-wallet-selector/modal-ui/styles.css';
 import Layout from '../components/Layout';
 
-export default function Root({ children }) {
+export default function Root({ wallet, accountId, children }) {
   return (
     // <div>
     //     <h1>OnMachina Demo</h1>
@@ -21,6 +21,8 @@ export default function Root({ children }) {
     //     <Outlet />
 
     // </div>
-    <Layout>{children}</Layout>
+    <Layout wallet={wallet} accountId={accountId}>
+      {children}
+    </Layout>
   );
 }

@@ -26,7 +26,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
     {
       path: '/account/',
       element: (
-        <Root>
+        <Root wallet={selectorWallet} accountId={accountId}>
           <AccountPage wallet={selectorWallet} accountId={accountId} />
         </Root>
       ),
@@ -34,7 +34,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
     {
       path: '/',
       element: (
-        <Root>
+        <Root wallet={selectorWallet} accountId={accountId}>
           <ShardPage />
         </Root>
       ),
