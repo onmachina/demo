@@ -40,13 +40,22 @@ export default function AccountPage() {
 }
 
 export async function loader(params, accountId, x_auth_token) {
-  const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/?format=json`, {
+  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/?format=json`, {
     method: 'GET',
     headers: {
       'x-auth-token': x_auth_token,
     },
   });
-  const containers = await req.json();
+
+  // handle the error if an account isn't found
+  if (!res.ok) {
+    throw new Response('', {
+      status: 404,
+      statusText: 'Not Found',
+    });
+  }
+
+  const containers = await res.json();
 
   return containers;
 }

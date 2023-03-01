@@ -21,6 +21,7 @@ import AddContainer, { action as addContainerAction } from './routes/createConta
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 import ShardList from './routes/shardList';
+import WaitingCard from './components/WaitingCard';
 
 nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
   const router = createBrowserRouter([
@@ -39,6 +40,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           <ShardPage />
         </Root>
       ),
+      errorElement: <WaitingCard wallet={selectorWallet} accountId={accountId} />,
       loader: async ({ params }) => {
         return shardLoader(params, accountId, x_auth_token);
       },
