@@ -40,7 +40,7 @@ function Row({ last_modified, bytes, name, count, selected }) {
   return (
     <tr className={`text-center ${selectedClass}`}>
       <td className="px-3 py-2 flex flex-row items-center">
-        <Link to={`${name}/`}>
+        <Link className="text-sky-400" to={`${name}/`}>
           <HiOutlineCube size={22} />
         </Link>
         <Link to={`${name}/`}>
