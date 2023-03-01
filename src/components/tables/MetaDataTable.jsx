@@ -2,13 +2,13 @@ export default function MetaDataTable({ metadata }) {
   if (!metadata) return <></>;
 
   return (
-    <table className="min-w-full table-auto">
+    <table className="min-w-full table-auto mt-8">
       <thead>
         <tr>
-          <th className="px-16 py-2">
+          <th className="sr-only">
             <span className="text-gray-400">Name</span>
           </th>
-          <th className="px-16 py-2">
+          <th className="sr-only">
             <span className="text-gray-400">Value</span>
           </th>
         </tr>
