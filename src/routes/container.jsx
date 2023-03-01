@@ -34,7 +34,6 @@ export default function ContainerPage() {
 }
 
 function EmptyGraphic({ objects }) {
-  console.log(objects.length);
   if (objects.length == 0) {
     return (
       <div className="w-full text-center mt-20">
@@ -53,6 +52,5 @@ export async function loader(params, accountId, x_auth_token) {
     },
   });
   const objects = await req.json();
-  console.log(x_auth_token);
   return objects;
 }

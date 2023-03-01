@@ -25,7 +25,6 @@ export default function ObjectTable({ objects, selectedObject }) {
       </thead>
       <tbody>
         {objects.map((object, index) => {
-          console.log(object);
           const selected = object.name === selectedObject;
           return <Row {...object} key={index} selected={selected} />;
         })}
@@ -64,3 +63,4 @@ function Row({ last_modified, bytes, name, content_type, selected }) {
     </tr>
   );
 }
+``;
