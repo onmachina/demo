@@ -4,12 +4,12 @@ export default function MetaDataTable({ metadata }) {
   return (
     <table className="min-w-full table-auto">
       <thead>
-        <tr className="bg-gray-800">
+        <tr>
           <th className="px-16 py-2">
-            <span className="text-gray-200">Name</span>
+            <span className="text-gray-400">Name</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200">Value</span>
+            <span className="text-gray-400">Value</span>
           </th>
         </tr>
       </thead>

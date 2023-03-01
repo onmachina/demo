@@ -1,13 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useLoaderData, Link, useNavigate, Outlet } from 'react-router-dom';
 import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
+import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
+import FileIcon from '../assets/file-icon.svg';
+import useOnClickOutside from '../hooks/useOnClickOutside';
 
 export default function Details({ accountId, authKey }) {
   let { container, object } = useParams();
   const objectData = useLoaderData();
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
   const navigate = useNavigate();
+  const ref = useRef();
+  useOnClickOutside(ref, () => navigate(`/${container}`));
 
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
@@ -34,21 +39,38 @@ export default function Details({ accountId, authKey }) {
   return (
     <>
       <Outlet />
-      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4">
-        <div className="drop-shadow-xl border border-cyan-300 bg-cyan-100 p-5 mb-5">
-          <h2 className="border-b pb-2 mb-2 border-cyan-300">
-            Details for {object} <Link to={`/${container}`}>Close</Link>
+      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
+        <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+          <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
+            <div>
+              Details for <strong>{object}</strong>
+            </div>
+            <Link to={`/${container}`}>
+              <HiXMark />
+            </Link>
           </h2>
           <img
-            className="block mx-auto mb-2 drop-shadow-md bg-white rounded-md"
+            className="block mx-auto mt-8 mb-2 bg-white rounded-md"
             style={{ maxWidth: '400px', maxHeight: '300px' }}
             id="preview-image"
-            src="/images/png.png"
+            src={FileIcon}
             alt={`preview for the object ${object}`}
           />
-          <Link to="delete" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
-            Delete
-          </Link>
+          <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
+            <Link className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border">
+              <HiOutlineArrowDownTray size={22} style={{ display: 'inline-block' }} /> Download
+            </Link>
+            <Link className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border">
+              <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
+            </Link>
+            <Link
+              to="delete"
+              className="text-red-600 px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+            >
+              <HiOutlineTrash size={22} style={{ display: 'inline-block' }} /> Delete
+            </Link>
+          </div>
+
           <MetaDataTable metadata={objectData} />
         </div>
       </div>
