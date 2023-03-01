@@ -50,12 +50,13 @@ export default function Details({ accountId, authKey }) {
             </Link>
           </h2>
           <img
-            className="block mx-auto mt-8 mb-2 bg-white rounded-md"
+            className="block mx-auto mt-8 mb-2 bg-white rounded-md pl-6 "
             style={{ maxWidth: '400px', maxHeight: '300px' }}
             id="preview-image"
             src={FileIcon}
             alt={`preview for the object ${object}`}
           />
+          <div className="text-sky-700 text-center">{object}</div>
           <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
             <Link className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border">
               <HiOutlineArrowDownTray size={22} style={{ display: 'inline-block' }} /> Download
@@ -90,7 +91,10 @@ export async function loader(params, accountId, x_auth_token) {
   );
   const headersArray = [];
   for (const [name, value] of response.headers.entries()) {
-    headersArray.push({ name, value });
+    if (name === 'last-modified') headersArray.push({ name, value });
+    if (name === 'content-type') headersArray.push({ name, value });
+    if (name === 'etag') headersArray.push({ name, value });
+    if (name.startsWith('x-object-meta')) headersArray.push({ name, value });
   }
   return headersArray;
 }
