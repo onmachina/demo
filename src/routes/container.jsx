@@ -1,6 +1,7 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiPlus } from 'react-icons/hi2';
 import { useLoaderData, Outlet, useNavigate, useParams } from 'react-router-dom';
+import emptyImage from '../assets/empty-container.svg';
 
 export default function ContainerPage() {
   const objects = useLoaderData();
@@ -26,9 +27,22 @@ export default function ContainerPage() {
         </div>
         <Outlet />
         <ObjectTable objects={objects} selectedObject={selectedObject} />
+        <EmptyGraphic objects={objects} />
       </main>
     </>
   );
+}
+
+function EmptyGraphic({ objects }) {
+  console.log(objects.length);
+  if (objects.length == 0) {
+    return (
+      <div className="w-full text-center mt-20">
+        <img src={emptyImage} alt="empty container" className="mx-auto pl-6 mb-2 opacity-70" />
+        <p className="text-slate-400">This container is currently empty.</p>
+      </div>
+    );
+  }
 }
 
 export async function loader(params, accountId, x_auth_token) {
@@ -39,5 +53,6 @@ export async function loader(params, accountId, x_auth_token) {
     },
   });
   const objects = await req.json();
+  console.log(x_auth_token);
   return objects;
 }
