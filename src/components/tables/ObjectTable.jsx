@@ -25,6 +25,7 @@ export default function ObjectTable({ objects, selectedObject }) {
       </thead>
       <tbody>
         {objects.map((object, index) => {
+          console.log(object);
           const selected = object.name === selectedObject;
           return <Row {...object} key={index} selected={selected} />;
         })}
@@ -34,7 +35,7 @@ export default function ObjectTable({ objects, selectedObject }) {
 }
 
 function Row({ last_modified, bytes, name, content_type, selected }) {
-  let selectedClass = selected ? 'bg-cyan-100' : 'bg-gray-50';
+  let selectedClass = selected ? 'bg-cyan-100' : 'bg-gray-50 hover:bg-slate-100';
 
   return (
     <tr className={`text-center ${selectedClass}`}>
