@@ -7,20 +7,20 @@ export default function ObjectTable({ objects, selectedObject }) {
   return (
     <table className="min-w-full table-auto">
       <thead>
-        <tr className="bg-gray-800">
-          <th className="px-16 py-2">
-            <span className="text-gray-200">File Name</span>
+        <tr className="bg-gray-600">
+          <th className="px-16 py-2 rounded-tl-md">
+            <span className="text-gray-200 font-normal">File Name</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200">Date Modified</span>
+            <span className="text-gray-200 font-normal">Date Modified</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200">Size</span>
+            <span className="text-gray-200 font-normal">Size</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200">Type</span>
+            <span className="text-gray-200 font-normal">Type</span>
           </th>
-          <th className="px-16 py-2"></th>
+          <th className="px-16 py-2 rounded-tr-md"></th>
         </tr>
       </thead>
       <tbody>
