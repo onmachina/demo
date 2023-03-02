@@ -61,8 +61,9 @@ export default function Details({ accountId, authKey }) {
 
   return (
     <>
-      <Outlet />
       <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
+        <Outlet />
+
         <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
           <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
             <div>

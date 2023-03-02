@@ -68,10 +68,10 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
             },
             {
               path: 'delete',
-              action: deleteContainerAction,
               loader: async ({ params }) => {
                 return deleteContainerLoader(params, accountId, x_auth_token);
               },
+              action: deleteContainerAction,
               element: <DeleteContainer accountId={accountId} authKey={x_auth_token} />,
             },
             {
