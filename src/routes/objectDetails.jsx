@@ -6,6 +6,24 @@ import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark 
 import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 
+async function downloadFile(authKey, accountId, container, object) {
+  const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
+    method: 'GET',
+    headers: {
+      'x-auth-token': authKey,
+    },
+  });
+
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = object || 'download';
+
+  link.click();
+}
+
 export default function Details({ accountId, authKey }) {
   let { container, object } = useParams();
   const objectData = useLoaderData();
@@ -13,6 +31,11 @@ export default function Details({ accountId, authKey }) {
   const navigate = useNavigate();
   const ref = useRef();
   useOnClickOutside(ref, () => navigate(`/${container}`));
+
+  const handleDownloadClick = () => {
+    downloadFile(authKey, accountId, container, object);
+    navigate(`/${container}`);
+  };
 
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
@@ -38,8 +61,9 @@ export default function Details({ accountId, authKey }) {
 
   return (
     <>
-      <Outlet />
       <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
+        <Outlet />
+
         <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
           <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
             <div>
@@ -58,9 +82,13 @@ export default function Details({ accountId, authKey }) {
           />
           <div className="text-sky-700 text-center">{object}</div>
           <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
-            <Link className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border">
+            <a
+              className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+              onClick={handleDownloadClick}
+              href="#"
+            >
               <HiOutlineArrowDownTray size={22} style={{ display: 'inline-block' }} /> Download
-            </Link>
+            </a>
             <Link className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border">
               <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
             </Link>
