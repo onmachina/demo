@@ -34,6 +34,7 @@ export default function Details({ accountId, authKey }) {
 
   const handleDownloadClick = () => {
     downloadFile(authKey, accountId, container, object);
+    navigate(`/${container}`);
   };
 
   useEffect(() => {
