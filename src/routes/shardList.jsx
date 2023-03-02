@@ -6,13 +6,13 @@ export default function ShardList() {
       <h1 className="text-3xl font-bold">Available Shards</h1>
       <div className="flex flex-row space-x-4 mt-4">
         <ShardCard
-          name="testnet.omnachina"
+          name="testnet.onmachina"
           decsription="The current test cluster for the OnMachina platform."
           url="/"
           isActive={true}
         />
         <ShardCard
-          name="global01.omnachina"
+          name="global01.onmachina"
           decsription="Global production cluster for the OnMachina platform"
           url="/"
         />
