@@ -17,6 +17,7 @@ import Details, { loader as detailsLoader } from './routes/objectDetails';
 import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
+import SettingsPage from './routes/settings';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
@@ -48,6 +49,10 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
         {
           path: 'shard-list',
           element: <ShardList />,
+        },
+        {
+          path: 'settings',
+          element: <SettingsPage accountId={accountId} authKey={x_auth_token} />,
         },
         {
           path: 'new-container',
