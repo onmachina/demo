@@ -57,9 +57,9 @@ export default function SettingsPage({ accountId, authKey }) {
         1. First, you'll want to export your account ID along with your API token.
       </h3>
       <p className="mb-4 mt-4">Both values have been prepopulated for you in the following shell command:</p>
-      <CodeBlock code={`export NEAR_ACCOUNT=${accountId} && export DSN_API_TOKEN=${authKey}`} />
-      <CodeBlock code={`export OS_AUTH_TOKEN=${authKey}`} />
-      <CodeBlock code={`export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountId}`} />
+      <CodeBlock
+        code={`export NEAR_ACCOUNT=${accountId} && export DSN_API_TOKEN=${authKey} && export OS_AUTH_TOKEN=${authKey} && export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountId}`}
+      />
 
       <p className="mb-4 mt-8 font-bold">
         2. Now you can run API commands against the OnMachina distributed storage network.
