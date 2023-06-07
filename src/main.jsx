@@ -26,7 +26,11 @@ import './index.css';
 import ShardList from './routes/shardList';
 import WaitingCard from './components/WaitingCard';
 
+// Contexts
+import { NearAccountContextProvider } from './contexts/NearContext';
+
 nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
+  console.log('setting up app...');
   const router = createBrowserRouter([
     {
       path: '/account/',
@@ -107,7 +111,9 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
 
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <NearAccountContextProvider>
+        <RouterProvider router={router} />
+      </NearAccountContextProvider>
     </React.StrictMode>,
   );
 });
