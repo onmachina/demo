@@ -1,6 +1,6 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
-import { useLoaderData, Outlet, useNavigate, useParams, useLocation, Form, Link } from 'react-router-dom';
+import { useLoaderData, Outlet, useNavigate, useParams, useLocation, Form, Link, redirect } from 'react-router-dom';
 import { useNearAccountContext } from '../contexts/NearContext';
 import { addContainer } from '../../lib/onmachina';
 
@@ -34,7 +34,6 @@ export default function AccountPage() {
             </button>
           </div>
           <ContainerTable containers={containers} />
-          {authToken}
           <Form className="pt-4" autoComplete="off" method="POST" action={`/`}>
             <div className="mb-6">
               <input name="token" type="hidden" defaultValue={authToken} />

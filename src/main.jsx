@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import nearSetup from '../lib/nearsetup';
+import nearSetup from '../lib/newnearsetup';
+import { action as shardAction } from './routes/shard';
 
 // Imports for elements used for routes
 import Root from './routes/root';
@@ -50,6 +51,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
       loader: async ({ params }) => {
         return shardLoader(params, accountId, x_auth_token);
       },
+      action: shardAction,
       children: [
         {
           path: 'shard-list',
@@ -57,7 +59,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
         },
         {
           path: 'settings',
-          element: <SettingsPage accountId={accountId} authKey={x_auth_token} />,
+          element: <SettingsPage />,
         },
         {
           path: 'new-container',

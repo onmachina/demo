@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import * as NearAccount from '../../lib/nearsetup';
+import * as NearAccount from '../../lib/newnearsetup';
 
 export const NearAccountContext = React.createContext();
 
@@ -15,17 +15,29 @@ export const NearAccountContextProvider = ({ children }) => {
     setAccountID(accountId);
   };
 
+  const getAuthTokenFromAPI = async () => {
+    console.log('requesting token from API');
+    const authToken = await NearAccount.refreshAuthToken();
+    setAuthToken(authToken);
+    localStorage.setItem('authToken', authToken);
+  };
+
   const refreshAuthToken = async () => {
-    console.log('checking token', authToken);
-    if (authToken !== null) return;
-    const token = await NearAccount.refreshAuthToken();
-    console.log('setting token', token);
-    setAuthToken(token);
+    const authToken = await NearAccount.refreshAuthToken();
+    setAuthToken(authToken);
+    localStorage.setItem('authToken', authToken);
   };
 
   useEffect(() => {
     loadAccountId();
-    refreshAuthToken();
+    // Check if the authToken exists in local storage
+    const storedAuthToken = localStorage.getItem('authToken');
+
+    if (storedAuthToken) {
+      setAuthToken(storedAuthToken);
+    } else {
+      getAuthTokenFromAPI();
+    }
   }, []);
 
   return (
