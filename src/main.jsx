@@ -25,7 +25,6 @@ import { action as containerPostAction } from './routes/container';
 import './index.css';
 import ShardList from './routes/shardList';
 import WaitingCard from './components/WaitingCard';
-import AddNode from './routes/addNode';
 
 nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
   const router = createBrowserRouter([
