@@ -18,9 +18,10 @@ export default function DeleteContainer({ accountId, authKey }) {
             Are you sure you want to delete the container <strong>{container}</strong>? It contains {objectCount}{' '}
             objects totalling {formatFileSize(byteCount)} in data. This action cannot be undone.
           </p>
-          <Form method="POST" action={`/${container}/delete/`}>
-            <input name="token" type="hidden" defaultValue={authKey} />
-            <input name="accountId" type="hidden" defaultValue={accountId} />
+          <Form method="POST" action={`/${container}`}>
+            <input name="action" type="hidden" value="deleteContainer" />
+            <input name="token" type="hidden" value={authKey} />
+            <input name="accountId" type="hidden" value={accountId} />
 
             <div className="flex space-x-2 pt-4">
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" type="submit">

@@ -1,7 +1,9 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiPlus } from 'react-icons/hi2';
-import { useLoaderData, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData, Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import emptyImage from '../assets/empty-container.svg';
+import { deleteContainer } from '../actions/container';
+import { redirect } from 'react-router-dom';
 
 export default function ContainerPage() {
   const objects = useLoaderData();
@@ -13,6 +15,9 @@ export default function ContainerPage() {
   const handleUpload = () => {
     navigate('upload');
   };
+
+  const [searchParams] = useSearchParams();
+  const showModal = searchParams.get('showModal');
 
   return (
     <>
@@ -28,8 +33,22 @@ export default function ContainerPage() {
         <Outlet />
         <ObjectTable objects={objects} selectedObject={selectedObject} />
         <EmptyGraphic objects={objects} />
+        {showModal && <ActionModal />}
       </main>
     </>
+  );
+}
+
+function ActionModal() {
+  return (
+    <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">
+      <div className="w-2/4">
+        <div className="drop-shadow-xl border border-red-400 bg-red-100 p-5 mb-5">
+          <h2 className="border-b pb-2 mb-2 border-red-400 text-red-700">Modal action</h2>
+          <p className="pt-4 pb-4">I'm a happy modal right here.</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -44,6 +63,7 @@ function EmptyGraphic({ objects }) {
   }
 }
 
+// Called for any GET request
 export async function loader(params, accountId, x_auth_token) {
   const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
     method: 'GET',
@@ -53,4 +73,16 @@ export async function loader(params, accountId, x_auth_token) {
   });
   const objects = await req.json();
   return objects;
+}
+
+// Called for any POST request
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const action = Object.fromEntries(formData).action;
+  const token = Object.fromEntries(formData).token;
+  const accountId = Object.fromEntries(formData).accountId;
+  if (action === 'deleteContainer') {
+    await deleteContainer(params.container, accountId, token);
+    return redirect(`/`);
+  }
 }

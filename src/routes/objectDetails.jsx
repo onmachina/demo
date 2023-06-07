@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { useParams, useLoaderData, Link, useNavigate, Outlet } from 'react-router-dom';
+import { useParams, useLoaderData, Link, useNavigate, Outlet, redirect } from 'react-router-dom';
 import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
 import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
 import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import { deleteObject } from '../actions/object';
 
 async function downloadFile(authKey, accountId, container, object) {
   const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
@@ -107,6 +108,7 @@ export default function Details({ accountId, authKey }) {
   );
 }
 
+// Called to load data for any GET request
 export async function loader(params, accountId, x_auth_token) {
   const response = await fetch(
     `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
@@ -125,4 +127,16 @@ export async function loader(params, accountId, x_auth_token) {
     if (name.startsWith('x-object-meta')) headersArray.push({ name, value });
   }
   return headersArray;
+}
+
+// Called for any POST request
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const action = Object.fromEntries(formData).action;
+  const token = Object.fromEntries(formData).token;
+  const accountId = Object.fromEntries(formData).accountId;
+  if (action === 'deleteObject') {
+    await deleteObject(params.container, params.object, accountId, token);
+    return redirect(`/${params.container}`);
+  }
 }

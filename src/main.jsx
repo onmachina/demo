@@ -18,11 +18,14 @@ import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
+import { action as objectPostAction } from './routes/objectDetails';
+import { action as containerPostAction } from './routes/container';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 import ShardList from './routes/shardList';
 import WaitingCard from './components/WaitingCard';
+import AddNode from './routes/addNode';
 
 nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
   const router = createBrowserRouter([
@@ -41,7 +44,6 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           <ShardPage />
         </Root>
       ),
-      errorElement: <WaitingCard wallet={selectorWallet} accountId={accountId} />,
       loader: async ({ params }) => {
         return shardLoader(params, accountId, x_auth_token);
       },
@@ -65,6 +67,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           loader: async ({ params }) => {
             return containerLoader(params, accountId, x_auth_token);
           },
+          action: containerPostAction,
           children: [
             {
               path: 'upload',
@@ -85,6 +88,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
               loader: async ({ params }) => {
                 return detailsLoader(params, accountId, x_auth_token);
               },
+              action: objectPostAction,
               children: [
                 {
                   path: 'delete',

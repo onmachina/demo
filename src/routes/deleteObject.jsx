@@ -19,8 +19,9 @@ export default function DeleteObject({ accountId, authKey }) {
             </strong>{' '}
             ({fileType})? This action cannot be undone.
           </p>
-          <Form method="POST" action={`/${container}/${object}/delete/`}>
-            <input name="accountId" type="hidden" defaultValue={accountId} />
+          <Form method="POST" action={`/${container}/${object}`}>
+            <input name="action" type="hidden" value="deleteObject" />
+            <input name="accountId" type="hidden" value={accountId} />
             <input name="token" type="hidden" defaultValue={authKey} />
             <div className="flex space-x-2 pt-4">
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" type="submit">

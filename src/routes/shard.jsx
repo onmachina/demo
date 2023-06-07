@@ -15,7 +15,7 @@ export default function AccountPage() {
     navigate('new-container');
   };
 
-  if (!params.container && !path.includes('shard-list') && !path.includes('settings'))
+  if (!params.container && !path.includes('shard-list') && !path.includes('settings') && !path.includes('add-node'))
     return (
       <>
         <main className="container mx-auto">

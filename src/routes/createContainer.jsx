@@ -20,7 +20,7 @@ export default function AddContainer({ accountId, authKey }) {
       <div className="w-2/4">
         <div className="drop-shadow-xl border border-cyan-400 bg-cyan-100 p-5 mb-5">
           <h2 className="border-b pb-2 mb-2 border-cyan-400">Create a new container</h2>
-          <Form className="pt-4" autocomplete="off" method="POST" action={`/new-container/`}>
+          <Form className="pt-4" autoComplete="off" method="POST" action={`/new-container/`}>
             <div class="mb-6">
               <input name="token" type="hidden" defaultValue={authKey} />
               <input name="accountId" type="hidden" defaultValue={accountId} />
