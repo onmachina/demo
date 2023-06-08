@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import * as NearAccount from '../../lib/nearsetup';
+import * as NearAccount from '../../lib/newnearsetup';
 
 export const NearAccountContext = React.createContext();
 
