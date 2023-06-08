@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import nearSetup from '../lib/newnearsetup';
+import nearSetup from '../lib/nearsetup';
 import { action as shardAction } from './routes/shard';
 
 // Imports for elements used for routes
