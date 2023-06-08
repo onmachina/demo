@@ -16,7 +16,6 @@ export default function AccountPage() {
   const showDelete = searchParams.get('action') === 'delete';
   const showCreate = searchParams.get('action') === 'create';
   const containerName = searchParams.get('container');
-  console.log('showDelete', showDelete);
   const location = useLocation();
   const path = location.pathname;
 

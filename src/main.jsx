@@ -10,10 +10,7 @@ import Root from './routes/root';
 import AccountPage from './routes/account';
 import Upload, { action as uploadAction } from './routes/uploadObject';
 import DeleteObject, { loader as deleteObjectLoader, action as deleteObjectAction } from './routes/deleteObject';
-import DeleteContainer, {
-  loader as deleteContainerLoader,
-  action as deleteContainerAction,
-} from './routes/deleteContainer';
+
 import Details, { loader as detailsLoader } from './routes/objectDetails';
 import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
@@ -78,14 +75,6 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
               path: 'upload',
               action: uploadAction,
               element: <Upload accountId={accountId} authKey={x_auth_token} />,
-            },
-            {
-              path: 'delete',
-              loader: async ({ params }) => {
-                return deleteContainerLoader(params, accountId, x_auth_token);
-              },
-              action: deleteContainerAction,
-              element: <DeleteContainer accountId={accountId} authKey={x_auth_token} />,
             },
             {
               path: ':object',

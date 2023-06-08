@@ -56,7 +56,7 @@ function Row({ last_modified, bytes, name, content_type, selected }) {
         <span>{content_type || 'Unknown'}</span>
       </td>
       <td className="text-right pr-4 text-red-600">
-        <Link to={`${name}/delete`}>
+        <Link to={`?action=delete&object=${name}`}>
           <HiOutlineTrash size={22} className="inline-block" />
         </Link>
       </td>

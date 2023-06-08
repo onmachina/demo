@@ -1,23 +1,41 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiPlus } from 'react-icons/hi2';
-import { useLoaderData, Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import {
+  redirect,
+  useLoaderData,
+  Outlet,
+  useNavigate,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import emptyImage from '../assets/empty-container.svg';
-import { deleteContainer } from '../actions/container';
-import { redirect } from 'react-router-dom';
+import DeleteObjectForm from '../components/DeleteObjectForm';
+import { useNearAccountContext } from '../contexts/NearContext';
+import { deleteObject } from '../../lib/onmachina';
+import UploadObjectForm from '../components/UploadObjectForm';
+import { uploadObject } from '../../lib/onmachina';
 
 export default function ContainerPage() {
   const objects = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showDelete = searchParams.get('action') === 'delete';
+  const showCreate = searchParams.get('action') === 'create';
+  const objectName = searchParams.get('object');
+  const location = useLocation();
+
+  const { accountID, authToken } = useNearAccountContext();
+
   const selectedObject = params.object;
 
   const handleUpload = () => {
-    navigate('upload');
+    navigate('?action=upload');
   };
 
-  const [searchParams] = useSearchParams();
-  const showModal = searchParams.get('showModal');
+  const showUpload = searchParams.get('action') === 'upload';
 
   return (
     <>
@@ -30,10 +48,20 @@ export default function ContainerPage() {
             <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Object
           </button>
         </div>
+        {showUpload && (
+          <UploadObjectForm authToken={authToken} accountID={accountID} containerName={params.container} />
+        )}
         <Outlet />
+        {showDelete && (
+          <DeleteObjectForm
+            authToken={authToken}
+            accountID={accountID}
+            containerName={params.container}
+            objectName={objectName}
+          />
+        )}
         <ObjectTable objects={objects} selectedObject={selectedObject} />
         <EmptyGraphic objects={objects} />
-        {showModal && <ActionModal />}
       </main>
     </>
   );
@@ -81,8 +109,19 @@ export async function action({ request, params }) {
   const action = Object.fromEntries(formData).action;
   const token = Object.fromEntries(formData).token;
   const accountId = Object.fromEntries(formData).accountId;
-  if (action === 'deleteContainer') {
-    await deleteContainer(params.container, accountId, token);
-    return redirect(`/`);
+  if (action === 'Upload Object') {
+    console.log('uploading object called here!');
+    const objectName = Object.fromEntries(formData).name;
+    const containerName = Object.fromEntries(formData).container;
+    const file = Object.fromEntries(formData).file;
+
+    await uploadObject(containerName, file, accountId, token);
+    return redirect(`/${params.container}/`);
+  }
+  if (action === 'Delete Object') {
+    const objectName = Object.fromEntries(formData).name;
+    const containerName = Object.fromEntries(formData).container;
+    await deleteObject(containerName, objectName, accountId, token);
+    return redirect(`/${params.container}/`);
   }
 }
