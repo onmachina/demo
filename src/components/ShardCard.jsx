@@ -16,7 +16,7 @@ export default function ShardCard({ name, decsription, url, isActive }) {
             to={url}
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 "
           >
-            Select shard now
+            Select shard
             <svg
               aria-hidden="true"
               className="w-4 h-4 ml-2 -mr-1"

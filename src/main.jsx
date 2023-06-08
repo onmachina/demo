@@ -8,13 +8,10 @@ import { action as shardAction } from './routes/shard';
 // Imports for elements used for routes
 import Root from './routes/root';
 import AccountPage from './routes/account';
-import Upload, { action as uploadAction } from './routes/uploadObject';
-import DeleteObject, { loader as deleteObjectLoader, action as deleteObjectAction } from './routes/deleteObject';
 
 import Details, { loader as detailsLoader } from './routes/objectDetails';
 import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
-import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
 import { action as objectPostAction } from './routes/objectDetails';
 import { action as containerPostAction } from './routes/container';
@@ -59,11 +56,6 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           element: <SettingsPage />,
         },
         {
-          path: 'new-container',
-          element: <AddContainer accountId={accountId} authKey={x_auth_token} />,
-          action: addContainerAction,
-        },
-        {
           path: ':container',
           element: <ContainerPage />,
           loader: async ({ params }) => {
@@ -72,27 +64,12 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           action: containerPostAction,
           children: [
             {
-              path: 'upload',
-              action: uploadAction,
-              element: <Upload accountId={accountId} authKey={x_auth_token} />,
-            },
-            {
               path: ':object',
               element: <Details accountId={accountId} authKey={x_auth_token} />,
               loader: async ({ params }) => {
                 return detailsLoader(params, accountId, x_auth_token);
               },
               action: objectPostAction,
-              children: [
-                {
-                  path: 'delete',
-                  loader: async ({ params }) => {
-                    return deleteObjectLoader(params, accountId, x_auth_token);
-                  },
-                  element: <DeleteObject accountId={accountId} authKey={x_auth_token} />,
-                  action: deleteObjectAction,
-                },
-              ],
             },
           ],
         },
