@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --color-background: rgb(30 30 30);
+        --color-text: rgb(255 255 255);
+        --color-text-muted: rgb(126 146 162);
+        --color-text-active: rgb(114 183 250);
+        --color-background-active: rgb(50 53 65);
+        --color-icon-active: rgb(50 53 65);
+        --color-icon: rgb(138 149 179);
+        --color-arrows: rgb(35 113 190);
+        --color-ui-lines: rgb(46 48 64);  
+    }
+    .ui-panel {
+        --color-background: rgb(40 43 53); 
+        --color-text: white;
+        --color-text-active: rgb(114 183 250);
+        --color-text-muted: rgb(255 255 255);
+        --color-ui-lines: rgb(64 67 92);
+        --color-text-destructive-action: rgb(255 97 129);
+    }
+    .ui-panel-muted {
+        --color-background: rgb(32 32 32)
+    }
+}

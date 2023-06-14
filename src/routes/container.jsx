@@ -67,19 +67,6 @@ export default function ContainerPage() {
   );
 }
 
-function ActionModal() {
-  return (
-    <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">
-      <div className="w-2/4">
-        <div className="drop-shadow-xl border border-red-400 bg-red-100 p-5 mb-5">
-          <h2 className="border-b pb-2 mb-2 border-red-400 text-red-700">Modal action</h2>
-          <p className="pt-4 pb-4">I'm a happy modal right here.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function EmptyGraphic({ objects }) {
   if (objects.length == 0) {
     return (

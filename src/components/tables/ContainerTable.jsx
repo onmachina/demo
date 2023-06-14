@@ -7,18 +7,18 @@ export default function ContainerTable({ containers }) {
   return (
     <table className="min-w-full table-auto">
       <thead>
-        <tr className="bg-gray-600 font-normal">
+        <tr className="bg-ui-base font-normal">
           <th className="px-16 py-2 rounded-tl-md">
-            <span className="text-gray-200 font-normal">Container</span>
+            <span className="text-ui-muted font-normal">Container</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200 font-normal">Date Modified</span>
+            <span className="text-ui-muted font-normal">Date Modified</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200 font-normal">Size</span>
+            <span className="text-ui-muted font-normal">Size</span>
           </th>
           <th className="px-16 py-2">
-            <span className="text-gray-200 font-normal">Number of objects</span>
+            <span className="text-ui-muted font-normal">Number of objects</span>
           </th>
           <th className="px-16 py-2 rounded-tr-md"></th>
         </tr>
@@ -35,7 +35,7 @@ export default function ContainerTable({ containers }) {
 }
 
 function Row({ last_modified, bytes, name, count, selected }) {
-  let selectedClass = selected ? 'bg-cyan-100' : 'bg-gray-50 hover:bg-slate-100';
+  let selectedClass = selected ? 'bg-cyan-100' : 'bg-ui-base hover:bg-ui-active';
 
   return (
     <tr className={`text-center ${selectedClass}`}>
@@ -44,16 +44,16 @@ function Row({ last_modified, bytes, name, count, selected }) {
           <HiOutlineCube size={22} />
         </Link>
         <Link to={`${name}/`}>
-          <span className="text-center ml-2 font-semibold">{name || 'Unknown'}</span>
+          <span className="text-center ml-2 text-ui-base">{name || 'Unknown'}</span>
         </Link>
       </td>
-      <td className="pl-10 py-2">
+      <td className="pl-10 py-2 text-ui-base">
         <span>{formatDate(last_modified)}</span>
       </td>
-      <td className="pl-10 py-2">
+      <td className="pl-10 py-2 text-ui-base">
         <span>{formatFileSize(bytes) || '0'}</span>
       </td>
-      <td className="pl-10 py-2">
+      <td className="pl-10 py-2 text-ui-base">
         <span>{count || '0'}</span>
       </td>
       <td className="text-right pr-4 text-red-600">

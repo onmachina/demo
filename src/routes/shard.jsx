@@ -29,13 +29,13 @@ export default function AccountPage() {
   if (!params.container && !path.includes('shard-list') && !path.includes('settings') && !path.includes('add-node'))
     return (
       <>
-        <main className="container mx-auto">
+        <main className="container mx-auto text-ui-muted ui-panel-muted bg-ui-base">
           <div className="flex flex-row items-center mb-4 mt-4">
             <h2 className="mr-4">
               {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
             </h2>
             <button
-              className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm"
+              className="px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
               onClick={handleAddContainer}
             >
               <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
