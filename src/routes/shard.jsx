@@ -30,16 +30,16 @@ export default function AccountPage() {
     return (
       <>
         <main className="container mx-auto text-ui-muted ui-panel-muted bg-ui-base">
-          <div className="flex flex-row items-center mb-4 mt-4">
-            <h2 className="mr-4">
-              {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
-            </h2>
+          <div className="mb-4 mt-4">
             <button
-              className="px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
+              className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
               onClick={handleAddContainer}
             >
               <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
             </button>
+            <h2 className="mr-4">
+              {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
+            </h2>
           </div>
           {showCreate && <NewContainerForm authToken={authToken} accountID={accountID} />}
           {showDelete && (

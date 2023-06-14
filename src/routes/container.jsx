@@ -39,12 +39,15 @@ export default function ContainerPage() {
 
   return (
     <>
-      <main className="container mx-auto">
+      <main className="container mx-auto ui-panel-muted">
         <div className="flex flex-row items-center mb-4 mt-4">
-          <h2 className="mr-4">
+          <h2 className="mr-4 text-ui-muted">
             {objects.length} {objects.length != 1 ? 'Objects' : 'Object'}
           </h2>
-          <button className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm" onClick={handleUpload}>
+          <button
+            className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
+            onClick={handleUpload}
+          >
             <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Object
           </button>
         </div>

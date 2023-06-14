@@ -6,10 +6,10 @@ export default function MetaDataTable({ metadata }) {
       <thead>
         <tr>
           <th className="sr-only">
-            <span className="text-gray-400">Name</span>
+            <span className="text-ui-muted">Name</span>
           </th>
           <th className="sr-only">
-            <span className="text-gray-400">Value</span>
+            <span className="text-ui-muted">Value</span>
           </th>
         </tr>
       </thead>
@@ -24,11 +24,11 @@ export default function MetaDataTable({ metadata }) {
 
 function Row({ name, value }) {
   return (
-    <tr className="bg-gray-50 text-center">
+    <tr className="bg-ui-base text-ui-muted text-center">
       <td className="px-3 py-2 flex flex-row items-center">
         <span className="text-left ml-2 font-semibold">{name}</span>
       </td>
-      <td className="pl-10 py-2 text-left">
+      <td className="pl-10 py-2 text-left text-ui-base">
         <span>{value}</span>
       </td>
     </tr>

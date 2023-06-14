@@ -59,11 +59,11 @@ export default function DisplayObject({ accountId, authKey, objectData, containe
 
   return (
     <>
-      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
+      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4 ui-panel" ref={ref}>
         <Outlet />
 
-        <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-          <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
+        <div className="p-5 mb-5 w-full bg-ui-base border border-ui-base rounded-lg shadow-lg text-ui-muted">
+          <h2 className="border-b pb-2 mb-2 border-ui-base flex justify-between">
             <div>
               Details for <strong>{object}</strong>
             </div>
@@ -78,10 +78,10 @@ export default function DisplayObject({ accountId, authKey, objectData, containe
             src={FileIcon}
             alt={`preview for the object ${object}`}
           />
-          <div className="text-sky-700 text-center">{object}</div>
+          <div className="text-ui-active text-center">{object}</div>
           <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
             <a
-              className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+              className="px-4 py-2 font-semibold text-sm bg-ui-base rounded-full shadow-sm border-ui-base border"
               onClick={handleDownloadClick}
               href="#"
             >
@@ -90,14 +90,14 @@ export default function DisplayObject({ accountId, authKey, objectData, containe
             <a
               onClick={() => setMode('rename')}
               href="#"
-              className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+              className="px-4 py-2 font-semibold text-sm bg-ui-base rounded-full shadow-sm border-ui-base border"
             >
               <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
             </a>
             <a
               onClick={() => setMode('delete')}
               href="#"
-              className="text-red-600 px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+              className="text-red-600 px-4 py-2 font-semibold text-sm bg-ui-base rounded-full shadow-sm border-ui-base border"
             >
               <HiOutlineTrash size={22} style={{ display: 'inline-block' }} /> Delete
             </a>

@@ -26,9 +26,9 @@ export default function RenameObject({ accountId, authKey, objectData, container
 
   return (
     <>
-      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
-        <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-          <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
+      <div className="ui-panel w-2/4 right-0 top-0 h-full absolute z-10 p-4 text-ui-muted" ref={ref}>
+        <div className="p-5 mb-5 w-full bg-ui-base border border-ui-base rounded-lg shadow-lg">
+          <h2 className="border-b pb-2 mb-2 border-ui-base flex justify-between">
             <div>
               Rename object: <strong>{object}</strong>
             </div>
@@ -50,7 +50,7 @@ export default function RenameObject({ accountId, authKey, objectData, container
               ref={inputRef}
               autoFocus
               type="text"
-              className="text-sky-700 text-center w-full border-none"
+              className="text-ui-base text-center w-full border-none bg-ui-base"
               defaultValue={object}
             />
             <input name="oldname" type="hidden" value={object} />
@@ -60,7 +60,7 @@ export default function RenameObject({ accountId, authKey, objectData, container
             <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
               <button
                 type="submit"
-                className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+                className="px-4 py-2 font-semibold text-sm bg-ui-base rounded-full shadow-sm border-ui-base border text-ui-active"
               >
                 <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
               </button>

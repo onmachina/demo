@@ -17,6 +17,7 @@ module.exports = {
         ui: {
           base: 'var(--color-background)',
           active: 'var(--color-background-active)',
+          selected: 'var(--color-background-selected)',
         },
       },
       borderColor: {
