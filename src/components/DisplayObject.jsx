@@ -94,12 +94,13 @@ export default function DisplayObject({ accountId, authKey, objectData, containe
             >
               <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
             </a>
-            <Link
-              to="delete"
+            <a
+              onClick={() => setMode('delete')}
+              href="#"
               className="text-red-600 px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
             >
               <HiOutlineTrash size={22} style={{ display: 'inline-block' }} /> Delete
-            </Link>
+            </a>
           </div>
 
           <MetaDataTable metadata={objectData} />

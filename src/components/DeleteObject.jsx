@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Link, Form, useNavigate } from 'react-router-dom';
 import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
@@ -6,11 +6,9 @@ import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark 
 import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 
-export default function RenameObject({ accountId, authKey, objectData, container, object, setMode }) {
-  const fileType = objectData.find((obj) => obj.name === 'content-type').value;
+export default function DeleteObject({ accountId, authKey, container, object, setMode }) {
   const navigate = useNavigate();
   const ref = useRef();
-  const inputRef = useRef(null);
 
   useOnClickOutside(ref, () => navigate(`/${container}`));
 
@@ -18,19 +16,13 @@ export default function RenameObject({ accountId, authKey, objectData, container
     setMode('display');
   });
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.select();
-    }
-  }, []);
-
   return (
     <>
       <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
-        <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-          <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
+        <div className="p-5 mb-5 w-full bg-red-100 border border-gray-200 rounded-lg shadow-lg">
+          <h2 className="border-b pb-2 mb-2 border-red-300 flex justify-between">
             <div>
-              Rename object: <strong>{object}</strong>
+              Delete object: <strong>{object}</strong>
             </div>
             <Link to={`/${container}`}>
               <HiXMark />
@@ -43,31 +35,28 @@ export default function RenameObject({ accountId, authKey, objectData, container
             src={FileIcon}
             alt={`preview for the object ${object}`}
           />
+          <div className="text-red-700 text-center">{object}</div>
+
           <Form action={`/${container}/${object}/`} method="POST">
-            <label htmlFor="rename" className="sr-only" />
-            <input
-              name="newname"
-              ref={inputRef}
-              autoFocus
-              type="text"
-              className="text-sky-700 text-center w-full border-none"
-              defaultValue={object}
-            />
-            <input name="oldname" type="hidden" value={object} />
-            <input name="action" type="hidden" value="rename" />
+            <input name="action" type="hidden" value="deleteObject" />
             <input name="token" type="hidden" value={authKey} />
             <input name="accountId" type="hidden" value={accountId} />
             <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
               <button
                 type="submit"
+                className="text-red-600 px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
+              >
+                <HiOutlineTrash size={22} style={{ display: 'inline-block' }} /> Yes, delete
+              </button>
+              <a
+                onClick={() => setMode('display')}
+                href="#"
                 className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
               >
-                <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
-              </button>
+                Cancel
+              </a>
             </div>
           </Form>
-
-          <MetaDataTable metadata={objectData} />
         </div>
       </div>
     </>

@@ -1,11 +1,12 @@
 import React, { useState, Suspense } from 'react';
 import { useParams, useLoaderData, redirect } from 'react-router-dom';
+import { deleteObject, renameObject } from '../../lib/onmachina';
 
 import DisplayObject from '../components/DisplayObject';
-// const DeleteComponent = React.lazy(() => import('./DeleteComponent'));
+const DeleteComponent = React.lazy(() => import('../components/DeleteObject'));
 const RenameComponent = React.lazy(() => import('../components/RenameObject'));
 
-export default function Details({ accountId, authkey }) {
+export default function Details({ accountId, authKey }) {
   const [mode, setMode] = useState('display');
 
   let { container, object } = useParams();
@@ -24,22 +25,18 @@ export default function Details({ accountId, authkey }) {
   }
 
   return (
-    <div>
-      <button onClick={() => setMode('display')}>Display</button>
-      <button onClick={() => setMode('delete')}>Delete</button>
-      <button onClick={() => setMode('rename')}>Rename</button>
-
+    <>
       <Suspense fallback={<div>Loading...</div>}>
         <Component
           accountId={accountId}
-          authKey={authkey}
+          authKey={authKey}
           objectData={objectData}
           container={container}
           object={object}
           setMode={setMode}
         />
       </Suspense>
-    </div>
+    </>
   );
 }
 
@@ -73,5 +70,10 @@ export async function action({ request, params }) {
   if (action === 'deleteObject') {
     await deleteObject(params.container, params.object, accountId, token);
     return redirect(`/${params.container}`);
+  } else if (action === 'rename') {
+    const oldName = Object.fromEntries(formData).oldname;
+    const newName = Object.fromEntries(formData).newname;
+    await renameObject({ container: params.container, oldName, newName, accountId, token });
+    return redirect(`/${params.container}/${newName}`);
   }
 }

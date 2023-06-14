@@ -67,6 +67,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
               path: ':object',
               element: <Details accountId={accountId} authKey={x_auth_token} />,
               loader: async ({ params }) => {
+                console.log('object loader');
                 return detailsLoader(params, accountId, x_auth_token);
               },
               action: objectPostAction,
