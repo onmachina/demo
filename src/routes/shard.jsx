@@ -1,21 +1,32 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
-import { useLoaderData, Outlet, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useLoaderData, Outlet, useNavigate, useParams, useLocation, Form, Link, redirect } from 'react-router-dom';
+import { useNearAccountContext } from '../contexts/NearContext';
+import { addContainer } from '../../lib/onmachina';
+import { deleteContainer } from '../../lib/onmachina';
+import DeleteContainerForm from '../components/DeleteContainerForm';
+import NewContainerForm from '../components/NewContainerForm';
+import { useSearchParams } from 'react-router-dom';
 
 export default function AccountPage() {
   const containers = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showDelete = searchParams.get('action') === 'delete';
+  const showCreate = searchParams.get('action') === 'create';
+  const containerName = searchParams.get('container');
   const location = useLocation();
   const path = location.pathname;
 
   const selectedObject = params.object;
+  const { accountID, authToken } = useNearAccountContext();
 
   const handleAddContainer = () => {
-    navigate('new-container');
+    navigate(`/?action=create`);
   };
 
-  if (!params.container && !path.includes('shard-list') && !path.includes('settings'))
+  if (!params.container && !path.includes('shard-list') && !path.includes('settings') && !path.includes('add-node'))
     return (
       <>
         <main className="container mx-auto">
@@ -30,7 +41,12 @@ export default function AccountPage() {
               <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
             </button>
           </div>
+          {showCreate && <NewContainerForm authToken={authToken} accountID={accountID} />}
+          {showDelete && (
+            <DeleteContainerForm authToken={authToken} accountID={accountID} containerName={containerName} />
+          )}
           <ContainerTable containers={containers} />
+
           <Outlet />
         </main>
       </>
@@ -58,4 +74,23 @@ export async function loader(params, accountId, x_auth_token) {
   const containers = await res.json();
 
   return containers;
+}
+
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const action = Object.fromEntries(formData).action;
+  const token = Object.fromEntries(formData).token;
+  const accountId = Object.fromEntries(formData).accountId;
+  if (action === 'Create Container') {
+    const containerName = Object.fromEntries(formData).name;
+    const isPublic = Object.fromEntries(formData).public;
+    await addContainer(containerName, isPublic, accountId, token);
+    return redirect(`/`);
+  }
+  if (action === 'Delete Container') {
+    console.log('delete container');
+    const containerName = Object.fromEntries(formData).name;
+    await deleteContainer(containerName, accountId, token);
+    return redirect(`/`);
+  }
 }

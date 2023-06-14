@@ -1,21 +1,20 @@
-import { useParams, redirect, Link, Form } from 'react-router-dom';
+import { Link, Form } from 'react-router-dom';
 import { HiXMark } from 'react-icons/hi2';
 
-export default function Upload({ accountId, authKey }) {
-  let { container } = useParams();
-
+export default function UploadObjectForm({ containerName, accountID, authToken }) {
   return (
     <div className="container mx-auto border border-cyan-300 bg-cyan-100 p-5 mb-5">
       <h2 className="border-b pb-2 mb-2 border-cyan-300 flex justify-between">
-        <div>Upload a new object to &quot;{container}&quot;</div>
-        <Link to={`/${container}`}>
+        <div>Upload a new object to &quot;{containerName}&quot;</div>
+        <Link to={`/${containerName}`}>
           <HiXMark />
         </Link>
       </h2>
-      <Form method="post" encType="multipart/form-data">
+      <Form method="post" encType="multipart/form-data" action={`/${containerName}`}>
         <input name="action" type="hidden" defaultValue="Upload Object" />
-        <input name="token" type="hidden" defaultValue={authKey} />
-        <input name="accountId" type="hidden" defaultValue={accountId} />
+        <input name="token" type="hidden" value={authToken} />
+        <input name="accountId" type="hidden" value={accountID} />
+        <input name="container" type="hidden" value={containerName} />
 
         <div className="mb-3 w-96">
           <label htmlFor="formFile" className="mb-2 inline-block text-neutral-700">
@@ -36,25 +35,4 @@ export default function Upload({ accountId, authKey }) {
       </Form>
     </div>
   );
-}
-
-export async function action({ request, params }) {
-  const formData = await request.formData();
-  const upload = Object.fromEntries(formData);
-  await uploadFile(params.container, upload);
-  return redirect(`/${params.container}`);
-}
-
-async function uploadFile(container, upload) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${upload.accountId}/${container}/${upload.file.name}`, {
-    // Your POST endpoint
-    method: 'PUT',
-    headers: {
-      'Content-Type': upload.file.type,
-      'x-auth-token': upload.token,
-    },
-    body: upload.file,
-  });
-  if (!res.ok) throw res;
-  return { ok: true };
 }

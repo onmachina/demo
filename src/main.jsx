@@ -2,29 +2,30 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import nearSetup from '../lib/nearsetup';
+import nearSetup from '../lib/newnearsetup';
+import { action as shardAction } from './routes/shard';
 
 // Imports for elements used for routes
 import Root from './routes/root';
 import AccountPage from './routes/account';
-import Upload, { action as uploadAction } from './routes/uploadObject';
-import DeleteObject, { loader as deleteObjectLoader, action as deleteObjectAction } from './routes/deleteObject';
-import DeleteContainer, {
-  loader as deleteContainerLoader,
-  action as deleteContainerAction,
-} from './routes/deleteContainer';
-import Details, { loader as detailsLoader } from './routes/objectDetails';
+
+import Details, { loader as detailsLoader } from './routes/newObjectDetails';
 import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
-import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
+import { action as objectPostAction } from './routes/newObjectDetails';
+import { action as containerPostAction } from './routes/container';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 import ShardList from './routes/shardList';
 import WaitingCard from './components/WaitingCard';
 
+// Contexts
+import { NearAccountContextProvider } from './contexts/NearContext';
+
 nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
+  console.log('setting up app...');
   const router = createBrowserRouter([
     {
       path: '/account/',
@@ -41,10 +42,10 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           <ShardPage />
         </Root>
       ),
-      errorElement: <WaitingCard wallet={selectorWallet} accountId={accountId} />,
       loader: async ({ params }) => {
         return shardLoader(params, accountId, x_auth_token);
       },
+      action: shardAction,
       children: [
         {
           path: 'shard-list',
@@ -52,12 +53,7 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
         },
         {
           path: 'settings',
-          element: <SettingsPage accountId={accountId} authKey={x_auth_token} />,
-        },
-        {
-          path: 'new-container',
-          element: <AddContainer accountId={accountId} authKey={x_auth_token} />,
-          action: addContainerAction,
+          element: <SettingsPage />,
         },
         {
           path: ':container',
@@ -65,36 +61,16 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
           loader: async ({ params }) => {
             return containerLoader(params, accountId, x_auth_token);
           },
+          action: containerPostAction,
           children: [
-            {
-              path: 'upload',
-              action: uploadAction,
-              element: <Upload accountId={accountId} authKey={x_auth_token} />,
-            },
-            {
-              path: 'delete',
-              loader: async ({ params }) => {
-                return deleteContainerLoader(params, accountId, x_auth_token);
-              },
-              action: deleteContainerAction,
-              element: <DeleteContainer accountId={accountId} authKey={x_auth_token} />,
-            },
             {
               path: ':object',
               element: <Details accountId={accountId} authKey={x_auth_token} />,
               loader: async ({ params }) => {
+                console.log('object loader');
                 return detailsLoader(params, accountId, x_auth_token);
               },
-              children: [
-                {
-                  path: 'delete',
-                  loader: async ({ params }) => {
-                    return deleteObjectLoader(params, accountId, x_auth_token);
-                  },
-                  element: <DeleteObject accountId={accountId} authKey={x_auth_token} />,
-                  action: deleteObjectAction,
-                },
-              ],
+              action: objectPostAction,
             },
           ],
         },
@@ -104,7 +80,9 @@ nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
 
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <NearAccountContextProvider>
+        <RouterProvider router={router} />
+      </NearAccountContextProvider>
     </React.StrictMode>,
   );
 });
