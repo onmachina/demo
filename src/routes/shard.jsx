@@ -26,28 +26,34 @@ export default function AccountPage() {
     navigate(`/?action=create`);
   };
 
-  if (!params.container && !path.includes('shard-list') && !path.includes('settings') && !path.includes('add-node'))
+  const containerIsSelected = true;
+
+  if (!path.includes('shard-list') && !path.includes('settings'))
     return (
       <>
         <main className="container mx-auto text-ui-muted ui-panel-muted bg-ui-base">
-          <div className="mb-4 mt-4">
-            <button
-              className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
-              onClick={handleAddContainer}
-            >
-              <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
-            </button>
-            <h2 className="mr-4">
-              {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
-            </h2>
-          </div>
           {showCreate && <NewContainerForm authToken={authToken} accountID={accountID} />}
           {showDelete && (
             <DeleteContainerForm authToken={authToken} accountID={accountID} containerName={containerName} />
           )}
-          <ContainerTable containers={containers} />
 
-          <Outlet />
+          <div className="flex">
+            <div className="flex-shink-0 min-w-fit mr-3">
+              <div className="mb-4 px-3 mt-2.5">
+                <button
+                  className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
+                  onClick={handleAddContainer}
+                >
+                  <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
+                </button>
+                <h2>
+                  {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
+                </h2>
+              </div>
+              <ContainerTable containers={containers} compact={containerIsSelected} />
+            </div>
+            <Outlet />
+          </div>
         </main>
       </>
     );

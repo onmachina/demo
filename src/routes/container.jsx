@@ -1,5 +1,6 @@
 import ObjectTable from '../components/tables/ObjectTable';
-import { HiPlus } from 'react-icons/hi2';
+import { HiOutlineCube, HiPlus } from 'react-icons/hi2';
+
 import {
   redirect,
   useLoaderData,
@@ -30,6 +31,7 @@ export default function ContainerPage() {
   const { accountID, authToken } = useNearAccountContext();
 
   const selectedObject = params.object;
+  const container = params.container;
 
   const handleUpload = () => {
     navigate('?action=upload');
@@ -39,13 +41,15 @@ export default function ContainerPage() {
 
   return (
     <>
-      <main className="container mx-auto ui-panel-muted">
-        <div className="flex flex-row items-center mb-4 mt-4">
-          <h2 className="mr-4 text-ui-muted">
+      <main className="container mx-auto ui-panel-muted border border-ui-base">
+        <div className="flex flex-row items-center my-2 px-2">
+          <HiOutlineCube size={22} />
+          <h2 className="ml-2 mr-4 text-ui-muted">
+            <div className="inline-block mr-3 text-ui-base">{container}</div>
             {objects.length} {objects.length != 1 ? 'Objects' : 'Object'}
           </h2>
           <button
-            className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
+            className="px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
             onClick={handleUpload}
           >
             <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Object

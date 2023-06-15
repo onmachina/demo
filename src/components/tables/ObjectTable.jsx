@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function ObjectTable({ objects, selectedObject }) {
   return (
-    <table className="min-w-full table-auto text-ui-base">
+    <table className="min-w-full table-auto text-ui-base border-t border-ui-base">
       <thead>
         <tr className="bg-ui-base font-normal">
           <th className="px-16 py-2 rounded-tl-md">

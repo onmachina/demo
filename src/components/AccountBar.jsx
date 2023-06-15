@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function AccountBar({ wallet, accountId }) {
   return (
-    <div className="pt-2 flex justify-end w-full">
+    <div className="pt-2 flex justify-end w-full text-ui-muted mb-2">
       <div className="flex items-center space-x-4 mr-4">
         <div className="font-medium">
           <div className="text-right">
