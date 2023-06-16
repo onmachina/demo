@@ -16,7 +16,7 @@
         --color-background-selected: rgb(89 137 184);
     }
     .ui-panel {
-        --color-background: rgb(40 43 53); 
+        --color-background: rgb(31, 34, 42); 
         --color-text: white;
         --color-text-active: rgb(114 183 250);
         --color-text-muted: rgb(126 146 162);
