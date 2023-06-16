@@ -19,26 +19,27 @@ export default function AccountPage() {
   const location = useLocation();
   const path = location.pathname;
 
-  const selectedObject = params.object;
+  const selectedContainer = params.container;
   const { accountID, authToken } = useNearAccountContext();
 
   const handleAddContainer = () => {
     navigate(`/?action=create`);
   };
 
-  const containerIsSelected = true;
+  const pageType = params.container ? 'container-page' : 'shard-page';
+  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mr-1' : 'w-full mr-1';
 
   if (!path.includes('shard-list') && !path.includes('settings'))
     return (
       <>
-        <main className="container mx-auto text-ui-muted ui-panel-muted bg-ui-base">
+        <main className={`${pageType} container mx-auto text-ui-muted ui-panel-muted bg-ui-base`}>
           {showCreate && <NewContainerForm authToken={authToken} accountID={accountID} />}
           {showDelete && (
             <DeleteContainerForm authToken={authToken} accountID={accountID} containerName={containerName} />
           )}
 
           <div className="flex">
-            <div className="flex-shink-0 min-w-fit mr-3">
+            <div className={flexClasses}>
               <div className="mb-4 px-3 mt-2.5">
                 <button
                   className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
@@ -50,7 +51,7 @@ export default function AccountPage() {
                   {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
                 </h2>
               </div>
-              <ContainerTable containers={containers} compact={containerIsSelected} />
+              <ContainerTable containers={containers} selectedContainer={selectedContainer} />
             </div>
             <Outlet />
           </div>

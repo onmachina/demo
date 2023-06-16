@@ -38,10 +38,11 @@ export default function ContainerPage() {
   };
 
   const showUpload = searchParams.get('action') === 'upload';
+  const pageType = params.container ? 'container-page' : 'shard-page';
 
   return (
     <>
-      <main className="container mx-auto ui-panel-muted border border-ui-base">
+      <main className={`${pageType} container mx-auto ui-panel-muted border border-ui-base`}>
         <div className="flex flex-row items-center my-2 px-2">
           <HiOutlineCube size={22} />
           <h2 className="ml-2 mr-4 text-ui-muted">
