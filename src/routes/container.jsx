@@ -108,11 +108,18 @@ export async function action({ request, params }) {
     console.log('uploading object called here!');
     const objectName = Object.fromEntries(formData).name;
     const containerName = Object.fromEntries(formData).container;
-    const file = Object.fromEntries(formData).file;
-
-    await uploadObject(containerName, file, accountId, token);
+    console.log('Files object:' + Object.fromEntries(formData).file);
     return redirect(`/${params.container}/`);
   }
+  // if (action === 'Upload Object') {
+  //   console.log('uploading object called here!');
+  //   const objectName = Object.fromEntries(formData).name;
+  //   const containerName = Object.fromEntries(formData).container;
+  //   const file = Object.fromEntries(formData).file;
+
+  //   await uploadObject(containerName, file, accountId, token);
+  //   return redirect(`/${params.container}/`);
+  // }
   if (action === 'Delete Object') {
     const objectName = Object.fromEntries(formData).name;
     const containerName = Object.fromEntries(formData).container;
