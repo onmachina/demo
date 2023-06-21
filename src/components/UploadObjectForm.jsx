@@ -3,28 +3,55 @@ import { HiXMark } from 'react-icons/hi2';
 import { useState } from 'react';
 import { fileListTotalSize } from '../../lib/utils.js';
 import FileUpload from './FileUpload.jsx';
+import { apiURL } from '../../lib/onmachina.js';
+import { max } from 'bn.js';
 
 export default function UploadObjectForm({ containerName, accountID, authToken }) {
-  const [uploadDetails, setUploadDetails] = useState({ fileList: [], totalSize: '0' });
+  const [uploadList, setUploadList] = useState({ files: [], totalSize: '0', isComplete: false });
 
-  const updateUploadDetails = (files) => {
+  const updateUploadList = (files) => {
     let fileList = [];
     Array.from(files).forEach((file, index) => {
-      fileList.push({ file: file, status: 'ready', percentUploaded: 0, index: index });
+      fileList.push({ file: file, status: 'pending', percentUploaded: 0, index: index });
     });
-    setUploadDetails({ fileList: fileList, totalSize: fileListTotalSize(files) });
+    setUploadList({ files: fileList, totalSize: fileListTotalSize(files), isComplete: false });
   };
 
-  const UploadFile = (file) => {
+  const uploadItem = (uploadItem) => {
     let xhr = new XMLHttpRequest();
-    xhr.open('PUT', `https://api.testnet.onmachina.io/v1/${accountID}/${containerName}/${file.name}`, true);
-    xhr.setRequestHeader('Content-Type', file.type);
+    xhr.open('PUT', `${apiURL}/${accountID}/${containerName}/${uploadItem.file.name}`, true);
+    xhr.setRequestHeader('Content-Type', uploadItem.file.type);
     xhr.setRequestHeader('x-auth-token', authToken);
     xhr.upload.addEventListener('progress', ProgressHandler, false);
-    xhr.addEventListener('load', SuccessHandler, false);
+    xhr.addEventListener(
+      'load',
+      () => {
+        console.log(`${uploadItem.file.name} uploaded.`);
+        startBatch(1); // pick another file to add to the uplodaing batch
+      },
+      false,
+    );
     xhr.addEventListener('error', ErrorHandler, false);
     xhr.addEventListener('abort', AbortHandler, false);
-    xhr.send(file);
+    xhr.send(uploadItem.file);
+  };
+
+  const startBatch = (maxItems) => {
+    if (maxItems === undefined || null) maxItems = 3;
+    let nextBatch = [];
+    let itemsInBatch = 0;
+    for (let item of uploadList.files) {
+      if (item.status === 'pending' && itemsInBatch <= maxItems) {
+        item.status = 'uploading';
+        uploadItem(item);
+        itemsInBatch++;
+        nextBatch.push(item);
+      } else {
+        nextBatch.push(item);
+      }
+    }
+    const isComplete = itemsInBatch === 0;
+    setUploadList({ files: nextBatch, totalSize: fileListTotalSize(uploadList.totalSize), isComplete: isComplete });
   };
 
   const ProgressHandler = (e) => {
@@ -43,7 +70,7 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
   };
 
   const handleUploadButton = () => {
-    if (uploadDetails.fileList && uploadDetails.fileList.length > 0) UploadFile(uploadDetails.fileList[0].file);
+    startBatch(3);
   };
 
   const dragEnter = (e) => {
@@ -63,7 +90,7 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
     const dt = e.dataTransfer;
     const files = dt.files;
 
-    updateUploadDetails(files);
+    updateUploadList(files);
   };
 
   return (
@@ -76,13 +103,13 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
       </h2>
 
       <div>
-        {uploadDetails.fileList.map((item, index) => (
+        {uploadList.files.map((item, index) => (
           <FileUpload key={index} file={item.file} status="ready" percentUploaded={0} />
         ))}
       </div>
 
       <Form method="post" encType="multipart/form-data" action={`/${containerName}`}>
-        <p>Total upload size: {uploadDetails.totalSize}</p>
+        <p>Total upload size: {uploadList.totalSize}</p>
         <input name="action" type="hidden" defaultValue="Upload Object" />
         <input name="token" type="hidden" value={authToken} />
         <input name="accountId" type="hidden" value={accountID} />
@@ -98,7 +125,7 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
               type="file"
               className="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none"
               id="formFile"
-              onChange={(e) => updateUploadDetails(e.target.files)}
+              onChange={(e) => updateUploadList(e.target.files)}
               multiple
             />
             <div className="w-full h-10 bg-slate-300" onDragEnter={dragEnter} onDragOver={dragOver} onDrop={drop}></div>
