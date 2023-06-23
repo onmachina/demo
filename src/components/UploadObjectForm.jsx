@@ -1,13 +1,17 @@
+import { useRef } from 'react';
 import { Link, Form } from 'react-router-dom';
 import { HiXMark } from 'react-icons/hi2';
 import { useState } from 'react';
 import { fileListTotalSize } from '../../lib/utils.js';
 import FileUpload from './FileUpload.jsx';
 import { apiURL } from '../../lib/onmachina.js';
+import './uploadform.css';
 
 export default function UploadObjectForm({ containerName, accountID, authToken }) {
   const [uploadList, setUploadList] = useState([]);
   const [uploadStatus, setUploadStatus] = useState({ totalSize: '0', isComplete: false });
+
+  const fileInputRef = useRef(null);
 
   const generateUploadList = (files) => {
     let fileList = [];
@@ -83,10 +87,15 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
     generateUploadList(files);
   };
 
+  const handleDragAreaClick = () => {
+    // trigger the file input click
+    fileInputRef.current.click();
+  };
+
   return (
-    <div className="container mx-auto border border-cyan-300 bg-cyan-100 p-5 mb-5">
-      <h2 className="border-b pb-2 mb-2 border-cyan-300 flex justify-between">
-        <div>Upload a new object to &quot;{containerName}&quot;</div>
+    <div className="container action-panel p-4 text-white">
+      <h2 className="pb-2 mb-2 flex justify-between">
+        <div></div>
         <Link to={`/${containerName}`}>
           <HiXMark />
         </Link>
@@ -99,13 +108,24 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
       </div>
 
       <Form method="post" encType="multipart/form-data" action={`/${containerName}`}>
-        <p>Total upload size: {uploadStatus.totalSize}</p>
         <input name="action" type="hidden" defaultValue="Upload Object" />
         <input name="token" type="hidden" value={authToken} />
         <input name="accountId" type="hidden" value={accountID} />
         <input name="container" type="hidden" value={containerName} />
 
-        <div className="mb-3 w-96">
+        <div
+          className="w-full mb-2 h-10 border border-dashed border-cyan-500 p-10 flex justify-center items-center"
+          onDragEnter={dragEnter}
+          onDragOver={dragOver}
+          onDrop={drop}
+          onClick={handleDragAreaClick}
+        >
+          <p className="text-center">
+            Drag and drop files here or <a className="underline">click to browse</a>.
+          </p>
+        </div>
+
+        <div className="sr-only">
           <label htmlFor="formFile" className="mb-2 inline-block text-neutral-700">
             File to upload
           </label>
@@ -117,17 +137,14 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
               id="formFile"
               onChange={(e) => generateUploadList(e.target.files)}
               multiple
+              ref={fileInputRef}
             />
-            <div className="w-full h-10 bg-slate-300" onDragEnter={dragEnter} onDragOver={dragOver} onDrop={drop}></div>
           </div>
         </div>
       </Form>
 
-      <button
-        className="px-4 py-2 font-semibold text-sm border border-cyan-300 bg-cyan-200 rounded-full shadow-sm"
-        onClick={handleUploadButton}
-      >
-        Upload
+      <button className="px-4 py-2 font-semibold text-sm bg-blue-900 rounded-sm shadow-sm" onClick={handleUploadButton}>
+        Start Upload
       </button>
     </div>
   );
