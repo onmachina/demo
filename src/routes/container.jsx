@@ -1,5 +1,6 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiOutlineCube, HiPlus } from 'react-icons/hi2';
+import EmptyContainerGraphic from '../components/EmptyContainerGraphic';
 
 import {
   redirect,
@@ -54,7 +55,7 @@ export default function ContainerPage() {
             className="px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
             onClick={handleUpload}
           >
-            <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Object
+            <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Files
           </button>
         </div>
         {showUpload && (
@@ -70,18 +71,20 @@ export default function ContainerPage() {
           />
         )}
         <ObjectTable objects={objects} selectedObject={selectedObject} />
-        <EmptyGraphic objects={objects} />
+        <EmptyMessage objects={objects} />
       </main>
     </>
   );
 }
 
-function EmptyGraphic({ objects }) {
+function EmptyMessage({ objects }) {
   if (objects.length == 0) {
     return (
       <div className="w-full text-center mt-20">
-        <img src={emptyImage} alt="empty container" className="mx-auto pl-6 mb-2 opacity-70" />
-        <p className="text-slate-400">This container is currently empty.</p>
+        <div className="mx-auto w-32">
+          <EmptyContainerGraphic />
+        </div>
+        <p className="text-ui-muted">This container is currently empty.</p>
       </div>
     );
   }
