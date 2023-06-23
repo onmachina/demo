@@ -14,7 +14,7 @@ export default function FileUpload({ file, status, percentUploaded }) {
       <div className="flex items-center">
         <span>{file.name}</span>
         <span>{file.size} bytes</span>
-        <span>{percentUploaded}% uploaded</span>
+        <span>{percentUploaded}% </span>
         <span>{status}</span>
       </div>
     </div>

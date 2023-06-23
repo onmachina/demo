@@ -9,6 +9,7 @@ import {
   useLocation,
   useParams,
   useSearchParams,
+  json,
 } from 'react-router-dom';
 import emptyImage from '../assets/empty-container.svg';
 import DeleteObjectForm from '../components/DeleteObjectForm';
@@ -105,21 +106,8 @@ export async function action({ request, params }) {
   const token = Object.fromEntries(formData).token;
   const accountId = Object.fromEntries(formData).accountId;
   if (action === 'Upload Object') {
-    console.log('uploading object called here!');
-    const objectName = Object.fromEntries(formData).name;
-    const containerName = Object.fromEntries(formData).container;
-    console.log('Files object:' + Object.fromEntries(formData).file);
-    return redirect(`/${params.container}/`);
+    return json({ status: 'ok' });
   }
-  // if (action === 'Upload Object') {
-  //   console.log('uploading object called here!');
-  //   const objectName = Object.fromEntries(formData).name;
-  //   const containerName = Object.fromEntries(formData).container;
-  //   const file = Object.fromEntries(formData).file;
-
-  //   await uploadObject(containerName, file, accountId, token);
-  //   return redirect(`/${params.container}/`);
-  // }
   if (action === 'Delete Object') {
     const objectName = Object.fromEntries(formData).name;
     const containerName = Object.fromEntries(formData).container;

@@ -4,17 +4,27 @@ import { useState } from 'react';
 import { fileListTotalSize } from '../../lib/utils.js';
 import FileUpload from './FileUpload.jsx';
 import { apiURL } from '../../lib/onmachina.js';
-import { max } from 'bn.js';
 
 export default function UploadObjectForm({ containerName, accountID, authToken }) {
-  const [uploadList, setUploadList] = useState({ files: [], totalSize: '0', isComplete: false });
+  const [uploadList, setUploadList] = useState([]);
+  const [uploadStatus, setUploadStatus] = useState({ totalSize: '0', isComplete: false });
 
-  const updateUploadList = (files) => {
+  const generateUploadList = (files) => {
     let fileList = [];
     Array.from(files).forEach((file, index) => {
       fileList.push({ file: file, status: 'pending', percentUploaded: 0, index: index });
     });
-    setUploadList({ files: fileList, totalSize: fileListTotalSize(files), isComplete: false });
+    setUploadList(fileList);
+    setUploadStatus({ totalSize: fileListTotalSize(fileList), isComplete: false });
+  };
+
+  const updateUploadItem = (itemIndex, newMetadata) => {
+    const updatedItem = { ...uploadList[itemIndex], ...newMetadata };
+    setUploadList((currentUploadList) => {
+      let newList = [...currentUploadList];
+      newList[itemIndex] = updatedItem;
+      return newList;
+    });
   };
 
   const uploadItem = (uploadItem) => {
@@ -22,55 +32,35 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
     xhr.open('PUT', `${apiURL}/${accountID}/${containerName}/${uploadItem.file.name}`, true);
     xhr.setRequestHeader('Content-Type', uploadItem.file.type);
     xhr.setRequestHeader('x-auth-token', authToken);
-    xhr.upload.addEventListener('progress', ProgressHandler, false);
+    xhr.uploadItem = uploadItem; // save a reference to the uploadItem in the xhr object
     xhr.addEventListener(
-      'load',
-      () => {
-        console.log(`${uploadItem.file.name} uploaded.`);
-        startBatch(1); // pick another file to add to the uplodaing batch
+      'progress',
+      (e) => {
+        var percent = Math.round((e.loaded / e.total) * 100);
+        updateUploadItem(e.target.uploadItem.index, { percentUploaded: percent });
       },
       false,
     );
-    xhr.addEventListener('error', ErrorHandler, false);
-    xhr.addEventListener('abort', AbortHandler, false);
+    xhr.addEventListener(
+      'load',
+      (e) => {
+        updateUploadItem(e.target.uploadItem.index, { percentUploaded: 100, status: 'complete' });
+      },
+      false,
+    );
+    // xhr.addEventListener('error', ErrorHandler, false);
+    // xhr.addEventListener('abort', AbortHandler, false);
     xhr.send(uploadItem.file);
   };
 
-  const startBatch = (maxItems) => {
-    if (maxItems === undefined || null) maxItems = 3;
-    let nextBatch = [];
-    let itemsInBatch = 0;
-    for (let item of uploadList.files) {
-      if (item.status === 'pending' && itemsInBatch <= maxItems) {
-        item.status = 'uploading';
-        uploadItem(item);
-        itemsInBatch++;
-        nextBatch.push(item);
-      } else {
-        nextBatch.push(item);
-      }
-    }
-    const isComplete = itemsInBatch === 0;
-    setUploadList({ files: nextBatch, totalSize: fileListTotalSize(uploadList.totalSize), isComplete: isComplete });
-  };
-
-  const ProgressHandler = (e) => {
-    var percent = (e.loaded / e.total) * 100;
-    console.log('upload progress: ' + percent + '%');
-  };
-
-  const SuccessHandler = (e) => {
-    console.log('upload complete');
-  };
-  const ErrorHandler = () => {
-    console.log('upload failed');
-  };
-  const AbortHandler = () => {
-    console.log('upload aborted');
+  const uploadAllItems = () => {
+    uploadList.forEach((item) => {
+      uploadItem(item);
+    });
   };
 
   const handleUploadButton = () => {
-    startBatch(3);
+    uploadAllItems();
   };
 
   const dragEnter = (e) => {
@@ -90,7 +80,7 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
     const dt = e.dataTransfer;
     const files = dt.files;
 
-    updateUploadList(files);
+    generateUploadList(files);
   };
 
   return (
@@ -103,13 +93,13 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
       </h2>
 
       <div>
-        {uploadList.files.map((item, index) => (
-          <FileUpload key={index} file={item.file} status="ready" percentUploaded={0} />
+        {uploadList.map((item, index) => (
+          <FileUpload key={index} file={item.file} status={item.status} percentUploaded={item.percentUploaded} />
         ))}
       </div>
 
       <Form method="post" encType="multipart/form-data" action={`/${containerName}`}>
-        <p>Total upload size: {uploadList.totalSize}</p>
+        <p>Total upload size: {uploadStatus.totalSize}</p>
         <input name="action" type="hidden" defaultValue="Upload Object" />
         <input name="token" type="hidden" value={authToken} />
         <input name="accountId" type="hidden" value={accountID} />
@@ -125,19 +115,20 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
               type="file"
               className="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none"
               id="formFile"
-              onChange={(e) => updateUploadList(e.target.files)}
+              onChange={(e) => generateUploadList(e.target.files)}
               multiple
             />
             <div className="w-full h-10 bg-slate-300" onDragEnter={dragEnter} onDragOver={dragOver} onDrop={drop}></div>
-            <button
-              className="px-4 py-2 font-semibold text-sm border border-cyan-300 bg-cyan-200 rounded-full shadow-sm"
-              onClick={handleUploadButton}
-            >
-              Upload
-            </button>
           </div>
         </div>
       </Form>
+
+      <button
+        className="px-4 py-2 font-semibold text-sm border border-cyan-300 bg-cyan-200 rounded-full shadow-sm"
+        onClick={handleUploadButton}
+      >
+        Upload
+      </button>
     </div>
   );
 }
