@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
 import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
-import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import ObjectPreview from './ObjectPreview';
 
 async function downloadFile(authKey, accountId, container, object) {
   const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
@@ -35,24 +35,6 @@ export default function DisplayObject({ accountId, authKey, objectData, containe
     navigate(`/${container}`);
   };
 
-  useEffect(() => {
-    const previewImage = document.querySelector('#preview-image');
-    const fetchImage = async () => {
-      const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
-        method: 'GET',
-        headers: {
-          'x-auth-token': authKey,
-        },
-      });
-      // Create an object URL from the data.
-      const blob = await response.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      // Set the image src to the object URL.
-      previewImage.src = objectUrl;
-    };
-    if (fileType === 'image/jpeg' || fileType === 'image/png') fetchImage();
-  }, [object]);
-
   UseEscape(() => {
     navigate(`/${container}`);
   });
@@ -71,12 +53,12 @@ export default function DisplayObject({ accountId, authKey, objectData, containe
               <HiXMark />
             </Link>
           </h2>
-          <img
-            className="block mx-auto mt-8 mb-2 bg-white rounded-md pl-6 "
-            style={{ maxWidth: '400px', maxHeight: '300px' }}
-            id="preview-image"
-            src={FileIcon}
-            alt={`preview for the object ${object}`}
+          <ObjectPreview
+            accountId={accountId}
+            authKey={authKey}
+            objectData={objectData}
+            container={container}
+            object={object}
           />
           <div className="text-ui-active text-center">{object}</div>
           <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">

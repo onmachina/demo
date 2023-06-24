@@ -9,11 +9,11 @@ import { action as shardAction } from './routes/shard';
 import Root from './routes/root';
 import AccountPage from './routes/account';
 
-import Details, { loader as detailsLoader } from './routes/newObjectDetails';
+import Details, { loader as detailsLoader } from './routes/objectDetails';
 import ShardPage, { loader as shardLoader } from './routes/shard';
 import ContainerPage, { loader as containerLoader } from './routes/container';
 import SettingsPage from './routes/settings';
-import { action as objectPostAction } from './routes/newObjectDetails';
+import { action as objectPostAction } from './routes/objectDetails';
 import { action as containerPostAction } from './routes/container';
 
 // Styles (index.css handles tailwindcss imports)
