@@ -1,8 +1,14 @@
-import { useRef } from 'react';
-import { Link, useNavigate, Outlet } from 'react-router-dom';
+import React, { useRef, useState, Suspense } from 'react';
+import { Link, redirect, useNavigate, useParams, useLoaderData, Outlet } from 'react-router-dom';
 import UseEscape from '../hooks/useEscape';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import ObjectPreview from '../components/ObjectPreview';
+import { HiXMark } from 'react-icons/hi2';
+import { deleteObject, renameObject } from '../../lib/onmachina';
+
+import DisplayObject from '../components/DisplayObject';
+const DeleteComponent = React.lazy(() => import('../components/DeleteObject'));
+const RenameComponent = React.lazy(() => import('../components/RenameObject'));
 
 export default function ObjectDetials({ accountId, authKey }) {
   const [mode, setMode] = useState('display');
@@ -50,7 +56,6 @@ export default function ObjectDetials({ accountId, authKey }) {
             container={container}
             object={object}
           />
-          <div className="text-ui-active text-center">{object}</div>
           <Suspense fallback={<div>Loading...</div>}>
             <Component
               accountId={accountId}
