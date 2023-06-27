@@ -57,7 +57,7 @@ function Row({ last_modified, bytes, name, count, selected }) {
         <span>{count || '0'}</span>
       </td>
       <td className="text-right pr-4 text-red-600 w-auto">
-        <Link to={`/?action=delete&container=${name}`}>
+        <Link to={`/?action=delete-container&container=${name}`}>
           <HiOutlineTrash size={22} className="inline-block" />
         </Link>
       </td>

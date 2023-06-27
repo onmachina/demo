@@ -13,8 +13,8 @@ export default function AccountPage() {
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const showDelete = searchParams.get('action') === 'delete';
-  const showCreate = searchParams.get('action') === 'create';
+  const showDelete = searchParams.get('action') === 'delete-container';
+  const showCreate = searchParams.get('action') === 'create-container';
   const containerName = searchParams.get('container');
   const location = useLocation();
   const path = location.pathname;
@@ -23,7 +23,7 @@ export default function AccountPage() {
   const { accountID, authToken } = useNearAccountContext();
 
   const handleAddContainer = () => {
-    navigate(`/?action=create`);
+    navigate(`/?action=create-container`);
   };
 
   const pageType = params.container ? 'container-page' : 'shard-page';

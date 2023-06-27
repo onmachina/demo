@@ -25,7 +25,7 @@ export default function ContainerPage() {
   const params = useParams();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const showDelete = searchParams.get('action') === 'delete';
+  const showDelete = searchParams.get('action') === 'delete-object';
   const showCreate = searchParams.get('action') === 'create';
   const objectName = searchParams.get('object');
   const location = useLocation();
