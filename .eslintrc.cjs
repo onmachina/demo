@@ -9,6 +9,10 @@ module.exports = {
     // Make sure it's always the last config, so it gets the chance to override other configs.
     'eslint-config-prettier',
   ],
+ plugins: [
+    "prettier",
+    "@typescript-eslint"
+  ], 
   settings: {
     react: {
       // Tells eslint-plugin-react to automatically detect the version of React to use.
