@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import nearSetup from '../lib/newnearsetup';
+import appInit from '../lib/newnearsetup';
 import { action as shardAction } from './routes/shard';
 
 // Imports for elements used for routes
@@ -24,7 +24,7 @@ import WaitingCard from './components/WaitingCard';
 // Contexts
 import { NearAccountContextProvider } from './contexts/NearContext';
 
-nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
+appInit().then(({ selectorWallet, accountId, x_auth_token }) => {
   console.log('setting up app...');
   const router = createBrowserRouter([
     {
