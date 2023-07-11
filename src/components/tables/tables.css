@@ -1,0 +1,42 @@
+/* Classes and queries to power responsive tables. */
+/* ========================================================================== */
+
+/* If a container is open, hide all but the first column of the table and the headers */
+/* to create a compact, side-menu-like view. */
+/* | containers name | */
+.container-page .container-table th,
+.container-page .container-table td:not(:first-child) {
+    display: none;
+}
+
+/* on a small screen, reduce the visible columns to just name & date modified */
+/* | name | date modified | */
+@media screen and (max-width: 700px) {
+    .object-table td:nth-last-child(-n+3),
+    .object-table th:nth-last-child(-n+3),
+    .container-table td:nth-last-child(-n+3),
+    .container-table th:nth-last-child(-n+3) {
+        display: none;
+    }
+}
+
+/* with a bit more room, show all but the object type column */
+/* | name | date modified | size | */
+@media screen and (max-width: 1300px) {
+    .object-table td:nth-child(4),
+    .object-table th:nth-child(4),
+    .container-table td:nth-child(4),
+    .container-table th:nth-child(4) {
+        display: none;
+    }
+}
+
+/* there's less room on the container page, so hide the object type column */
+/* | containers list | . | file name | date modified | size | */
+@media screen and (max-width: 1000px) {
+
+    .container-page .object-table th:nth-child(3),
+    .container-page .object-table td:nth-child(3) {
+        display: none;
+    }
+}

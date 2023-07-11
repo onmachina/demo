@@ -1,6 +1,9 @@
 import CodeBlock from '../components/CodeBlock';
+import { useNearAccountContext } from '../contexts/NearContext';
 
-export default function SettingsPage({ accountId, authKey }) {
+export default function SettingsPage() {
+  const { accountID, authToken } = useNearAccountContext();
+
   return (
     <div className="container ml-8 max-w-2xl">
       <h1 className="text-3xl mb-4 font-bold">Account Settings</h1>
@@ -27,7 +30,7 @@ export default function SettingsPage({ accountId, authKey }) {
               <span className="text-left ml-2 font-semibold">account id</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <input type="text" className="w-full p-2 border" value={accountId} />
+              <input type="text" className="w-full p-2 border" value={accountID} />
             </td>
           </tr>
           <tr className="bg-gray-50 text-center">
@@ -35,7 +38,7 @@ export default function SettingsPage({ accountId, authKey }) {
               <span className="text-left ml-2 font-semibold">auth token</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <textarea className="w-full p-2 border">{authKey}</textarea>
+              <textarea className="w-full p-2 border">{authToken}</textarea>
             </td>
           </tr>
         </tbody>
@@ -58,7 +61,7 @@ export default function SettingsPage({ accountId, authKey }) {
       </h3>
       <p className="mb-4 mt-4">Both values have been prepopulated for you in the following shell command:</p>
       <CodeBlock
-        code={`export NEAR_ACCOUNT=${accountId} && export DSN_API_TOKEN=${authKey} && export OS_AUTH_TOKEN=${authKey} && export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountId}`}
+        code={`export NEAR_ACCOUNT=${accountID} && export DSN_API_TOKEN=${authToken} && export OS_AUTH_TOKEN=${authToken} && export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountID}`}
       />
 
       <p className="mb-4 mt-8 font-bold">

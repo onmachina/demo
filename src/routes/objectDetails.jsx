@@ -1,59 +1,36 @@
-import { useEffect, useRef } from 'react';
-import { useParams, useLoaderData, Link, useNavigate, Outlet } from 'react-router-dom';
-import MetaDataTable from '../components/tables/MetaDataTable';
+import React, { useRef, useState, Suspense } from 'react';
+import { Link, redirect, useNavigate, useParams, useLoaderData, Outlet } from 'react-router-dom';
 import UseEscape from '../hooks/useEscape';
-import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
-import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import ObjectPreview from '../components/ObjectPreview';
+import { HiXMark } from 'react-icons/hi2';
+import { deleteObject, renameObject } from '../../lib/onmachina';
 
-async function downloadFile(authKey, accountId, container, object) {
-  const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
-    method: 'GET',
-    headers: {
-      'x-auth-token': authKey,
-    },
-  });
+import DisplayObject from '../components/DisplayObject';
+const DeleteComponent = React.lazy(() => import('../components/DeleteObject'));
+const RenameComponent = React.lazy(() => import('../components/RenameObject'));
 
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
+export default function ObjectDetials({ accountId, authKey }) {
+  const [mode, setMode] = useState('display');
 
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = object || 'download';
-
-  link.click();
-}
-
-export default function Details({ accountId, authKey }) {
   let { container, object } = useParams();
   const objectData = useLoaderData();
-  const fileType = objectData.find((obj) => obj.name === 'content-type').value;
+
+  let Component;
+  switch (mode) {
+    case 'delete':
+      Component = DeleteComponent;
+      break;
+    case 'rename':
+      Component = RenameComponent;
+      break;
+    default:
+      Component = DisplayObject;
+  }
+
   const navigate = useNavigate();
   const ref = useRef();
   useOnClickOutside(ref, () => navigate(`/${container}`));
-
-  const handleDownloadClick = () => {
-    downloadFile(authKey, accountId, container, object);
-    navigate(`/${container}`);
-  };
-
-  useEffect(() => {
-    const previewImage = document.querySelector('#preview-image');
-    const fetchImage = async () => {
-      const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
-        method: 'GET',
-        headers: {
-          'x-auth-token': authKey,
-        },
-      });
-      // Create an object URL from the data.
-      const blob = await response.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      // Set the image src to the object URL.
-      previewImage.src = objectUrl;
-    };
-    if (fileType === 'image/jpeg' || fileType === 'image/png') fetchImage();
-  }, [object]);
 
   UseEscape(() => {
     navigate(`/${container}`);
@@ -61,11 +38,10 @@ export default function Details({ accountId, authKey }) {
 
   return (
     <>
-      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4" ref={ref}>
+      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4 ui-panel" ref={ref}>
         <Outlet />
-
-        <div className="p-5 mb-5 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-          <h2 className="border-b pb-2 mb-2 border-slate-300 flex justify-between">
+        <div className="p-5 mb-5 w-full bg-ui-base border border-ui-base rounded-lg shadow-lg text-ui-muted">
+          <h2 className="border-b pb-2 mb-2 border-ui-base flex justify-between">
             <div>
               Details for <strong>{object}</strong>
             </div>
@@ -73,40 +49,30 @@ export default function Details({ accountId, authKey }) {
               <HiXMark />
             </Link>
           </h2>
-          <img
-            className="block mx-auto mt-8 mb-2 bg-white rounded-md pl-6 "
-            style={{ maxWidth: '400px', maxHeight: '300px' }}
-            id="preview-image"
-            src={FileIcon}
-            alt={`preview for the object ${object}`}
+          <ObjectPreview
+            accountId={accountId}
+            authKey={authKey}
+            objectData={objectData}
+            container={container}
+            object={object}
           />
-          <div className="text-sky-700 text-center">{object}</div>
-          <div className="flex flex-row items-center space-x-2 mb-4 mt-4 justify-center">
-            <a
-              className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
-              onClick={handleDownloadClick}
-              href="#"
-            >
-              <HiOutlineArrowDownTray size={22} style={{ display: 'inline-block' }} /> Download
-            </a>
-            <Link className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border">
-              <HiOutlinePencilSquare size={22} style={{ display: 'inline-block' }} /> Rename
-            </Link>
-            <Link
-              to="delete"
-              className="text-red-600 px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border-gray-300 border"
-            >
-              <HiOutlineTrash size={22} style={{ display: 'inline-block' }} /> Delete
-            </Link>
-          </div>
-
-          <MetaDataTable metadata={objectData} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Component
+              accountId={accountId}
+              authKey={authKey}
+              objectData={objectData}
+              container={container}
+              object={object}
+              setMode={setMode}
+            />
+          </Suspense>
         </div>
       </div>
     </>
   );
 }
 
+// Called to load data for any GET request
 export async function loader(params, accountId, x_auth_token) {
   const response = await fetch(
     `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
@@ -125,4 +91,21 @@ export async function loader(params, accountId, x_auth_token) {
     if (name.startsWith('x-object-meta')) headersArray.push({ name, value });
   }
   return headersArray;
+}
+
+// Called for any POST request
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const action = Object.fromEntries(formData).action;
+  const token = Object.fromEntries(formData).token;
+  const accountId = Object.fromEntries(formData).accountId;
+  if (action === 'deleteObject') {
+    await deleteObject(params.container, params.object, accountId, token);
+    return redirect(`/${params.container}`);
+  } else if (action === 'rename') {
+    const oldName = Object.fromEntries(formData).oldname;
+    const newName = Object.fromEntries(formData).newname;
+    await renameObject({ container: params.container, oldName, newName, accountId, token });
+    return redirect(`/${params.container}/${newName}`);
+  }
 }
