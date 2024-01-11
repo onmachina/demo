@@ -47,7 +47,7 @@ export default function ContainerPage() {
   return (
     <>
       <div className="container mx-auto mb-8">
-        <LanguageTabs />
+        <LanguageTabs containerName={params.container} />
       </div>
       <div className="text-ui-muted mb-4 container mx-auto ui-panel-muted border border-ui-base">
         <AudioRecorder authToken={authToken} accountID={accountID} containerName={params.container} />
