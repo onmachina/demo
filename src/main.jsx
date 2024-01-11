@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 
 import appInit from '../lib/newnearsetup';
 import { action as shardAction } from './routes/shard';
@@ -28,18 +28,10 @@ appInit().then(({ selectorWallet, accountId, x_auth_token }) => {
   console.log('setting up app...');
   const router = createBrowserRouter([
     {
-      path: '/account/',
-      element: (
-        <Root wallet={selectorWallet} accountId={accountId}>
-          <AccountPage wallet={selectorWallet} accountId={accountId} />
-        </Root>
-      ),
-    },
-    {
       path: '/',
       element: (
         <Root wallet={selectorWallet} accountId={accountId}>
-          <ShardPage />
+          <Outlet />
         </Root>
       ),
       loader: async ({ params }) => {
@@ -47,14 +39,6 @@ appInit().then(({ selectorWallet, accountId, x_auth_token }) => {
       },
       action: shardAction,
       children: [
-        {
-          path: 'shard-list',
-          element: <ShardList />,
-        },
-        {
-          path: 'settings',
-          element: <SettingsPage />,
-        },
         {
           path: ':container',
           element: <ContainerPage />,

@@ -17,7 +17,9 @@ import DeleteObjectForm from '../components/DeleteObjectForm';
 import { useNearAccountContext } from '../contexts/NearContext';
 import { deleteObject } from '../../lib/onmachina';
 import UploadObjectForm from '../components/UploadObjectForm';
+import LanguageTabs from '../components/LanguageTabs';
 import { uploadObject } from '../../lib/onmachina';
+import AudioRecorder from '../components/AudioRecorder';
 
 export default function ContainerPage() {
   const objects = useLoaderData();
@@ -44,9 +46,18 @@ export default function ContainerPage() {
 
   return (
     <>
+      <div className="container mx-auto mb-8">
+        <LanguageTabs />
+      </div>
+      <div className="text-ui-muted mb-4 container mx-auto ui-panel-muted border border-ui-base">
+        <AudioRecorder authToken={authToken} accountID={accountID} containerName={params.container} />
+      </div>
       <main className={`${pageType} container mx-auto ui-panel-muted border border-ui-base`}>
         <div className="flex flex-row items-center my-2 px-2">
-          <HiOutlineCube size={22} />
+          <span className="text-ui-active">
+            <HiOutlineCube size={22} />
+          </span>
+
           <h2 className="ml-2 mr-4 text-ui-muted">
             <div className="inline-block mr-3 text-ui-base">{container}</div>
             {objects.length} {objects.length != 1 ? 'Objects' : 'Object'}
