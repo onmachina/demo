@@ -77,6 +77,7 @@ const AudioRecorder = ({ containerName, accountID, authToken }) => {
     xhr.open('PUT', `${apiURL}/${accountID}/${containerName}/audio-${dateString}.webm`, true);
     xhr.setRequestHeader('Content-Type', mimeType);
     xhr.setRequestHeader('x-auth-token', authToken);
+    xhr.setRequestHeader('X-Object-Meta-Pipeline', 'audio-translate');
     xhr.addEventListener(
       'progress',
       (e) => {
@@ -124,14 +125,14 @@ const AudioRecorder = ({ containerName, accountID, authToken }) => {
           </button>
         ) : null}
       </div>
-      {audio ? (
+      {/* {audio ? (
         <div className="audio-player">
           <audio src={audio} controls></audio>
           <a download href={audio}>
             Download Recording
           </a>
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

@@ -7,11 +7,12 @@ export default function ObjectPreview({ accountId, authKey, objectData, containe
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
   const ref = useRef();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [transcript, setTranscript] = useState('');
   useOnClickOutside(ref, () => navigate(`/${container}`));
 
   useEffect(() => {
-    const previewImage = document.querySelector('#preview-image');
-    const fetchImage = async () => {
+    const previewAudio = document.querySelector('#audio-controls');
+    const fetchAudio = async () => {
       const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
         method: 'GET',
         headers: {
@@ -22,22 +23,33 @@ export default function ObjectPreview({ accountId, authKey, objectData, containe
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
       // Set the image src to the object URL.
-      previewImage.src = objectUrl;
+      previewAudio.src = objectUrl;
       setIsLoaded(true);
     };
-    if (fileType === 'image/jpeg' || fileType === 'image/png') fetchImage();
+
+    const fetchTranscript = async () => {
+      // Write the object back to onMacchina
+      const jsonFilename = object.replace(/\.webm$/, '.json');
+
+      const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${jsonFilename}`, {
+        method: 'GET',
+        headers: {
+          'x-auth-token': authKey,
+        },
+      });
+      const transcript = await response.json();
+      setTranscript(transcript?.text);
+    };
+
+    fetchAudio();
+    fetchTranscript();
   }, [object]);
 
   return (
     <div>
-      <img
-        className={`mx-auto mt-8 mb-2 rounded-md shadow-lg ${isLoaded ? 'block' : 'hidden'}`}
-        style={{ maxWidth: '400px', maxHeight: '300px' }}
-        id="preview-image"
-        src={FileIcon}
-        alt={`preview for the object ${object}`}
-      />
       {!isLoaded && <LoadingPreviewGraphic />}
+      <audio src="" controls id="audio-controls" className={`mx-auto mb-4 ${isLoaded ? 'block' : 'hidden'}`}></audio>
+      {transcript && <div className="text-center mb-4">"{transcript}"</div>}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiOutlineCube, HiPlus } from 'react-icons/hi2';
 import EmptyContainerGraphic from '../components/EmptyContainerGraphic';
+import { apiURL } from '../../lib/onmachina';
 
 import {
   redirect,
@@ -103,7 +104,7 @@ function EmptyMessage({ objects }) {
 
 // Called for any GET request
 export async function loader(params, accountId, x_auth_token) {
-  const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
+  const req = await fetch(`${apiURL}/${accountId}/${params.container}/?format=json`, {
     method: 'GET',
     headers: {
       'x-auth-token': x_auth_token,

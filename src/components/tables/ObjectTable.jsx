@@ -36,6 +36,8 @@ export default function ObjectTable({ objects, selectedObject }) {
 function Row({ last_modified, bytes, name, content_type, selected }) {
   let selectedClass = selected ? 'bg-ui-selected text-black' : 'bg-ui-base hover:bg-ui-active';
 
+  if (content_type === 'application/json') return;
+
   return (
     <tr className={`text-center ${selectedClass}`}>
       <td className="px-2 py-2 flex flex-row items-center">
@@ -63,4 +65,3 @@ function Row({ last_modified, bytes, name, content_type, selected }) {
     </tr>
   );
 }
-``;
