@@ -39,6 +39,7 @@ appInit().then(({ selectorWallet, accountId, x_auth_token }) => {
       },
       action: shardAction,
       children: [
+        { path: 'account', element: <AccountPage wallet={selectorWallet} accountId={accountId} /> },
         {
           path: ':container',
           element: <ContainerPage />,
