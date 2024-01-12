@@ -28,8 +28,8 @@ export default function ObjectPreview({ accountId, authKey, objectData, containe
     };
 
     const fetchTranscript = async () => {
-      // Write the object back to onMacchina
-      const jsonFilename = object.replace(/\.webm$/, '.json');
+      const noExtension = object.replace(/\.[^/.]+$/, '');
+      const jsonFilename = noExtension + '.json';
 
       const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${jsonFilename}`, {
         method: 'GET',

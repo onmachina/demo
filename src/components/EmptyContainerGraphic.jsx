@@ -83,8 +83,8 @@ export default function EmptyContainerGraphic() {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(79 79) rotate(90) scale(79)"
         >
-          <stop stop-color="#72B7FA" stop-opacity="0.58" />
-          <stop offset="1" stop-color="#72B7FA" stop-opacity="0" />
+          <stop stop-color="#72B7FA" stopOpacity="0.58" />
+          <stop offset="1" stop-color="#72B7FA" stopOpacity="0" />
         </radialGradient>
         <linearGradient
           id="paint1_linear_515_478"
@@ -95,7 +95,7 @@ export default function EmptyContainerGraphic() {
           gradientUnits="userSpaceOnUse"
         >
           <stop stop-color="#312B2B" />
-          <stop offset="1" stop-color="#312B2B" stop-opacity="0" />
+          <stop offset="1" stop-color="#312B2B" stopOpacity="0" />
         </linearGradient>
       </defs>
     </svg>

@@ -92,7 +92,7 @@ export default function ContainerPage() {
 function EmptyMessage({ objects }) {
   if (objects.length == 0) {
     return (
-      <div className="w-full text-center mt-20">
+      <div className="w-full text-center mt-20 mb-20">
         <div className="mx-auto w-32">
           <EmptyContainerGraphic />
         </div>
