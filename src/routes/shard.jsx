@@ -7,6 +7,7 @@ import { deleteContainer } from '../../lib/onmachina';
 import DeleteContainerForm from '../components/DeleteContainerForm';
 import NewContainerForm from '../components/NewContainerForm';
 import { useSearchParams } from 'react-router-dom';
+import { red } from 'bn.js';
 
 export default function AccountPage() {
   const containers = useLoaderData();
@@ -79,6 +80,8 @@ export async function loader(params, accountId, x_auth_token) {
   }
 
   const containers = await res.json();
+
+  if (!params.container) return redirect(`/audio-english`);
 
   return containers;
 }

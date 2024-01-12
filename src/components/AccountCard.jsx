@@ -16,7 +16,7 @@ export default function AccountCard({ wallet, accountId }) {
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
       <div className="flex justify-end px-4 pt-4">
-        <Link to="/">Close</Link>
+        <Link to="/audio-english">Close</Link>
       </div>
       <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={NearLogo} alt="Near Logo" />
