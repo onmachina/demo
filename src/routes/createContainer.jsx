@@ -68,7 +68,7 @@ export async function action({ request, params }) {
   const token = Object.fromEntries(formData).token;
   const accountId = Object.fromEntries(formData).accountId;
   const containerName = Object.fromEntries(formData).name;
-  const isPublic = Object.fromEntries(formData).public;
+  const isPublic = formData.has('public');
   await addContainer(containerName, isPublic, accountId, token);
   return redirect(`/`);
 }
