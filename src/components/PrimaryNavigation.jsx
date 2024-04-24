@@ -21,12 +21,12 @@ export default function Nav() {
         </Link>
       </li>
       <li>
-        <a href="/settings">
+        <Link to="/settings">
           <div className="bg-white rounded-full aspect-square w-10 flex justify-center items-center m-auto mt-8 mb-1 border border">
             <HiOutlineCog size={22} />
           </div>
           <span className="block text-center mb-8">Settings</span>
-        </a>
+        </Link>
       </li>
     </ul>
   );
