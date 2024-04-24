@@ -58,7 +58,7 @@ export default function SettingsPage({ accountId, authKey }) {
       </h3>
       <p className="mb-4 mt-4">Both values have been prepopulated for you in the following shell command:</p>
       <CodeBlock
-        code={`export NEAR_ACCOUNT=${accountId} && export DSN_API_TOKEN=${authKey} && export OS_AUTH_TOKEN=${authKey} && export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountId}`}
+        code={`export NEAR_ACCOUNT=${accountId} && export DSN_API_TOKEN=${authKey} && export OS_AUTH_TOKEN=${authKey} && export OS_STORAGE_URL=https://api.global01.onmachina.io/v1/${accountId}`}
       />
 
       <p className="mb-4 mt-8 font-bold">
@@ -66,11 +66,11 @@ export default function SettingsPage({ accountId, authKey }) {
       </p>
       <p className="mb-4 mt-4">View an overview of your account:</p>
       <CodeBlock
-        code={`curl -i https://api.testnet.onmachina.io/v1/$NEAR_ACCOUNT -X GET -H "X-Auth-Token: $DSN_API_TOKEN"`}
+        code={`curl -i https://api.global01.onmachina.io/v1/$NEAR_ACCOUNT -X GET -H "X-Auth-Token: $DSN_API_TOKEN"`}
       />
       <p className="mb-4 mt-4">Create a new container called "test-container":</p>
       <CodeBlock
-        code={`curl -i https://api.testnet.onmachina.io/v1/$NEAR_ACCOUNT/test-container -X PUT -H "X-Auth-Token: $DSN_API_TOKEN"`}
+        code={`curl -i https://api.global01.onmachina.io/v1/$NEAR_ACCOUNT/test-container -X PUT -H "X-Auth-Token: $DSN_API_TOKEN"`}
       />
       <p className="mb-4 mt-4">
         Add an object into the container:
@@ -78,7 +78,7 @@ export default function SettingsPage({ accountId, authKey }) {
         (Be sure to include a proper content type for the data to be accessible)
       </p>
       <CodeBlock
-        code={`curl -i https://api.testnet.onmachina.io/v1/$NEAR_ACCOUNT/test-container/test.txt -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "Content-Type: text/plain" -T ~/tmp`}
+        code={`curl -i https://api.global01.onmachina.io/v1/$NEAR_ACCOUNT/test-container/test.txt -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "Content-Type: text/plain" -T ~/tmp`}
       />
     </div>
   );

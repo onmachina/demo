@@ -38,7 +38,7 @@ export default function DeleteContainer({ accountId, authKey }) {
 }
 
 export async function loader(params, accountId, x_auth_token) {
-  const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}`, {
+  const response = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${params.container}`, {
     method: 'HEAD',
     headers: {
       'x-auth-token': x_auth_token,
@@ -60,7 +60,7 @@ export async function action({ request, params }) {
 }
 
 async function deleteContainer(container, accountId, token) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/`, {
+  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/`, {
     method: 'DELETE',
     headers: {
       'x-auth-token': token,

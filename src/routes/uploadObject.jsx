@@ -45,7 +45,7 @@ export async function action({ request, params }) {
 }
 
 async function uploadFile(container, upload) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${upload.accountId}/${container}/${upload.file.name}`, {
+  const res = await fetch(`https://api.global01.onmachina.io/v1/${upload.accountId}/${container}/${upload.file.name}`, {
     // Your POST endpoint
     method: 'PUT',
     headers: {
@@ -54,6 +54,5 @@ async function uploadFile(container, upload) {
     },
     body: upload.file,
   });
-  if (!res.ok) throw res;
   return { ok: true };
 }

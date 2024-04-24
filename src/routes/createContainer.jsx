@@ -74,13 +74,14 @@ export async function action({ request, params }) {
 }
 
 async function addContainer(containerName, isPublic, accountId, token) {
+  console.log('creating container', containerName, isPublic, accountId, token);
   let headers = { 'x-auth-token': token };
   if (isPublic) {
     // set an ACL to allow anybody to get an object in this container
     headers['x-container-read'] = '.r:*';
   }
 
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${containerName}/`, {
+  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${containerName}/`, {
     method: 'PUT',
     headers: headers,
   });

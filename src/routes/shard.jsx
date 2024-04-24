@@ -40,7 +40,7 @@ export default function AccountPage() {
 }
 
 export async function loader(params, accountId, x_auth_token) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/?format=json`, {
+  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/?format=json`, {
     method: 'GET',
     headers: {
       'x-auth-token': x_auth_token,

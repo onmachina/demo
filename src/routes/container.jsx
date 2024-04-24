@@ -45,7 +45,7 @@ function EmptyGraphic({ objects }) {
 }
 
 export async function loader(params, accountId, x_auth_token) {
-  const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
+  const req = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
     method: 'GET',
     headers: {
       'x-auth-token': x_auth_token,

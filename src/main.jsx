@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 
-import nearSetup from '../lib/nearsetup';
+import { auth0Setup, handleAuthCallback } from '../lib/auth0setup.js';
 
 // Imports for elements used for routes
 import Root from './routes/root';
@@ -24,24 +25,30 @@ import './index.css';
 import ShardList from './routes/shardList';
 import WaitingCard from './components/WaitingCard';
 
-nearSetup().then(({ selectorWallet, accountId, x_auth_token }) => {
+auth0Setup().then(({ token, accountId, x_auth_token }) => {
   const router = createBrowserRouter([
+    {
+      path: '/callback',
+      element: <Root accountId={accountId}></Root>,
+      loader: async () => {
+        return redirect(`/`);
+      },
+    },
     {
       path: '/account/',
       element: (
-        <Root wallet={selectorWallet} accountId={accountId}>
-          <AccountPage wallet={selectorWallet} accountId={accountId} />
+        <Root accountId={accountId}>
+          <AccountPage accountId={accountId} />
         </Root>
       ),
     },
     {
       path: '/',
       element: (
-        <Root wallet={selectorWallet} accountId={accountId}>
+        <Root accountId={accountId}>
           <ShardPage />
         </Root>
       ),
-      errorElement: <WaitingCard wallet={selectorWallet} accountId={accountId} />,
       loader: async ({ params }) => {
         return shardLoader(params, accountId, x_auth_token);
       },

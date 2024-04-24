@@ -39,7 +39,7 @@ export default function DeleteObject({ accountId, authKey }) {
 
 export async function loader(params, accountId, x_auth_token) {
   const response = await fetch(
-    `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
+    `https://api.global01.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
     {
       method: 'HEAD',
       headers: {
@@ -63,7 +63,7 @@ export async function action({ request, params }) {
 }
 
 async function deleteFile(container, object, accountId, token) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
+  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/${object}`, {
     method: 'DELETE',
     headers: {
       'x-auth-token': token,

@@ -7,7 +7,7 @@ import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 
 async function downloadFile(authKey, accountId, container, object) {
-  const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
+  const response = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/${object}`, {
     method: 'GET',
     headers: {
       'x-auth-token': authKey,
@@ -40,7 +40,7 @@ export default function Details({ accountId, authKey }) {
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
     const fetchImage = async () => {
-      const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
+      const response = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/${object}`, {
         method: 'GET',
         headers: {
           'x-auth-token': authKey,
@@ -109,7 +109,7 @@ export default function Details({ accountId, authKey }) {
 
 export async function loader(params, accountId, x_auth_token) {
   const response = await fetch(
-    `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
+    `https://api.global01.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
     {
       method: 'HEAD',
       headers: {
