@@ -79,7 +79,7 @@ export function LoggingIn() {
             </svg>
             <span className="sr-only">Info</span>
             <div>
-              <span className="font-medium">One moment...</span>
+              <span className="font-medium">One moment please...</span>
             </div>
           </div>
         </div>
