@@ -50,16 +50,19 @@ export const auth0AuthProvider: AuthProvider = {
 
   async signin(type: string, redirectTo: string) {
     let client = await getClient();
-    if (type === 'redirect') {
-      await client.loginWithRedirect({
-        authorizationParams: {
-          redirect_uri:
-            window.location.origin + '/login-result?' + new URLSearchParams([['redirectTo', redirectTo]]).toString(),
-        },
-      });
-    } else {
-      await client.loginWithPopup();
-    }
+    // if (type === 'redirect') {
+    //   await client.loginWithRedirect({
+    //     authorizationParams: {
+    //       redirect_uri:
+    //         window.location.origin + '/login-result?' + new URLSearchParams([['redirectTo', redirectTo]]).toString(),
+    //     },
+    //   });
+    // } else {
+    //   await client.loginWithPopup();
+    // }
+    console.log(
+      window.location.origin + '/login-result?' + new URLSearchParams([['redirectTo', redirectTo]]).toString(),
+    );
   },
   async handleSigninRedirect() {
     const query = window.location.search;
