@@ -1,9 +1,10 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
-import { useLoaderData, Outlet, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useLoaderData, Outlet, useNavigate, useParams, useLocation, redirect } from 'react-router-dom';
+import { auth0AuthProvider } from '../auth';
 
 export default function AccountPage() {
-  const containers = useLoaderData();
+  const { containers } = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -39,12 +40,15 @@ export default function AccountPage() {
   return <Outlet />;
 }
 
-export async function loader(params, accountId, x_auth_token) {
-  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/?format=json`, {
+export async function loader() {
+  const isAuthenticated = await auth0AuthProvider.isAuthenticated();
+  if (!isAuthenticated) return redirect('/login');
+
+  const username = await auth0AuthProvider.username();
+  const token = await auth0AuthProvider.accessToken();
+  const avatarUrl = await auth0AuthProvider.avatarUrl();
+  const res = await auth0AuthProvider.authenticatedFetch(`/?format=json`, {
     method: 'GET',
-    headers: {
-      'x-auth-token': x_auth_token,
-    },
   });
 
   // handle the error if an account isn't found
@@ -57,5 +61,5 @@ export async function loader(params, accountId, x_auth_token) {
 
   const containers = await res.json();
 
-  return containers;
+  return { containers, token, username, avatarUrl };
 }

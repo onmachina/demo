@@ -1,7 +1,8 @@
 import { useParams, useLoaderData, Link, redirect, Form } from 'react-router-dom';
 import { formatFileSize } from '../../lib/utils';
+import { auth0AuthProvider } from '../auth';
 
-export default function DeleteObject({ accountId, authKey }) {
+export default function DeleteObject() {
   let { container, object } = useParams();
   const objectData = useLoaderData();
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
@@ -20,8 +21,6 @@ export default function DeleteObject({ accountId, authKey }) {
             ({fileType})? This action cannot be undone.
           </p>
           <Form method="POST" action={`/${container}/${object}/delete/`}>
-            <input name="accountId" type="hidden" defaultValue={accountId} />
-            <input name="token" type="hidden" defaultValue={authKey} />
             <div className="flex space-x-2 pt-4">
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
                 Yes, Delete
@@ -54,21 +53,16 @@ export async function loader(params, accountId, x_auth_token) {
   return headersArray;
 }
 
-export async function action({ request, params }) {
-  const formData = await request.formData();
-  const token = Object.fromEntries(formData).token;
-  const accountId = Object.fromEntries(formData).accountId;
-  await deleteFile(params.container, params.object, accountId, token);
+export async function action({ params }) {
+  await deleteFile(params.container, params.object);
   return redirect(`/${params.container}`);
 }
 
-async function deleteFile(container, object, accountId, token) {
-  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/${object}`, {
+async function deleteFile(container, object) {
+  const res = await auth0AuthProvider.authenticatedFetch(`/${container}/${object}`, {
     method: 'DELETE',
-    headers: {
-      'x-auth-token': token,
-    },
   });
+
   if (!res.ok) throw res;
   return { ok: true };
 }

@@ -1,7 +1,8 @@
 import { useParams, redirect, Link, Form } from 'react-router-dom';
 import { HiXMark } from 'react-icons/hi2';
+import { auth0AuthProvider } from '../auth';
 
-export default function Upload({ accountId, authKey }) {
+export default function Upload() {
   let { container } = useParams();
 
   return (
@@ -13,9 +14,6 @@ export default function Upload({ accountId, authKey }) {
         </Link>
       </h2>
       <Form method="post" encType="multipart/form-data">
-        <input name="token" type="hidden" defaultValue={authKey} />
-        <input name="accountId" type="hidden" defaultValue={accountId} />
-
         <div className="mb-3 w-96">
           <label htmlFor="formFile" className="mb-2 inline-block text-neutral-700">
             File to upload
@@ -45,14 +43,14 @@ export async function action({ request, params }) {
 }
 
 async function uploadFile(container, upload) {
-  const res = await fetch(`https://api.global01.onmachina.io/v1/${upload.accountId}/${container}/${upload.file.name}`, {
-    // Your POST endpoint
+  const res = await auth0AuthProvider.authenticatedFetch(`/${container}/${upload.file.name}`, {
     method: 'PUT',
     headers: {
       'Content-Type': upload.file.type,
-      'x-auth-token': upload.token,
     },
     body: upload.file,
   });
+  if (!res.ok) throw res;
+
   return { ok: true };
 }

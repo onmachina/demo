@@ -1,13 +1,12 @@
 import { useParams, useLoaderData, Link, redirect, Form } from 'react-router-dom';
 import { formatFileSize } from '../../lib/utils';
+import { auth0AuthProvider } from '../auth';
 
-export default function DeleteContainer({ accountId, authKey }) {
+export default function DeleteContainer() {
   let { container } = useParams();
   const containerData = useLoaderData();
   const objectCount = containerData.find((obj) => obj.name === 'x-container-object-count').value;
   const byteCount = containerData.find((obj) => obj.name === 'x-container-bytes-used').value;
-  //   const fileType = containerData.find((obj) => obj.name === 'content-type').value;
-  //   const fileSize = containerData.find((obj) => obj.name === 'content-length').value;
 
   return (
     <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">
@@ -19,9 +18,6 @@ export default function DeleteContainer({ accountId, authKey }) {
             objects totalling {formatFileSize(byteCount)} in data. This action cannot be undone.
           </p>
           <Form method="POST" action={`/${container}/delete/`}>
-            <input name="token" type="hidden" defaultValue={authKey} />
-            <input name="accountId" type="hidden" defaultValue={accountId} />
-
             <div className="flex space-x-2 pt-4">
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" type="submit">
                 Yes, Delete
@@ -37,12 +33,9 @@ export default function DeleteContainer({ accountId, authKey }) {
   );
 }
 
-export async function loader(params, accountId, x_auth_token) {
-  const response = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${params.container}`, {
+export async function loader(params) {
+  const response = await auth0AuthProvider.authenticatedFetch(`/${params.container}`, {
     method: 'HEAD',
-    headers: {
-      'x-auth-token': x_auth_token,
-    },
   });
   const headersArray = [];
   for (const [name, value] of response.headers.entries()) {
@@ -52,20 +45,15 @@ export async function loader(params, accountId, x_auth_token) {
 }
 
 export async function action({ request, params }) {
-  const formData = await request.formData();
-  const token = Object.fromEntries(formData).token;
-  const accountId = Object.fromEntries(formData).accountId;
-  await deleteContainer(params.container, accountId, token);
+  await deleteContainer(params.container);
   return redirect(`/`);
 }
 
-async function deleteContainer(container, accountId, token) {
-  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/`, {
+async function deleteContainer(container) {
+  const res = await auth0AuthProvider.authenticatedFetch(`/${container}/`, {
     method: 'DELETE',
-    headers: {
-      'x-auth-token': token,
-    },
   });
+
   if (!res.ok) throw res;
   return { ok: true };
 }

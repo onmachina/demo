@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import debounce from 'lodash/debounce';
+import { auth0AuthProvider } from '../auth';
 
 import { Link, redirect, Form } from 'react-router-dom';
 
-export default function AddContainer({ accountId, authKey }) {
+export default function AddContainer() {
   // ensure the container name is URL apporpriate
   const slugify = debounce((event) => {
     const containerName = event.target.value;
@@ -22,8 +23,6 @@ export default function AddContainer({ accountId, authKey }) {
           <h2 className="border-b pb-2 mb-2 border-cyan-400">Create a new container</h2>
           <Form className="pt-4" autocomplete="off" method="POST" action={`/new-container/`}>
             <div class="mb-6">
-              <input name="token" type="hidden" defaultValue={authKey} />
-              <input name="accountId" type="hidden" defaultValue={accountId} />
               <label for="email" className="block mb-2 text-sm font-medium text-gray-900">
                 Container name
               </label>
@@ -65,26 +64,24 @@ export default function AddContainer({ accountId, authKey }) {
 
 export async function action({ request, params }) {
   const formData = await request.formData();
-  const token = Object.fromEntries(formData).token;
-  const accountId = Object.fromEntries(formData).accountId;
   const containerName = Object.fromEntries(formData).name;
   const isPublic = formData.has('public');
-  await addContainer(containerName, isPublic, accountId, token);
+  await addContainer(containerName, isPublic);
   return redirect(`/`);
 }
 
-async function addContainer(containerName, isPublic, accountId, token) {
-  console.log('creating container', containerName, isPublic, accountId, token);
-  let headers = { 'x-auth-token': token };
+async function addContainer(containerName, isPublic) {
+  let headers = [];
   if (isPublic) {
     // set an ACL to allow anybody to get an object in this container
     headers['x-container-read'] = '.r:*';
   }
 
-  const res = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${containerName}/`, {
+  const res = await auth0AuthProvider.authenticatedFetch(`/${containerName}/`, {
     method: 'PUT',
     headers: headers,
   });
+
   if (!res.ok) throw res;
   return { ok: true };
 }

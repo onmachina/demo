@@ -1,6 +1,10 @@
+import { useRouteLoaderData } from 'react-router-dom';
+
 import CodeBlock from '../components/CodeBlock';
 
-export default function SettingsPage({ accountId, authKey }) {
+export default function SettingsPage() {
+  const { username, token } = useRouteLoaderData('root');
+
   return (
     <div className="container ml-8 max-w-2xl">
       <h1 className="text-3xl mb-4 font-bold">Account Settings</h1>
@@ -27,7 +31,7 @@ export default function SettingsPage({ accountId, authKey }) {
               <span className="text-left ml-2 font-semibold">account id</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <input type="text" className="w-full p-2 border" value={accountId} />
+              <input type="text" className="w-full p-2 border" value={username} />
             </td>
           </tr>
           <tr className="bg-gray-50 text-center">
@@ -35,7 +39,7 @@ export default function SettingsPage({ accountId, authKey }) {
               <span className="text-left ml-2 font-semibold">auth token</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <textarea className="w-full p-2 border">{authKey}</textarea>
+              <textarea className="w-full p-2 border">{token}</textarea>
             </td>
           </tr>
         </tbody>
@@ -57,7 +61,7 @@ export default function SettingsPage({ accountId, authKey }) {
         1. First, you'll want to export your account ID along with your API token.
       </h3>
       <p className="mb-4 mt-4">Both values have been prepopulated for you in the following shell command:</p>
-      <CodeBlock code={`export DSN_ACCOUNT=${accountId} && export DSN_API_TOKEN=${authKey}`} />
+      <CodeBlock code={`export DSN_ACCOUNT=${username} && export DSN_API_TOKEN=${token}`} />
 
       <p className="mb-4 mt-8 font-bold">
         2. Now you can run API commands against the OnMachina distributed storage network.

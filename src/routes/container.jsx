@@ -1,6 +1,7 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiPlus } from 'react-icons/hi2';
 import { useLoaderData, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { auth0AuthProvider } from '../auth';
 import emptyImage from '../assets/empty-container.svg';
 
 export default function ContainerPage() {
@@ -44,13 +45,10 @@ function EmptyGraphic({ objects }) {
   }
 }
 
-export async function loader(params, accountId, x_auth_token) {
-  const req = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
+export async function loader(params) {
+  const res = await auth0AuthProvider.authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
-    headers: {
-      'x-auth-token': x_auth_token,
-    },
   });
-  const objects = await req.json();
+  const objects = await res.json();
   return objects;
 }

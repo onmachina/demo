@@ -5,13 +5,11 @@ import UseEscape from '../hooks/useEscape';
 import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
 import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import { auth0AuthProvider } from '../auth';
 
-async function downloadFile(authKey, accountId, container, object) {
-  const response = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/${object}`, {
+async function downloadFile(container, object) {
+  const response = await auth0AuthProvider.authenticatedFetch(`/${container}/${object}`, {
     method: 'GET',
-    headers: {
-      'x-auth-token': authKey,
-    },
   });
 
   const blob = await response.blob();
@@ -24,7 +22,7 @@ async function downloadFile(authKey, accountId, container, object) {
   link.click();
 }
 
-export default function Details({ accountId, authKey }) {
+export default function Details() {
   let { container, object } = useParams();
   const objectData = useLoaderData();
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
@@ -33,18 +31,15 @@ export default function Details({ accountId, authKey }) {
   useOnClickOutside(ref, () => navigate(`/${container}`));
 
   const handleDownloadClick = () => {
-    downloadFile(authKey, accountId, container, object);
+    downloadFile(container, object);
     navigate(`/${container}`);
   };
 
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
     const fetchImage = async () => {
-      const response = await fetch(`https://api.global01.onmachina.io/v1/${accountId}/${container}/${object}`, {
+      const response = await auth0AuthProvider.authenticatedFetch(`/${container}/${object}`, {
         method: 'GET',
-        headers: {
-          'x-auth-token': authKey,
-        },
       });
       // Create an object URL from the data.
       const blob = await response.blob();
@@ -107,16 +102,10 @@ export default function Details({ accountId, authKey }) {
   );
 }
 
-export async function loader(params, accountId, x_auth_token) {
-  const response = await fetch(
-    `https://api.global01.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
-    {
-      method: 'HEAD',
-      headers: {
-        'x-auth-token': x_auth_token,
-      },
-    },
-  );
+export async function loader(params) {
+  const response = await auth0AuthProvider.authenticatedFetch(`/${params.container}/${params.object}`, {
+    method: 'HEAD',
+  });
   const headersArray = [];
   for (const [name, value] of response.headers.entries()) {
     if (name === 'last-modified') headersArray.push({ name, value });

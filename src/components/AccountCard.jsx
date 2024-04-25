@@ -1,13 +1,11 @@
-import NearLogo from '../assets/near-logo.png';
 import UseEscape from '../hooks/useEscape';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useRouteLoaderData } from 'react-router-dom';
 
-export default function AccountCard({ wallet, accountId }) {
+export default function AccountCard() {
   const navigate = useNavigate();
 
-  const handleSignOut = () => {
-    wallet.signOut();
-  };
+  const { username } = useRouteLoaderData('root');
+  const { avatarUrl } = useRouteLoaderData('root');
 
   UseEscape(() => {
     navigate(`/`);
@@ -19,17 +17,16 @@ export default function AccountCard({ wallet, accountId }) {
         <Link to="/">Close</Link>
       </div>
       <div className="flex flex-col items-center pb-10">
-        <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={NearLogo} alt="Near Logo" />
-        <h5 className="mb-1 text-xl font-medium text-gray-900">{accountId}</h5>
-        <span className="text-sm text-gray-500 ">Near Wallet</span>
+        <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={avatarUrl} alt="Avatar" />
+        <h5 className="mb-1 text-xl font-medium text-gray-900">{username}</h5>
+        <span className="text-sm text-gray-500 ">Decentral Infra User</span>
         <div className="flex mt-4 space-x-3 md:mt-6">
-          <a
-            onClick={handleSignOut}
-            href="/"
+          <Link
+            to="/logout"
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
           >
             Sign Out
-          </a>
+          </Link>
         </div>
       </div>
     </div>
