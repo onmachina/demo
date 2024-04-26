@@ -51,7 +51,6 @@ export const auth0AuthProvider: AuthProvider = {
   async signin(type: string, redirectTo: string) {
     let client = await getClient();
     const redirectUri = window.location.origin + '/login-result'.toString();
-    alert(redirectUri);
     if (type === 'redirect') {
       await client.loginWithRedirect({
         authorizationParams: {
