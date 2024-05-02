@@ -47,6 +47,9 @@ export async function loader() {
   const username = await auth0AuthProvider.username();
   const token = await auth0AuthProvider.accessToken();
   const avatarUrl = await auth0AuthProvider.avatarUrl();
+  const emailVerified = await auth0AuthProvider.emailVerified();
+  if (!emailVerified) return redirect('/verify-email');
+
   const res = await auth0AuthProvider.authenticatedFetch(`/?format=json`, {
     method: 'GET',
   });
@@ -61,5 +64,5 @@ export async function loader() {
 
   const containers = await res.json();
 
-  return { containers, token, username, avatarUrl };
+  return { containers, token, username, avatarUrl, emailVerified };
 }

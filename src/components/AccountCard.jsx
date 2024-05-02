@@ -6,6 +6,7 @@ export default function AccountCard() {
 
   const { username } = useRouteLoaderData('root');
   const { avatarUrl } = useRouteLoaderData('root');
+  const { emailVerified } = useRouteLoaderData('root');
 
   UseEscape(() => {
     navigate(`/`);
@@ -19,7 +20,9 @@ export default function AccountCard() {
       <div className="flex flex-col items-center pb-10">
         <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={avatarUrl} alt="Avatar" />
         <h5 className="mb-1 text-xl font-medium text-gray-900">{username}</h5>
-        <span className="text-sm text-gray-500 ">Decentral Infra User</span>
+        <div className="text-sm text-gray-500 ">Decentral Infra User</div>
+        <div className="text-sm text-gray-500 ">{emailVerified ? 'Email verified' : 'Email not yet verified'}</div>
+
         <div className="flex mt-4 space-x-3 md:mt-6">
           <Link
             to="/logout"

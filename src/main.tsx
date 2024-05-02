@@ -30,12 +30,13 @@ import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
 import ShardList from './routes/shardList';
-import { Error, Loading, LoggingIn } from './components/AppMessages';
+import { Error, Loading, LoggingIn, VerifyEmail } from './components/AppMessages';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 
 const router = createBrowserRouter([
+  { path: '/verify-email', Component: VerifyEmail },
   {
     path: '/login-result',
     async loader({ request }) {
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
   {
     path: '/logout',
     async loader() {
-      // We signout in a "resource route" that we can hit from a fetcher.Form
+      alert('logging out');
       await auth0AuthProvider.signout();
       return redirect('/');
     },

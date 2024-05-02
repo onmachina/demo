@@ -3,11 +3,12 @@ import { createAuth0Client } from '@auth0/auth0-spa-js';
 interface AuthProvider {
   isAuthenticated(): Promise<boolean>;
   username(): Promise<null | string>;
-  accessToken(): Promise<null | string>;
+  accessToken(cacheMode?: 'on' | 'off' | 'cache-only'): Promise<null | string>;
   signin(type: 'redirect' | 'popup', redirectTo: string): Promise<void>;
   handleSigninRedirect(): Promise<void>;
   signout(): Promise<void>;
   authenticatedFetch(url: string, init?: RequestInit): Promise<Response>;
+  emailVerified(): Promise<boolean>;
 }
 
 const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -45,9 +46,15 @@ export const auth0AuthProvider: AuthProvider = {
     return user?.picture || null;
   },
 
-  async accessToken() {
+  async accessToken(cacheMode = 'on') {
     let client = await getClient();
-    return await client.getTokenSilently();
+    return await client.getTokenSilently({ cacheMode: cacheMode });
+  },
+
+  async emailVerified() {
+    let client = await getClient();
+    let user = await client.getUser();
+    return user?.email_verified || false;
   },
 
   async signin(type: string, redirectTo: string) {
