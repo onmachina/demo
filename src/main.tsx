@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         <ShardPage />
       </Root>
     ),
-    errorElement: <Error />,
+    // errorElement: <Error />,
     children: [
       {
         path: 'account',
@@ -114,13 +114,13 @@ const router = createBrowserRouter([
             path: ':object',
             element: <Details />,
             loader: async ({ params }) => {
-              return detailsLoader(params, accountId, x_auth_token);
+              return detailsLoader(params);
             },
             children: [
               {
                 path: 'delete',
                 loader: async ({ params }) => {
-                  return deleteObjectLoader(params, accountId, x_auth_token);
+                  return deleteObjectLoader(params);
                 },
                 element: <DeleteObject />,
                 action: deleteObjectAction,

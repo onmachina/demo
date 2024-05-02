@@ -21,7 +21,6 @@ function getClient() {
     auth0ClientPromise = createAuth0Client({
       domain: AUTH0_DOMAIN,
       clientId: AUTH0_CLIENT_ID,
-      cacheLocation: 'localstorage',
     });
   }
   return auth0ClientPromise;
