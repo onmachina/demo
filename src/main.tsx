@@ -40,14 +40,14 @@ const router = createBrowserRouter([
     path: '/login-result',
     async loader({ request }) {
       await auth0AuthProvider.handleSigninRedirect();
-      // let isAuthenticated = await auth0AuthProvider.isAuthenticated();
-      // if (isAuthenticated) {
-      //   let redirectTo = new URLSearchParams(window.location.search).get('redirectTo') || '/';
-      //   return redirect(redirectTo);
-      // }
-      return redirect('/');
+      let isAuthenticated = await auth0AuthProvider.isAuthenticated();
+      if (isAuthenticated) {
+        let redirectTo = new URLSearchParams(window.location.search).get('redirectTo') || '/';
+        return redirect(redirectTo);
+      }
+      return null;
     },
-    Component: () => null,
+    Component: () => <p>redirecting...</p>,
   },
   {
     path: '/login',
@@ -139,8 +139,11 @@ export default function App() {
 
 async function loginLoader() {
   let isAuthenticated = await auth0AuthProvider.isAuthenticated();
+  console.log('isAuthenticated', isAuthenticated);
   if (!isAuthenticated) {
+    console.log('not authenticated, redirecting');
     await auth0AuthProvider.signin('redirect', '/login-result');
+    console.log('back from redirect');
   } else {
     return redirect('/');
   }

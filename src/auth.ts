@@ -21,6 +21,8 @@ function getClient() {
     auth0ClientPromise = createAuth0Client({
       domain: AUTH0_DOMAIN,
       clientId: AUTH0_CLIENT_ID,
+      useRefreshTokens: true,
+      cacheLocation: 'localstorage',
     });
   }
   return auth0ClientPromise;
@@ -55,6 +57,7 @@ export const auth0AuthProvider: AuthProvider = {
       await client.loginWithRedirect({
         authorizationParams: {
           redirect_uri: redirectUri,
+          scope: 'openid offline_access',
         },
       });
     } else {
