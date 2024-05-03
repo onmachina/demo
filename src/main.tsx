@@ -58,7 +58,6 @@ const router = createBrowserRouter([
   {
     path: '/logout',
     async loader() {
-      alert('logging out');
       await auth0AuthProvider.signout();
       return redirect('/');
     },
