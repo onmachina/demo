@@ -40,6 +40,14 @@ const router = createBrowserRouter([
     Component: LoggingIn,
   },
   {
+    path: '/signup',
+    async loader() {
+      await auth0AuthProvider.startAuth('signup', `${BASE_URL}/finish-auth`);
+      return null;
+    },
+    Component: LoggingIn,
+  },
+  {
     path: '/start-checkout',
     async loader({ request }) {
       const url = await auth0AuthProvider.stripeCheckoutUrl(request);
