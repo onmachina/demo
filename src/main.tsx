@@ -75,6 +75,9 @@ const router = createBrowserRouter([
     path: '/verify-email',
     async loader() {
       await auth0AuthProvider.refreshToken();
+      if (await auth0AuthProvider.emailVerified()) {
+        return redirect('/');
+      }
       return null;
     },
     Component: VerifyEmail
