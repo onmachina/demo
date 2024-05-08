@@ -10,7 +10,8 @@ interface AuthProvider {
   username(): Promise<null | string>;
   avatarUrl(): Promise<null | string>;
   emailVerified(): Promise<boolean>;
-  accessToken(cacheMode?: 'on' | 'off' | 'cache-only'): Promise<null | string>;
+  accessToken(): Promise<null | string>;
+  refreshToken(): Promise<void>;
   authenticatedFetch(path: string, options?: RequestInit): Promise<Response>;
 }
 
@@ -95,9 +96,14 @@ export const auth0AuthProvider: AuthProvider = {
     return user?.email_verified || false;
   },
 
-  async accessToken(cacheMode = 'on') {
+  async accessToken() {
     let auth0 = await auth0Client();
-    return await auth0.getTokenSilently({ cacheMode });
+    return await auth0.getTokenSilently({ cacheMode: 'on' });
+  },
+
+  async refreshToken() {
+    let auth0 = await auth0Client();
+    await auth0.getTokenSilently({ cacheMode: 'off' });
   },
 
   async authenticatedFetch(path: string, options?: RequestInit) {
