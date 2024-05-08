@@ -28,14 +28,14 @@ import { LoggingIn, VerifyEmail } from './components/AppMessages';
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 
-const BASE_URL = import.meta.env.URL; // process.env.URL; // Netlify-exposed
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const router = createBrowserRouter([
   {
     path: '/login',
     async loader() {
-      console.log(`${import.meta.env.URL} or ${process.env.URL}`);
-      return await auth0AuthProvider.startAuth('login', `${BASE_URL}/finish-auth`);
+      await auth0AuthProvider.startAuth('login', `${BASE_URL}/finish-auth`);
+      return null;
     },
     Component: LoggingIn,
   },
