@@ -1,17 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 
-import type { LoaderFunctionArgs } from 'react-router-dom';
 import {
-  Form,
-  Link,
-  Outlet,
   RouterProvider,
   createBrowserRouter,
   redirect,
-  useFetcher,
-  useLocation,
-  useRouteLoaderData,
 } from 'react-router-dom';
 import { auth0AuthProvider } from './auth';
 
@@ -30,35 +23,54 @@ import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
 import ShardList from './routes/shardList';
-import { Error, Loading, LoggingIn, VerifyEmail } from './components/AppMessages';
+import { LoggingIn, VerifyEmail } from './components/AppMessages';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 
+const BASE_URL = process.env.URL; // Netlify-exposed
+
 const router = createBrowserRouter([
-  { path: '/verify-email', Component: VerifyEmail },
   {
-    path: '/login-result',
+    path: '/login',
+    async loader() {
+      await auth0AuthProvider.startAuth('login', `${BASE_URL}/finish-auth`);
+
+    },
+    Component: LoggingIn,
+  },
+  {
+    path: '/start-checkout',
     async loader({ request }) {
-      await auth0AuthProvider.handleSigninRedirect();
-      let isAuthenticated = await auth0AuthProvider.isAuthenticated();
-      if (isAuthenticated) {
-        let redirectTo = new URLSearchParams(window.location.search).get('redirectTo') || '/';
-        return redirect(redirectTo);
-      }
-      return null;
+      const url = await auth0AuthProvider.stripeCheckoutUrl(request);
+      return url ? redirect(url) : redirect('/');
     },
     Component: () => <p>redirecting...</p>,
   },
   {
-    path: '/login',
-    loader: loginLoader,
-    Component: LoggingIn,
+    path: '/finish-checkout',
+    async loader({ request }) {
+      const url = await auth0AuthProvider.stripeFinishRedirectUrl(request);
+      return url ? redirect(url) : redirect('/');
+    },
+    Component: () => <p>redirecting...</p>,
+  },
+  {
+    path: '/finish-auth',
+    async loader() {
+      await auth0AuthProvider.finishAuth();
+      return await auth0AuthProvider.isAuthenticated() ? redirect('/') : null;
+    },
+    Component: () => <p>redirecting...</p>,
+  },
+  {
+    path: '/verify-email',
+    Component: VerifyEmail
   },
   {
     path: '/logout',
     async loader() {
-      await auth0AuthProvider.signout();
+      await auth0AuthProvider.logout();
       return redirect('/');
     },
   },
@@ -135,27 +147,6 @@ const router = createBrowserRouter([
 
 export default function App() {
   return <RouterProvider router={router} />;
-}
-
-async function loginLoader() {
-  let isAuthenticated = await auth0AuthProvider.isAuthenticated();
-  console.log('isAuthenticated', isAuthenticated);
-  if (!isAuthenticated) {
-    console.log('not authenticated, redirecting');
-    await auth0AuthProvider.signin('redirect', '/login-result');
-    console.log('back from redirect');
-  } else {
-    return redirect('/');
-  }
-  return null;
-}
-
-function LoginPage() {
-  let location = useLocation();
-  let params = new URLSearchParams(location.search);
-  let from = params.get('from') || '/';
-
-  return <LoggingIn />;
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
