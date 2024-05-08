@@ -34,6 +34,7 @@ const router = createBrowserRouter([
   {
     path: '/login',
     async loader() {
+      console.log(`${BASE_URL}/finish-auth`);
       await auth0AuthProvider.startAuth('login', `${BASE_URL}/finish-auth`);
 
     },
