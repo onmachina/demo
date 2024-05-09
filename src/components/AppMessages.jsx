@@ -124,9 +124,9 @@ export function VerifyEmail() {
           </div>
           <Link
             className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border border-slate-300"
-            to="/logout"
+            to="/verify-email"
           >
-            Log in again
+            Check again
           </Link>
         </div>
       </div>
