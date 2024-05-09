@@ -2,22 +2,26 @@ import { createAuth0Client } from '@auth0/auth0-spa-js';
 
 interface AuthProvider {
   isAuthenticated(): Promise<boolean>;
+  startAuth(type: 'signup' | 'login', finish_auth_url: string): Promise<void>;
+  finishAuth(): Promise<void>;
+  logout(): Promise<void>;
+  stripeCheckoutUrl(request: Request): Promise<null | string>;
+  stripeFinishRedirectUrl(request: Request): Promise<null | string>;
   username(): Promise<null | string>;
-  accessToken(cacheMode?: 'on' | 'off' | 'cache-only'): Promise<null | string>;
-  signin(type: 'redirect' | 'popup', redirectTo: string): Promise<void>;
-  handleSigninRedirect(): Promise<void>;
-  signout(): Promise<void>;
-  authenticatedFetch(url: string, init?: RequestInit): Promise<Response>;
+  avatarUrl(): Promise<null | string>;
   emailVerified(): Promise<boolean>;
+  accessToken(): Promise<null | string>;
+  refreshToken(): Promise<void>;
+  authenticatedFetch(path: string, options?: RequestInit): Promise<Response>;
 }
 
 const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN;
 const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID;
-const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
+const AUTH0_STATE_KEY = 'auth0.session.state';
 
 let auth0ClientPromise: ReturnType<typeof createAuth0Client>;
 
-function getClient() {
+function auth0Client() {
   if (!auth0ClientPromise) {
     auth0ClientPromise = createAuth0Client({
       domain: AUTH0_DOMAIN,
@@ -31,71 +35,88 @@ function getClient() {
 
 export const auth0AuthProvider: AuthProvider = {
   async isAuthenticated() {
-    let client = await getClient();
-    return client.isAuthenticated();
+    let auth0 = await auth0Client();
+    return auth0.isAuthenticated();
   },
+
+  async startAuth(type: 'signup' | 'login', finish_auth_url: string) {
+    const auth0 = await auth0Client();
+
+    await auth0.loginWithRedirect({
+      authorizationParams: {
+        redirect_uri: finish_auth_url,
+        screen_hint: type
+      }
+    });
+  },
+
+  async finishAuth() {
+    const auth0 = await auth0Client();
+    await auth0.handleRedirectCallback();
+  },
+
+  async logout() {
+    let auth0 = await auth0Client();
+    await auth0.logout();
+  },
+
+  async stripeCheckoutUrl(request: Request) {
+    const url = new URL(request.url);
+    const state = url.searchParams.get("state");
+    const stripe_checkout_url = url.searchParams.get("checkout_url");
+    if (!state || !stripe_checkout_url) {
+      return null;
+    }
+    sessionStorage.setItem(AUTH0_STATE_KEY, state);
+    return stripe_checkout_url;
+  },
+
+  async stripeFinishRedirectUrl(request: Request) {
+    const url = new URL(request.url);
+    const stripe_session_id = url.searchParams.get("session_id");
+    const state = sessionStorage.getItem(AUTH0_STATE_KEY);
+    return `https://${AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`;
+  },
+
   async username() {
-    let client = await getClient();
-    let user = await client.getUser();
+    let auth0 = await auth0Client();
+    let user = await auth0.getUser();
     return user?.name || null;
   },
 
   async avatarUrl() {
-    let client = await getClient();
-    let user = await client.getUser();
+    let auth0 = await auth0Client();
+    let user = await auth0.getUser();
     return user?.picture || null;
   },
 
-  async accessToken(cacheMode = 'on') {
-    let client = await getClient();
-    return await client.getTokenSilently({ cacheMode: cacheMode });
-  },
-
   async emailVerified() {
-    let client = await getClient();
-    let user = await client.getUser();
+    let auth0 = await auth0Client();
+    let user = await auth0.getUser();
     return user?.email_verified || false;
   },
 
-  async signin(type: string, redirectTo: string) {
-    let client = await getClient();
-    const redirectUri = window.location.origin + '/login-result'.toString();
-    if (type === 'redirect') {
-      await client.loginWithRedirect({
-        authorizationParams: {
-          redirect_uri: redirectUri,
-          scope: 'openid offline_access',
-        },
-      });
-    } else {
-      await client.loginWithPopup();
-    }
-  },
-  async handleSigninRedirect() {
-    const query = window.location.search;
-    if (query.includes('code=') && query.includes('state=')) {
-      let client = await getClient();
-      await client.handleRedirectCallback();
-    }
-  },
-  async signout() {
-    let client = await getClient();
-    await client.logout();
+  async accessToken() {
+    let auth0 = await auth0Client();
+    return await auth0.getTokenSilently({ cacheMode: 'on' });
   },
 
-  async authenticatedFetch(url: string, options?: RequestInit) {
+  async refreshToken() {
+    let auth0 = await auth0Client();
+    await auth0.getTokenSilently({ cacheMode: 'off' });
+  },
+
+  async authenticatedFetch(path: string, options?: RequestInit) {
+    const token = await auth0AuthProvider.accessToken();
     const requestOpts = {
       ...options,
       headers: {
         ...options?.headers,
-        'x-auth-token': await auth0AuthProvider.accessToken(),
+        'x-auth-token': token || ''
       },
     };
-    let isAuthenticated = await auth0AuthProvider.isAuthenticated();
-    if (isAuthenticated) {
-      const userName = await auth0AuthProvider.username();
-      const authToken = await auth0AuthProvider.accessToken();
-      return fetch(`https://api.global01.onmachina.io/v1/${userName}${url}`, requestOpts);
-    }
+    const userName = await auth0AuthProvider.username();
+    return fetch(`https://api.global01.onmachina.io/v1/${userName}${path}`, requestOpts);
+
   },
 };
