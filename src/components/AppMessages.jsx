@@ -69,7 +69,7 @@ export function Loading() {
   );
 }
 
-export function LoggingIn() {
+export function OneMomentPlease() {
   return (
     <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">

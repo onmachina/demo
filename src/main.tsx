@@ -19,7 +19,7 @@ import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
 import ShardList from './routes/shardList';
-import { Error, LoggingIn } from './components/AppMessages';
+import { Error, OneMomentPlease } from './components/AppMessages';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       await auth0AuthProvider.startAuth('login', `${BASE_URL}/finish-auth`);
       return null;
     },
-    Component: LoggingIn,
+    Component: OneMomentPlease,
   },
   {
     path: '/signup',
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       await auth0AuthProvider.startAuth('signup', `${BASE_URL}/finish-auth`);
       return null;
     },
-    Component: LoggingIn,
+    Component: OneMomentPlease,
   },
   {
     path: '/start-checkout',
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
       const url = await auth0AuthProvider.stripeCheckoutUrl(request);
       return url ? redirect(url) : redirect('/');
     },
-    Component: () => <p>redirecting...</p>,
+    Component: OneMomentPlease,
   },
   {
     path: '/finish-checkout',
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
       const url = await auth0AuthProvider.stripeFinishRedirectUrl(request);
       return url ? redirect(url) : redirect('/');
     },
-    Component: () => <p>redirecting...</p>,
+    Component: OneMomentPlease,
   },
   {
     path: '/finish-auth',
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
       await auth0AuthProvider.finishAuth();
       return (await auth0AuthProvider.isAuthenticated()) ? redirect('/') : null;
     },
-    Component: () => <p>redirecting...</p>,
+    Component: OneMomentPlease,
   },
   {
     path: '/logout',
