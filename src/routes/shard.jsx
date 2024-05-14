@@ -48,14 +48,13 @@ export async function loader() {
   const token = await auth0AuthProvider.accessToken();
   const avatarUrl = await auth0AuthProvider.avatarUrl();
   const emailVerified = await auth0AuthProvider.emailVerified();
-  if (!emailVerified) return redirect('/verify-email');
 
   const res = await auth0AuthProvider.authenticatedFetch(`/?format=json`, {
     method: 'GET',
   });
 
   // handle the error if an account isn't found
-  if (!res.ok) {
+  if (emailVerified && !res.ok) {
     throw new Response('', {
       status: 404,
       statusText: 'Not Found',

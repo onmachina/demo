@@ -1,11 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 
-import {
-  RouterProvider,
-  createBrowserRouter,
-  redirect,
-} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
 import { auth0AuthProvider } from './auth';
 
 // Imports for elements used for routes
@@ -67,20 +63,9 @@ const router = createBrowserRouter([
     path: '/finish-auth',
     async loader() {
       await auth0AuthProvider.finishAuth();
-      return await auth0AuthProvider.isAuthenticated() ? redirect('/') : null;
+      return (await auth0AuthProvider.isAuthenticated()) ? redirect('/') : null;
     },
     Component: () => <p>redirecting...</p>,
-  },
-  {
-    path: '/verify-email',
-    async loader() {
-      await auth0AuthProvider.refreshToken();
-      if (await auth0AuthProvider.emailVerified()) {
-        return redirect('/');
-      }
-      return null;
-    },
-    Component: VerifyEmail
   },
   {
     path: '/logout',
