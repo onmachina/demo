@@ -53,8 +53,11 @@ export async function loader() {
     method: 'GET',
   });
 
-  // handle the error if an account isn't found
-  if (emailVerified && !res.ok) {
+  // return empty json if email not verified
+  if (!emailVerified) return {};
+
+  // return 404 if an account isn't found
+  if (!res.ok) {
     throw new Response('', {
       status: 404,
       statusText: 'Not Found',
