@@ -49,12 +49,12 @@ export async function loader() {
   const avatarUrl = await auth0AuthProvider.avatarUrl();
   const emailVerified = await auth0AuthProvider.emailVerified();
 
+  // return empty json if email not verified
+  if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
+
   const res = await auth0AuthProvider.authenticatedFetch(`/?format=json`, {
     method: 'GET',
   });
-
-  // return empty json if email not verified
-  if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
 
   // return 404 if an account isn't found
   if (!res.ok) {
