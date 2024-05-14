@@ -4,7 +4,7 @@ import { useLoaderData, Outlet, useNavigate, useParams, useLocation, redirect } 
 import { auth0AuthProvider } from '../auth';
 
 export default function AccountPage() {
-  const { containers } = useLoaderData() || [];
+  const { containers } = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -54,7 +54,7 @@ export async function loader() {
   });
 
   // return empty json if email not verified
-  if (!emailVerified) return {};
+  if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
 
   // return 404 if an account isn't found
   if (!res.ok) {
