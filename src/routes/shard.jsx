@@ -4,7 +4,7 @@ import { useLoaderData, Outlet, useNavigate, useParams, useLocation, redirect } 
 import { auth0AuthProvider } from '../auth';
 
 export default function AccountPage() {
-  const { containers } = useLoaderData();
+  const { containers } = useLoaderData() || [];
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
