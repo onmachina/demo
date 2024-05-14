@@ -1,7 +1,8 @@
-import { redirect, Link } from 'react-router-dom';
-import { auth0AuthProvider } from '../auth';
+import { useRouteError, Link } from 'react-router-dom';
 
 export function Error() {
+  const error = useRouteError();
+  console.error(error);
   return (
     <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
@@ -22,7 +23,14 @@ export function Error() {
             </svg>
             <span className="sr-only">Info</span>
             <div>
-              <span className="font-medium">Application error.</span> There was an error fulfilling your request.
+              <p>
+                <span className="font-medium">Application error.</span> There was an error fulfilling your request.
+              </p>
+              <p className="mt-2">
+                <i>
+                  {error.statusText || error.message} ({error.status})
+                </i>
+              </p>
             </div>
           </div>
         </div>

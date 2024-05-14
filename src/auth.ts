@@ -45,8 +45,8 @@ export const auth0AuthProvider: AuthProvider = {
     await auth0.loginWithRedirect({
       authorizationParams: {
         redirect_uri: finish_auth_url,
-        screen_hint: type
-      }
+        screen_hint: type,
+      },
     });
   },
 
@@ -62,8 +62,8 @@ export const auth0AuthProvider: AuthProvider = {
 
   async stripeCheckoutUrl(request: Request) {
     const url = new URL(request.url);
-    const state = url.searchParams.get("state");
-    const stripe_checkout_url = url.searchParams.get("checkout_url");
+    const state = url.searchParams.get('state');
+    const stripe_checkout_url = url.searchParams.get('checkout_url');
     if (!state || !stripe_checkout_url) {
       return null;
     }
@@ -73,7 +73,7 @@ export const auth0AuthProvider: AuthProvider = {
 
   async stripeFinishRedirectUrl(request: Request) {
     const url = new URL(request.url);
-    const stripe_session_id = url.searchParams.get("session_id");
+    const stripe_session_id = url.searchParams.get('session_id');
     const state = sessionStorage.getItem(AUTH0_STATE_KEY);
     return `https://${AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`;
   },
@@ -107,16 +107,22 @@ export const auth0AuthProvider: AuthProvider = {
   },
 
   async authenticatedFetch(path: string, options?: RequestInit) {
+    const email_verified = await auth0AuthProvider.emailVerified();
+    if (!email_verified) {
+      throw new Response('', {
+        status: 401,
+        statusText: 'Your email has not been verified yet. Please verify your email before continuing to use the app.',
+      });
+    }
     const token = await auth0AuthProvider.accessToken();
     const requestOpts = {
       ...options,
       headers: {
         ...options?.headers,
-        'x-auth-token': token || ''
+        'x-auth-token': token || '',
       },
     };
     const userName = await auth0AuthProvider.username();
     return fetch(`https://api.global01.onmachina.io/v1/${userName}${path}`, requestOpts);
-
   },
 };

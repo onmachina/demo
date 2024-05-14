@@ -19,7 +19,7 @@ import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
 import ShardList from './routes/shardList';
-import { LoggingIn, VerifyEmail } from './components/AppMessages';
+import { Error, LoggingIn } from './components/AppMessages';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
@@ -83,7 +83,7 @@ const router = createBrowserRouter([
         <ShardPage />
       </Root>
     ),
-    // errorElement: <Error />,
+    errorElement: <Error />,
     children: [
       {
         path: 'account',
