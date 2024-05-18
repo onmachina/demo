@@ -22,6 +22,7 @@ import ShardList from './routes/shardList';
 import { LoggingIn } from './components/AppMessages';
 import { ErrorWindow } from './components/errors/ErrorComponent';
 import { AccountStatus, loader as accountStatusLoader } from './routes/AccountStatus';
+import { Checkout } from './routes/Checkout';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';

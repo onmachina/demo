@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 
-export default function Checkout() {
+export const Checkout = function () {
   const { clientSecret } = useLoaderData();
 
   useEffect(() => {
@@ -33,4 +33,4 @@ export default function Checkout() {
       </div>
     </div>
   );
-}
+};
