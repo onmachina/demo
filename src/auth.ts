@@ -7,7 +7,7 @@ interface AuthProvider {
   finishAuth(): Promise<void>;
   logout(): Promise<void>;
   stripeCheckoutUrl(request: Request): Promise<null | string>;
-  stripeCheckoutClientSecret(request: Request): Promise<null | string>;
+  stripeCheckoutSessionDetails(request: Request): Promise<null | stripeCheckoutSessionDetails>;
   stripeFinishRedirectUrl(request: Request): Promise<null | string>;
   username(): Promise<null | string>;
   avatarUrl(): Promise<null | string>;
@@ -16,6 +16,11 @@ interface AuthProvider {
   accessToken(): Promise<null | string>;
   refreshToken(): Promise<void>;
   authenticatedFetch(path: string, options?: RequestInit): Promise<Response>;
+}
+
+interface stripeCheckoutSessionDetails {
+  stripe_client_secret: string | null;
+  stripe_session_id: string | null;
 }
 
 const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -74,15 +79,16 @@ export const auth0AuthProvider: AuthProvider = {
     return stripe_checkout_url;
   },
 
-  async stripeCheckoutClientSecret(request: Request) {
+  async stripeCheckoutSessionDetails(request: Request): Promise<null | stripeCheckoutSessionDetails> {
     const url = new URL(request.url);
     const state = url.searchParams.get('state');
     const stripe_client_secret = url.searchParams.get('client_secret');
+    const stripe_session_id = url.searchParams.get('session_id');
     if (!state || !stripe_client_secret) {
       return null;
     }
     sessionStorage.setItem(AUTH0_STATE_KEY, state);
-    return stripe_client_secret;
+    return { stripe_client_secret, stripe_session_id };
   },
 
   async stripeFinishRedirectUrl(request: Request) {

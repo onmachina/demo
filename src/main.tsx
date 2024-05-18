@@ -48,10 +48,10 @@ const router = createBrowserRouter([
   {
     path: '/start-checkout',
     async loader({ request }) {
-      const url = await auth0AuthProvider.stripeCheckoutUrl(request);
-      return url ? redirect(url) : redirect('/');
+      const clientSecret = await auth0AuthProvider.stripeCheckoutSessionDetails(request);
+      return clientSecret;
     },
-    Component: () => <p>redirecting...</p>,
+    Component: <Checkout />,
   },
   {
     path: '/finish-checkout',
