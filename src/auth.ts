@@ -1,4 +1,5 @@
 import { createAuth0Client } from '@auth0/auth0-spa-js';
+import { json } from 'react-router-dom';
 
 interface AuthProvider {
   isAuthenticated(): Promise<boolean>;
@@ -6,10 +7,12 @@ interface AuthProvider {
   finishAuth(): Promise<void>;
   logout(): Promise<void>;
   stripeCheckoutUrl(request: Request): Promise<null | string>;
+  stripeCheckoutClientSecret(request: Request): Promise<null | string>;
   stripeFinishRedirectUrl(request: Request): Promise<null | string>;
   username(): Promise<null | string>;
   avatarUrl(): Promise<null | string>;
   emailVerified(): Promise<boolean>;
+  hasSubscription(): Promise<boolean>;
   accessToken(): Promise<null | string>;
   refreshToken(): Promise<void>;
   authenticatedFetch(path: string, options?: RequestInit): Promise<Response>;
@@ -71,6 +74,17 @@ export const auth0AuthProvider: AuthProvider = {
     return stripe_checkout_url;
   },
 
+  async stripeCheckoutClientSecret(request: Request) {
+    const url = new URL(request.url);
+    const state = url.searchParams.get('state');
+    const stripe_client_secret = url.searchParams.get('client_secret');
+    if (!state || !stripe_client_secret) {
+      return null;
+    }
+    sessionStorage.setItem(AUTH0_STATE_KEY, state);
+    return stripe_client_secret;
+  },
+
   async stripeFinishRedirectUrl(request: Request) {
     const url = new URL(request.url);
     const stripe_session_id = url.searchParams.get('session_id');
@@ -96,6 +110,14 @@ export const auth0AuthProvider: AuthProvider = {
     return user?.email_verified || false;
   },
 
+  async hasSubscription() {
+    let auth0 = await auth0Client();
+    const claims = await auth0.getIdTokenClaims();
+    console.log(claims);
+    const subscribed = claims['has_subscription'] ? true : false;
+    return subscribed;
+  },
+
   async accessToken() {
     let auth0 = await auth0Client();
     return await auth0.getTokenSilently({ cacheMode: 'on' });
@@ -109,10 +131,12 @@ export const auth0AuthProvider: AuthProvider = {
   async authenticatedFetch(path: string, options?: RequestInit) {
     const email_verified = await auth0AuthProvider.emailVerified();
     if (!email_verified) {
-      throw new Response('', {
-        status: 401,
-        statusText: 'Your email has not been verified yet. Please verify your email before continuing to use the app.',
-      });
+      throw json(
+        {
+          code: 'ERR_EMAIL_NOT_VERIFIED',
+        },
+        { status: 401 },
+      );
     }
     const token = await auth0AuthProvider.accessToken();
     const requestOpts = {

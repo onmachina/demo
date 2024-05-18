@@ -19,7 +19,9 @@ import ContainerPage, { loader as containerLoader } from './routes/container';
 import AddContainer, { action as addContainerAction } from './routes/createContainer';
 import SettingsPage from './routes/settings';
 import ShardList from './routes/shardList';
-import { Error, LoggingIn } from './components/AppMessages';
+import { LoggingIn } from './components/AppMessages';
+import { ErrorWindow } from './components/errors/ErrorComponent';
+import { AccountStatus, loader as accountStatusLoader } from './routes/AccountStatus';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
@@ -75,6 +77,11 @@ const router = createBrowserRouter([
     },
   },
   {
+    path: '/account-status',
+    element: <AccountStatus />,
+    loader: accountStatusLoader,
+  },
+  {
     id: 'root',
     path: '/',
     loader: shardLoader,
@@ -83,7 +90,7 @@ const router = createBrowserRouter([
         <ShardPage />
       </Root>
     ),
-    errorElement: <Error />,
+    errorElement: <ErrorWindow />,
     children: [
       {
         path: 'account',
@@ -101,6 +108,7 @@ const router = createBrowserRouter([
         path: 'new-container',
         element: <AddContainer />,
         action: addContainerAction,
+        errorElement: <ErrorWindow />,
       },
       {
         path: ':container',
