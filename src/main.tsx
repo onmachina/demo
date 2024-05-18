@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       const clientSecret = await auth0AuthProvider.stripeCheckoutSessionDetails(request);
       return clientSecret;
     },
-    Component: <Checkout />,
+    Component: Checkout,
   },
   {
     path: '/finish-checkout',
