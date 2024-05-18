@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 
 export const Checkout = function () {
-  const { clientSecret } = useLoaderData();
+  const { stripe_client_secret, stripe_session_id } = useLoaderData();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const initializeCheckout = async () => {
-      if (!clientSecret) {
+      if (!stripe_client_secret) {
         return;
       }
 
@@ -17,14 +18,20 @@ export const Checkout = function () {
       );
 
       // Initialize Checkout
-      const checkout = await stripe.initEmbeddedCheckout({ clientSecret });
+      const checkout = await stripe.initEmbeddedCheckout({ clientSecret: stripe_client_secret });
 
       // Mount Checkout
       checkout.mount('#checkout');
+
+      // Listen for payment completion event
+      checkout.addEventListener('complete', () => {
+        // Payment completed successfully, redirect the user
+        navigate(`/finish-checkout?session_id=${stripe_session_id}`);
+      });
     };
 
     initializeCheckout();
-  }, [clientSecret]);
+  }, [stripe_client_secret]);
 
   return (
     <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">

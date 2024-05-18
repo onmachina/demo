@@ -49,8 +49,8 @@ const router = createBrowserRouter([
   {
     path: '/start-checkout',
     async loader({ request }) {
-      const clientSecret = await auth0AuthProvider.stripeCheckoutSessionDetails(request);
-      return clientSecret;
+      const details = await auth0AuthProvider.stripeCheckoutSessionDetails(request);
+      return details;
     },
     Component: Checkout,
   },
