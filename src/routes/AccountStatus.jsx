@@ -2,6 +2,7 @@ import UseEscape from '../hooks/useEscape';
 import { Link, useNavigate, useLoaderData, redirect } from 'react-router-dom';
 import { auth0AuthProvider } from '../auth';
 import { Children } from 'react';
+import { DecentralLogo } from '../components/DecentralLogo';
 
 export const AccountStatus = function AccountStatus() {
   const navigate = useNavigate();
@@ -13,47 +14,48 @@ export const AccountStatus = function AccountStatus() {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
-      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-        <div className="flex flex-col items-center m-4">
-          <div className="my-4 text-center">
-            <h5 className="mb-1 text-xl font-medium text-gray-900">
-              {emailVerified && activeSubscription ? 'You are all set!' : 'Account setup'}
-            </h5>
-            <div className=" text-gray-500 ">{username}</div>
-          </div>
-          {emailVerified ? (
-            <Complete titleText="Your email has been verified.">
-              <p>Thanks for completing this step!</p>
-            </Complete>
-          ) : (
-            <Incomplete titleText="Your email needs to be verified.">
-              <p>Please check your inbox for an email with a link to verify your email.</p>
-            </Incomplete>
-          )}
-          {activeSubscription ? (
-            <Complete titleText="Your subscription is active.">
-              <p>Looks good from our side!</p>
-            </Complete>
-          ) : (
-            <Incomplete titleText="Hmm... Still waiting for your subscription to get set up.">
-              <div>
-                <p>
-                  If this is a new account, you may just need to wait a few additional minnutes for everything to
-                  complete.
-                </p>
-              </div>
-            </Incomplete>
-          )}
+    <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50 bg-slate-100">
+      <div className="w-full flex-1 p-8 order-1 shadow-lg rounded-xl bg-white text-gray-400 max-w-lg mx-auto">
+        <div className="mb-4 mx-auto w-16">
+          <DecentralLogo />
+        </div>
+        <div className="my-4 text-center mb-8">
+          <h5 className="mb-1 text-2xl font-medium text-gray-900">
+            {emailVerified && activeSubscription ? 'You are all set!' : 'Account setup'}
+          </h5>
+          <div className=" text-gray-500 ">{username}</div>
+        </div>
+        {emailVerified ? (
+          <Complete titleText="Your email has been verified.">
+            <p>Thanks for completing this step!</p>
+          </Complete>
+        ) : (
+          <Incomplete titleText="Your email needs to be verified.">
+            <p>Please check your inbox for an email with a link to verify your email.</p>
+          </Incomplete>
+        )}
+        {activeSubscription ? (
+          <Complete titleText="Your subscription is active.">
+            <p>Looks good from our side!</p>
+          </Complete>
+        ) : (
+          <Incomplete titleText="Hmm... Still waiting for your subscription to get set up.">
+            <div>
+              <p>
+                If this is a new account, you may just need to wait a few additional minnutes for everything to
+                complete.
+              </p>
+            </div>
+          </Incomplete>
+        )}
 
-          <div className="flex mt-4 space-x-3 md:mt-6">
-            <Link
-              to="/"
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
-            >
-              Continue to the application
-            </Link>
-          </div>
+        <div className="mx-4 mt-8">
+          <Link
+            to="/"
+            className="block w-full px-4 py-3 text-sm font-medium text-center text-cyan-200 bg-black  rounded-lg  focus:ring-4 focus:outline-none focus:slate-800"
+          >
+            Continue to the application
+          </Link>
         </div>
       </div>
     </div>
@@ -89,7 +91,7 @@ const Incomplete = (props) => {
 
 const Complete = (props) => {
   return (
-    <div className="rounded-lg m-4 w-full flex gap-2  items-start py-3 px-4 bg-green-100 bg-opacity-50 text-green-700 border border-green-300 sm:items-center">
+    <div className="rounded-lg m-4 flex gap-2  items-start py-3 px-4 bg-green-100 bg-opacity-50 text-green-700 border border-green-300 sm:items-center">
       <div className="text-green-700">
         <svg
           xmlns="http://www.w3.org/2000/svg"

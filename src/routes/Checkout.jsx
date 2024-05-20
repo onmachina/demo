@@ -43,7 +43,7 @@ export const Checkout = function () {
         <p className="text-3xl text-center">Review your plan</p>
         <p className="text-center mb-8 text-slate-500 text-lg">Simple monthly subscription. Cancel any time.</p>
 
-        <div className="w-full flex-1 p-8 order-1 shadow-lg rounded-xl bg-white text-gray-400">
+        <div className="w-full flex-1 p-8 order-1 shadow-lg rounded-xl bg-white text-gray-400 max-w-lg mx-auto">
           <div className="mb-8 pb-8 flex items-center border-b border-gray-300">
             <DecentralLogo />
             <div className="ml-5">
