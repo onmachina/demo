@@ -101,7 +101,7 @@ export const auth0AuthProvider: AuthProvider = {
   async username() {
     let auth0 = await auth0Client();
     let user = await auth0.getUser();
-    return user?.name || null;
+    return user?.email || null;
   },
 
   async avatarUrl() {
