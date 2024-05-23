@@ -1,15 +1,12 @@
-export function formatDate(utcTimeStamp) {
+export function formatDate(utcTimeStamp: string): string {
   const date = new Date(utcTimeStamp + 'Z');
-  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-  const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-
-  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-  const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+  const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  const formattedTime = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
   return `${formattedDate} at ${formattedTime}`;
 }
 
-export function formatFileSize(bytes) {
+export function formatFileSize(bytes: number): string {
   if (bytes < 1024) {
     return bytes + ' Bytes';
   } else if (bytes < 1048576) {
@@ -24,7 +21,7 @@ export function formatFileSize(bytes) {
 }
 
 // based on the excellent article at: https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
-export function fileListTotalSize(fileList) {
+export function fileListTotalSize(fileList: File[]): string {
   let numberOfBytes = 0;
   for (const file of fileList) {
     numberOfBytes += file.size;
