@@ -1,12 +1,12 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
 import { useLoaderData, Outlet, useNavigate, useParams, useLocation, Form, Link, redirect } from 'react-router-dom';
-import { useNearAccountContext } from '../contexts/NearContext';
 import { addContainer } from '../../lib/onmachina';
 import { deleteContainer } from '../../lib/onmachina';
 import DeleteContainerForm from '../components/DeleteContainerForm';
 import NewContainerForm from '../components/NewContainerForm';
 import { useSearchParams } from 'react-router-dom';
+import { auth0AuthProvider } from '../../lib/auth';
 
 export default function AccountPage() {
   const containers = useLoaderData();
@@ -20,7 +20,6 @@ export default function AccountPage() {
   const path = location.pathname;
 
   const selectedContainer = params.container;
-  const { accountID, authToken } = useNearAccountContext();
 
   const handleAddContainer = () => {
     navigate(`/?action=create-container`);
@@ -62,15 +61,23 @@ export default function AccountPage() {
   return <Outlet />;
 }
 
-export async function loader(params, accountId, x_auth_token) {
-  const res = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/?format=json`, {
+export async function loader() {
+  const isAuthenticated = await auth0AuthProvider.isAuthenticated();
+  if (!isAuthenticated) return redirect('/login');
+
+  const username = await auth0AuthProvider.username();
+  const token = await auth0AuthProvider.accessToken();
+  const avatarUrl = await auth0AuthProvider.avatarUrl();
+  const emailVerified = await auth0AuthProvider.emailVerified();
+
+  // return empty json if email not verified
+  if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
+
+  const res = await auth0AuthProvider.authenticatedFetch(`/?format=json`, {
     method: 'GET',
-    headers: {
-      'x-auth-token': x_auth_token,
-    },
   });
 
-  // handle the error if an account isn't found
+  // return 404 if an account isn't found
   if (!res.ok) {
     throw new Response('', {
       status: 404,
@@ -80,7 +87,7 @@ export async function loader(params, accountId, x_auth_token) {
 
   const containers = await res.json();
 
-  return containers;
+  return { containers, token, username, avatarUrl, emailVerified };
 }
 
 export async function action({ request, params }) {

@@ -1,11 +1,6 @@
 import React from 'react';
-import '@near-wallet-selector/modal-ui/styles.css';
 import Layout from '../components/Layout';
 
-export default function Root({ wallet, accountId, children }) {
-  return (
-    <Layout wallet={wallet} accountId={accountId}>
-      {children}
-    </Layout>
-  );
+export default function Root({ children }) {
+  return <Layout>{children}</Layout>;
 }
