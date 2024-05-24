@@ -1,7 +1,7 @@
 import { Link, Form } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 
-export default function NewContainerForm({ authToken, accountID }) {
+export default function NewContainerForm() {
   // ensure the container name is URL apporpriate
   const slugify = debounce((event) => {
     const containerName = event.target.value;
@@ -20,8 +20,6 @@ export default function NewContainerForm({ authToken, accountID }) {
       <Form className="pt-4" autoComplete="off" method="POST" action={`/`}>
         <div className="mb-6">
           <input name="action" type="hidden" defaultValue="Create Container" />
-          <input name="token" type="hidden" defaultValue={authToken} />
-          <input name="accountId" type="hidden" defaultValue={accountID} />
           <label className="block mb-2 text-sm font-medium text-gray-900">Container name</label>
           <input
             type="text"

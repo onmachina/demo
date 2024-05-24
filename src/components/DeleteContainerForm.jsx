@@ -3,14 +3,14 @@ import { Link, Form } from 'react-router-dom';
 import { formatFileSize } from '../../lib/utils';
 import { fetchContainerMetadata } from '../../lib/onmachina';
 
-export default function DeleteContainerForm({ containerName, authToken, accountID }) {
+export default function DeleteContainerForm({ containerName }) {
   const [metadata, setMetadata] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const metadata = await fetchContainerMetadata(containerName, accountID, authToken);
+        const metadata = await fetchContainerMetadata(containerName);
         setMetadata(metadata);
         setLoading(false);
       } catch (error) {
@@ -35,8 +35,6 @@ export default function DeleteContainerForm({ containerName, authToken, accountI
         </p>
         <Form method="POST" action={`/`}>
           <input name="action" type="hidden" value="Delete Container" />
-          <input name="token" type="hidden" value={authToken} />
-          <input name="accountId" type="hidden" value={accountID} />
           <input name="name" type="hidden" value={containerName} />
 
           <div className="flex space-x-2 pt-4">

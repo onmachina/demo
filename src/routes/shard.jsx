@@ -1,15 +1,14 @@
 import ContainerTable from '../components/tables/ContainerTable';
 import { HiPlus } from 'react-icons/hi2';
 import { useLoaderData, Outlet, useNavigate, useParams, useLocation, Form, Link, redirect } from 'react-router-dom';
-import { addContainer } from '../../lib/onmachina';
-import { deleteContainer } from '../../lib/onmachina';
+import { addContainer, deleteContainer } from '../../lib/onmachina';
 import DeleteContainerForm from '../components/DeleteContainerForm';
 import NewContainerForm from '../components/NewContainerForm';
 import { useSearchParams } from 'react-router-dom';
 import { auth0AuthProvider } from '../../lib/auth';
 
 export default function AccountPage() {
-  const containers = useLoaderData();
+  const { containers } = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,10 +31,8 @@ export default function AccountPage() {
     return (
       <>
         <main className={`${pageType} container mx-auto text-ui-muted ui-panel-muted bg-ui-base`}>
-          {showCreate && <NewContainerForm authToken={authToken} accountID={accountID} />}
-          {showDelete && (
-            <DeleteContainerForm authToken={authToken} accountID={accountID} containerName={containerName} />
-          )}
+          {showCreate && <NewContainerForm />}
+          {showDelete && <DeleteContainerForm />}
 
           <div className="flex">
             <div className={flexClasses}>
@@ -90,15 +87,13 @@ export async function loader() {
   return { containers, token, username, avatarUrl, emailVerified };
 }
 
-export async function action({ request, params }) {
+export async function action({ request }) {
   const formData = await request.formData();
   const action = Object.fromEntries(formData).action;
-  const token = Object.fromEntries(formData).token;
-  const accountId = Object.fromEntries(formData).accountId;
   if (action === 'Create Container') {
     const containerName = Object.fromEntries(formData).name;
     const isPublic = Object.fromEntries(formData).public;
-    await addContainer(containerName, isPublic, accountId, token);
+    await addContainer(containerName, isPublic);
     return redirect(`/`);
   }
   if (action === 'Delete Container') {
