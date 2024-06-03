@@ -95,6 +95,7 @@ export const auth0AuthProvider: AuthProvider = {
     const url = new URL(request.url);
     const stripe_session_id = url.searchParams.get('session_id');
     const state = sessionStorage.getItem(AUTH0_STATE_KEY);
+    sessionStorage.removeItem(AUTH0_STATE_KEY);
     return `https://${AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`;
   },
 
