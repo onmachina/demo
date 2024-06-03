@@ -1,8 +1,26 @@
+import { useEffect, useState } from 'react';
 import CodeBlock from '../components/CodeBlock';
-import { useNearAccountContext } from '../contexts/NearContext';
+import { auth0AuthProvider } from '../../lib/auth';
 
 export default function SettingsPage() {
-  const { accountID, authToken } = useNearAccountContext();
+  const [accountID, setAccountId] = useState(null);
+  const [authToken, setAuthToken] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const authToken = await auth0AuthProvider.accessToken();
+        const accountID = await auth0AuthProvider.username();
+        setAccountId(accountID);
+        setAuthToken(authToken);
+        console.log(accountID, authToken);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [accountID, authToken]);
 
   return (
     <div className="container ml-8 max-w-2xl">
@@ -30,7 +48,7 @@ export default function SettingsPage() {
               <span className="text-left ml-2 font-semibold">account id</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <input type="text" className="w-full p-2 border" value={accountID} />
+              <input type="text" className="w-full p-2 border" value={accountID} readOnly />
             </td>
           </tr>
           <tr className="bg-gray-50 text-center">
@@ -38,7 +56,7 @@ export default function SettingsPage() {
               <span className="text-left ml-2 font-semibold">auth token</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <textarea className="w-full p-2 border">{authToken}</textarea>
+              <textarea className="w-full p-2 border" value={authToken} readOnly />
             </td>
           </tr>
         </tbody>
