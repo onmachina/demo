@@ -25,7 +25,7 @@ export default function AccountPage() {
   };
 
   const pageType = params.container ? 'container-page' : 'shard-page';
-  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mr-1' : 'w-full mr-1';
+  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mr-4' : 'w-full mr-1';
 
   if (!path.includes('shard-list') && !path.includes('settings'))
     return (

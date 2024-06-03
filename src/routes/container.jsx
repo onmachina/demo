@@ -1,6 +1,7 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiOutlineCube, HiPlus } from 'react-icons/hi2';
 import EmptyContainerGraphic from '../components/EmptyContainerGraphic';
+import { auth0AuthProvider } from '../../lib/auth';
 
 import {
   redirect,
@@ -14,7 +15,6 @@ import {
 } from 'react-router-dom';
 import emptyImage from '../assets/empty-container.svg';
 import DeleteObjectForm from '../components/DeleteObjectForm';
-import { useNearAccountContext } from '../contexts/NearContext';
 import { deleteObject } from '../../lib/onmachina';
 import UploadObjectForm from '../components/UploadObjectForm';
 import { uploadObject } from '../../lib/onmachina';
@@ -30,8 +30,6 @@ export default function ContainerPage() {
   const objectName = searchParams.get('object');
   const location = useLocation();
 
-  const { accountID, authToken } = useNearAccountContext();
-
   const selectedObject = params.object;
   const container = params.container;
 
@@ -44,7 +42,7 @@ export default function ContainerPage() {
 
   return (
     <>
-      <main className={`${pageType} container mx-auto ui-panel-muted border border-ui-base`}>
+      <main className={`${pageType} flex-1 h-screen -mt-12 bg-ui-panel-muted border-l border-ui-base`}>
         <div className="flex flex-row items-center my-2 px-2">
           <HiOutlineCube size={22} />
           <h2 className="ml-2 mr-4 text-ui-muted">
@@ -58,9 +56,7 @@ export default function ContainerPage() {
             <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Files
           </button>
         </div>
-        {showUpload && (
-          <UploadObjectForm authToken={authToken} accountID={accountID} containerName={params.container} />
-        )}
+        {showUpload && <UploadObjectForm containerName={params.container} />}
         <Outlet />
         {showDelete && (
           <DeleteObjectForm
@@ -91,12 +87,9 @@ function EmptyMessage({ objects }) {
 }
 
 // Called for any GET request
-export async function loader(params, accountId, x_auth_token) {
-  const req = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/?format=json`, {
+export async function loader(params) {
+  const req = await auth0AuthProvider.authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
-    headers: {
-      'x-auth-token': x_auth_token,
-    },
   });
   const objects = await req.json();
   return objects;

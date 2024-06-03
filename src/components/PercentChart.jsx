@@ -7,21 +7,21 @@ import './PercentChart.css';
 export default function PercentChart({ percent }) {
   const isCommplete = () => percent === 100;
   return (
-    <svg viewbox="0 0 40 40" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 40 40" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
       <circle
-        class="circle-chart__background"
+        className="circle-chart__background"
         stroke="#084f95"
-        stroke-width="4"
+        strokeWidth="4"
         fill="none"
         cx="20"
         cy="20"
         r="15.91549430918954"
       />
       <circle
-        class="circle-chart__circle"
+        className="circle-chart__circle"
         stroke="white"
-        stroke-width="4"
-        stroke-dasharray={`${percent},${100 - percent}`}
+        strokeWidth="4"
+        strokeDasharray={`${percent},${100 - percent}`}
         fill="none"
         cx="20"
         cy="20"
@@ -30,7 +30,7 @@ export default function PercentChart({ percent }) {
       <path
         d="M14 20.5L17.3478 24L25 16"
         stroke="white"
-        stroke-width="2"
+        strokeWidth="2"
         fill="none"
         className={`transition-all duration-400 ${isCommplete() ? 'opacity-100' : 'opacity-0'}`}
       />

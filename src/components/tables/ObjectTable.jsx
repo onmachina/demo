@@ -1,6 +1,6 @@
 import { HiOutlineDocument, HiOutlineTrash } from 'react-icons/hi2';
-import { formatDate } from '../../../lib/utils.js';
-import { formatFileSize } from '../../../lib/utils.js';
+import { formatDate } from '../../../lib/utils.ts';
+import { formatFileSize } from '../../../lib/utils.ts';
 import { Link } from 'react-router-dom';
 
 export default function ObjectTable({ objects, selectedObject }) {

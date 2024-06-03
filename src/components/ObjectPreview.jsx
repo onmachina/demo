@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import FileIcon from '../assets/file-icon.svg';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import LoadingPreviewGraphic from './LoadingPreviewGraphic';
+import { auth0AuthProvider } from '../../lib/auth';
 
 export default function ObjectPreview({ accountId, authKey, objectData, container, object }) {
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
@@ -12,11 +13,8 @@ export default function ObjectPreview({ accountId, authKey, objectData, containe
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
     const fetchImage = async () => {
-      const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
+      const response = await auth0AuthProvider.authenticatedFetch(`/${container}/${object}`, {
         method: 'GET',
-        headers: {
-          'x-auth-token': authKey,
-        },
       });
       // Create an object URL from the data.
       const blob = await response.blob();

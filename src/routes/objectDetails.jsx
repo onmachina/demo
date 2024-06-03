@@ -10,6 +10,8 @@ import DisplayObject from '../components/DisplayObject';
 const DeleteComponent = React.lazy(() => import('../components/DeleteObject'));
 const RenameComponent = React.lazy(() => import('../components/RenameObject'));
 
+import { auth0AuthProvider } from '../../lib/auth';
+
 export default function ObjectDetials({ accountId, authKey }) {
   const [mode, setMode] = useState('display');
 
@@ -74,15 +76,9 @@ export default function ObjectDetials({ accountId, authKey }) {
 
 // Called to load data for any GET request
 export async function loader(params, accountId, x_auth_token) {
-  const response = await fetch(
-    `https://api.testnet.onmachina.io/v1/${accountId}/${params.container}/${params.object}`,
-    {
-      method: 'HEAD',
-      headers: {
-        'x-auth-token': x_auth_token,
-      },
-    },
-  );
+  const response = await auth0AuthProvider.authenticatedFetch(`/${params.container}/${params.object}`, {
+    method: 'HEAD',
+  });
   const headersArray = [];
   for (const [name, value] of response.headers.entries()) {
     if (name === 'last-modified') headersArray.push({ name, value });

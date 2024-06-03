@@ -4,13 +4,11 @@ import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
 import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import { auth0AuthProvider } from '../../lib/auth';
 
 async function downloadFile(authKey, accountId, container, object) {
-  const response = await fetch(`https://api.testnet.onmachina.io/v1/${accountId}/${container}/${object}`, {
+  const response = await auth0AuthProvider.authenticatedFetch(`/${container}/${object}`, {
     method: 'GET',
-    headers: {
-      'x-auth-token': authKey,
-    },
   });
 
   const blob = await response.blob();

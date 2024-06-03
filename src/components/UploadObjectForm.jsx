@@ -2,12 +2,17 @@ import { useRef } from 'react';
 import { Link, Form } from 'react-router-dom';
 import { HiXMark } from 'react-icons/hi2';
 import { useState } from 'react';
-import { fileListTotalSize } from '../../lib/utils.js';
+import { fileListTotalSize } from '../../lib/utils.ts';
 import FileUpload from './FileUpload.jsx';
-import { apiURL } from '../../lib/onmachina.js';
+import { apiURL } from '../../lib/onmachina.ts';
 import './uploadform.css';
+import { auth0AuthProvider } from '../../lib/auth.ts';
 
-export default function UploadObjectForm({ containerName, accountID, authToken }) {
+const authToken =
+  'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpLUUpCVkViZmItc0ZWdVVieUdEaSJ9.eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwic3Vic2NyaWJlZCI6dHJ1ZSwiY3VzdG9tZXIiOiJ0b2RkK2xpdmVAdG9kZG1vcmV5LmNvbSIsImlzcyI6Imh0dHBzOi8vZGV2LXljMDQ4MWFmcGtxZHducGkudXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDY2MmFlOWVkNGRhOGVjNDUzNzFmOTFmNCIsImF1ZCI6WyJodHRwczovL2FwaS5nbG9iYWwwMS5vbm1hY2hpbmEuaW8vIiwiaHR0cHM6Ly9kZXYteWMwNDgxYWZwa3Fkd25waS51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzE3Mzc1MDA4LCJleHAiOjE3MTc0NjE0MDgsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgb2ZmbGluZV9hY2Nlc3MiLCJhenAiOiJaOXZIZkZEeDl3WWxXdmc0d2tuc0s2QzA2dXBYOXltMiJ9.BVEEZpQdl_lFCqaEulV1U9Vb9SrivGDRDJ_RH203ccypGGvZ1oi9gCgoR9l7oqMuxCZz-L95RrTifMKDC59eLS09ecrR4X7DTRWbujBPUZhtsSqA--B8BvKqGZ4lfvI4T-U0fx9qY5E0iV0QTfPsaG7m9nFXt30NRfpzldwgMvWMp6S-14vnBFzv6qVDDwr-5Wlaaq09ULiKltO7YwzjDI84xgXh4DA1AlUCLl2SQQKHhfxgoGezkyPoRG-_JeQiWc2G3pdMfIwQPG5t3Ygxhycql_BN3RuWLwPTHH4ZQQvQPf9_Kdmyg6IbSnCYMJ2AnDUxyFauwyJuyARhJD-cRA';
+const accountID = 'todd+live@toddmorey.com';
+
+export default function UploadObjectForm({ containerName }) {
   const [uploadList, setUploadList] = useState([]);
   const [uploadStatus, setUploadStatus] = useState({ totalSize: '0', isComplete: false });
 
@@ -37,14 +42,14 @@ export default function UploadObjectForm({ containerName, accountID, authToken }
     xhr.setRequestHeader('Content-Type', uploadItem.file.type);
     xhr.setRequestHeader('x-auth-token', authToken);
     xhr.uploadItem = uploadItem; // save a reference to the uploadItem in the xhr object
-    xhr.addEventListener(
-      'progress',
-      (e) => {
-        var percent = Math.round((e.loaded / e.total) * 100);
-        updateUploadItem(e.target.uploadItem.index, { percentUploaded: percent });
-      },
-      false,
-    );
+    xhr.upload.onprogress = function (event) {
+      if (event.lengthComputable) {
+        var percent = Math.round((event.loaded / event.total) * 100);
+        updateUploadItem(xhr.uploadItem.index, { percentUploaded: percent });
+        console.log(`${percent}% complete`);
+      }
+    };
+
     xhr.addEventListener(
       'load',
       (e) => {
