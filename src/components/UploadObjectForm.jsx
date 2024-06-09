@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { fileListTotalSize } from '../../lib/utils.ts';
 import FileUpload from './FileUpload.jsx';
 import { apiURL } from '../../lib/onmachina.ts';
-import './uploadform.css';
 import { auth0AuthProvider } from '../../lib/auth.ts';
 
 const authToken =
@@ -68,7 +67,9 @@ export default function UploadObjectForm({ containerName }) {
     });
   };
 
-  const handleUploadButton = () => {
+  const handleUploadButton = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     uploadAllItems();
   };
 
@@ -119,7 +120,7 @@ export default function UploadObjectForm({ containerName }) {
         <input name="container" type="hidden" value={containerName} />
 
         <div
-          className="w-full mb-2 h-10 border border-dashed border-cyan-500 p-10 flex justify-center items-center"
+          className="w-full mb-2 h-10 bg-blue-400 bg-opacity-40  border-l-blue-800 border-t-blue-800 p-10 flex justify-center items-center cursor-pointer"
           onDragEnter={dragEnter}
           onDragOver={dragOver}
           onDrop={drop}
@@ -134,7 +135,7 @@ export default function UploadObjectForm({ containerName }) {
           <label htmlFor="formFile" className="mb-2 inline-block text-neutral-700">
             File to upload
           </label>
-          <div className="flex space-x-2">
+          <div className="flex space-x-1">
             <input
               name="file"
               type="file"
@@ -146,11 +147,13 @@ export default function UploadObjectForm({ containerName }) {
             />
           </div>
         </div>
+        <button
+          className="block w-full text-white hover:text-white px-4 py-4 font-semibold text-sm  rounded-sm shadow-sm hover:bg-blue-700 hover:bg-opacity-50 animate-pulse hover:animate-none transition-all"
+          onClick={handleUploadButton}
+        >
+          Start Upload
+        </button>
       </Form>
-
-      <button className="px-4 py-2 font-semibold text-sm bg-blue-900 rounded-sm shadow-sm" onClick={handleUploadButton}>
-        Start Upload
-      </button>
     </div>
   );
 }
