@@ -35,7 +35,7 @@ export default function ContainerTable({ containers, selectedContainer }) {
 }
 
 function Row({ last_modified, bytes, name, count, selected }) {
-  let selectedClass = selected ? 'bg-ui-active' : 'bg-ui-base hover:bg-ui-active';
+  let selectedClass = selected ? 'bg-ui-active' : 'bg-ui-base hover:bg-ui-hover';
 
   return (
     <tr className={`text-center ${selectedClass}`}>

@@ -25,25 +25,25 @@ export default function AccountPage() {
   };
 
   const pageType = params.container ? 'container-page' : 'shard-page';
-  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mr-4' : 'w-full mr-1';
+  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mx-6' : 'w-full mr-1';
 
-  if (!path.includes('shard-list') && !path.includes('settings'))
+  if (!path.includes('shard-list') && !path.includes('settings') && !path.includes('usage'))
     return (
       <>
-        <main className={`${pageType} container mx-auto text-ui-muted ui-panel-muted bg-ui-base`}>
+        <main className={`${pageType} text-ui-muted bg-ui-base`}>
           {showCreate && <NewContainerForm />}
           {showDelete && <DeleteContainerForm />}
 
           <div className="flex">
             <div className={flexClasses}>
-              <div className="mb-4 px-3 mt-2.5">
+              <div className="mb-4 mt-2.5">
                 <button
-                  className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-sm"
+                  className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-md w-full"
                   onClick={handleAddContainer}
                 >
                   <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
                 </button>
-                <h2>
+                <h2 className="text-center">
                   {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
                 </h2>
               </div>

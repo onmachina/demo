@@ -7,11 +7,13 @@ export default function Layout({ children, wallet, accountId }) {
     <div className="flex h-screen">
       {/* Sidebar */}
       <div className="pt-4 w-[6em] h-full bg-ui-base border-r border-ui-base flex flex-col items-center">
-        <Logo />
-        <PrimaryNavigation />
+        <div className="fixed pt-5">
+          <Logo />
+          <PrimaryNavigation />
+        </div>
       </div>
       {/* Content Area */}
-      <div className="flex-1 h-full bg-ui-base pt-12">{children}</div>
+      <div className="flex-1 h-full bg-ui-base pt-6">{children}</div>
     </div>
   );
 }

@@ -42,7 +42,7 @@ export default function ContainerPage() {
 
   return (
     <>
-      <main className={`${pageType} flex-1 h-screen -mt-12 bg-ui-panel-muted border-l border-ui-base`}>
+      <main className={`${pageType} flex-1 h-screen -mt-12 px-6 pt-12 bg-ui-base border-l border-ui-base`}>
         <div className="flex flex-row items-center my-2 px-2">
           <HiOutlineCube size={22} />
           <h2 className="ml-2 mr-4 text-ui-muted">

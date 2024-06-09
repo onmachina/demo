@@ -13,7 +13,6 @@ export default function SettingsPage() {
         const accountID = await auth0AuthProvider.username();
         setAccountId(accountID);
         setAuthToken(authToken);
-        console.log(accountID, authToken);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -23,10 +22,10 @@ export default function SettingsPage() {
   }, [accountID, authToken]);
 
   return (
-    <div className="container ml-8 max-w-2xl">
-      <h1 className="text-3xl mb-4 font-bold">Account Settings</h1>
+    <div className="container ml-8 max-w-2xl text-slate-400">
+      <h1 className="text-3xl mb-4 font-bold text-white">Account Settings</h1>
 
-      <div class="p-4 mb-4  rounded-lg border border-cyan-300 bg-cyan-100" role="alert">
+      <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
         <span class="font-medium">Note:</span> Your API key from OnMachina will change and need to be refreshed about
         once every two hours. On this page, you can see your current API key.
       </div>
@@ -35,54 +34,56 @@ export default function SettingsPage() {
         <thead>
           <tr>
             <th class="sr-only">
-              <span class="text-gray-400">Name</span>
+              <span>Name</span>
             </th>
             <th class="sr-only">
-              <span class="text-gray-400">Value</span>
+              <span>Value</span>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-gray-50 text-center">
+          <tr className="bg-ui-active text-center">
             <td className="px-3 py-2 flex flex-row items-center">
               <span className="text-left ml-2 font-semibold">account id</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <input type="text" className="w-full p-2 border" value={accountID} readOnly />
+              <input type="text" className="w-full p-2 bg-ui-base border-0" value={accountID || ''} readOnly />
             </td>
           </tr>
-          <tr className="bg-gray-50 text-center">
+          <tr className="bg-ui-active text-center">
             <td className="px-3 py-2 flex flex-row items-center">
               <span className="text-left ml-2 font-semibold">auth token</span>
             </td>
             <td className="pl-10 py-2 text-left pr-4">
-              <textarea className="w-full p-2 border" value={authToken} readOnly />
+              <textarea className="w-full p-2 bg-ui-base border-0" value={authToken || ''} readOnly />
             </td>
           </tr>
         </tbody>
       </table>
 
-      <h2 className="mt-10 text-2xl mb-4 font-bold">💻 Using the API</h2>
+      <h2 className="mt-10 text-2xl mb-4 font-bold text-white">Using the API</h2>
 
       <p className="mb-4 mt-4">
         Below are the steps to explore the OnMachina API using the cURL command in your terminal.
       </p>
-      <div class="p-4 mb-4  rounded-lg border border-cyan-300 bg-cyan-100" role="alert">
+      <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
         <span class="font-medium">Note:</span> Full docmentation can be found at{' '}
         <a href="https://docs.onmachina.io/" className="underline" target="_blank">
           docs.onmachina.io
         </a>
         .
       </div>
-      <h3 className="mb-4 mt-8 font-bold">
+      <h3 className="mb-4 mt-8 text-white">
         1. First, you'll want to export your account ID along with your API token.
       </h3>
       <p className="mb-4 mt-4">Both values have been prepopulated for you in the following shell command:</p>
       <CodeBlock
-        code={`export NEAR_ACCOUNT=${accountID} && export DSN_API_TOKEN=${authToken} && export OS_AUTH_TOKEN=${authToken} && export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountID}`}
+        code={`export NEAR_ACCOUNT=${accountID || ''} && export DSN_API_TOKEN=${authToken} && export OS_AUTH_TOKEN=${
+          authToken || ''
+        } && export OS_STORAGE_URL=https://api.testnet.onmachina.io/v1/${accountID}`}
       />
 
-      <p className="mb-4 mt-8 font-bold">
+      <p className="mb-4 mt-8 text-white">
         2. Now you can run API commands against the OnMachina distributed storage network.
       </p>
       <p className="mb-4 mt-4">View an overview of your account:</p>

@@ -43,16 +43,18 @@ function Row({ last_modified, bytes, name, content_type, selected }) {
           <HiOutlineDocument size={22} className="text-ui-icon" />
         </Link>
         <Link to={`${name}/`}>
-          <span className="text-center ml-2 font-semibold">{name || 'Unknown'}</span>
+          <span className="text-center ml-2 font-semibold whitespace-nowrap text-ellipsis text-nowrap">
+            {name || 'Unknown'}
+          </span>
         </Link>
       </td>
-      <td className="pr-2 py-2">
+      <td className="pr-2 py-2 whitespace-nowrap text-ellipsis text-nowrap">
         <span>{formatDate(last_modified)}</span>
       </td>
-      <td className="pr-2 py-2">
+      <td className="pr-2 py-2 whitespace-nowrap text-ellipsis text-nowrap">
         <span>{formatFileSize(bytes) || '0'}</span>
       </td>
-      <td className="pr-2 py-2">
+      <td className="pr-2 py-2 whitespace-nowrap text-ellipsis text-nowrap">
         <span>{content_type || 'Unknown'}</span>
       </td>
       <td className="text-right pr-2 text-red-600">
