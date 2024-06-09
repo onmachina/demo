@@ -40,12 +40,15 @@ export default function ObjectDetials({ accountId, authKey }) {
 
   return (
     <>
-      <div className="w-2/4 right-0 top-0 h-full absolute z-10 p-4 ui-panel" ref={ref}>
+      <div
+        className="w-[450px] right-0 top-0 h-full absolute z-10 ui-panel bg-ui-base border-l border-ui-base"
+        ref={ref}
+      >
         <Outlet />
-        <div className="p-5 mb-5 w-full bg-ui-base border border-ui-base rounded-lg shadow-lg text-ui-muted">
+        <div className="p-5 mt-5 w-full text-ui-muted">
           <h2 className="border-b pb-2 mb-2 border-ui-base flex justify-between">
-            <div>
-              Details for <strong>{object}</strong>
+            <div className="text-ui-muted mb-2">
+              Details for <strong className="text-white font-normal">{object}</strong>
             </div>
             <Link to={`/${container}`}>
               <HiXMark />

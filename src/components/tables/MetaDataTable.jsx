@@ -2,7 +2,7 @@ export default function MetaDataTable({ metadata }) {
   if (!metadata) return <></>;
 
   return (
-    <table className="min-w-full table-auto mt-8">
+    <table className="min-w-full table-auto mt-8 text-sm">
       <thead>
         <tr>
           <th className="sr-only">
@@ -25,12 +25,8 @@ export default function MetaDataTable({ metadata }) {
 function Row({ name, value }) {
   return (
     <tr className="bg-ui-base text-ui-muted text-center">
-      <td className="px-3 py-2 flex flex-row items-center">
-        <span className="text-left ml-2 font-semibold">{name}</span>
-      </td>
-      <td className="pl-10 py-2 text-left text-ui-base">
-        <span>{value}</span>
-      </td>
+      <td className="px-2 py-2 text-right">{name}</td>
+      <td className="pl-4 py-2 text-left text-ui-base">{value}</td>
     </tr>
   );
 }
