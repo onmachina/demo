@@ -16,6 +16,7 @@ interface AuthProvider {
   accessToken(): Promise<null | string>;
   refreshToken(): Promise<void>;
   authenticatedFetch(path: string, options?: RequestInit): Promise<Response>;
+  fetchMetrics(accountId: string): Promise<Response>;
 }
 
 interface stripeCheckoutSessionDetails {
@@ -155,5 +156,17 @@ export const auth0AuthProvider: AuthProvider = {
     };
     const userName = await auth0AuthProvider.username();
     return fetch(`https://api.global01.onmachina.io/v1/${userName}${path}`, requestOpts);
+  },
+
+  async fetchMetrics() {
+    const accountID = await auth0AuthProvider.username();
+    const token = await auth0AuthProvider.accessToken();
+    const response = await fetch(`https://api.global01.onmachina.io/metrics/${accountID}`, {
+      headers: {
+        'x-auth-token': token || '',
+      },
+    });
+    const data = await response.json();
+    return data;
   },
 };
