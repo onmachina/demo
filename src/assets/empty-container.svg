@@ -2,15 +2,15 @@
 <g opacity="0.8">
 <path opacity="0.9" d="M73.5488 49.6042H139.207L179 89.0412H73.5488V49.6042Z" fill="url(#paint0_linear_90_385)"/>
 <rect x="25.0171" y="22.4833" width="85.6449" height="46.391" fill="#E7E8F2"/>
-<path d="M105.756 39.3553L127.947 39.3553L99.172 3.55559V27.2254L105.756 39.3553Z" fill="#E7E8F2" stroke="#B9BAD6" stroke-width="2"/>
-<path d="M25.029 39.3553L2.83774 39.3553L31.6127 3.55559V27.2254L25.029 39.3553Z" fill="#E7E8F2" stroke="#B9BAD6" stroke-width="2"/>
-<rect x="3.06396" y="39.8986" width="125.754" height="47.2458" fill="#F1F2F4" stroke="#B9BAD6" stroke-width="2"/>
-<rect x="32.4404" y="2.07208" width="65.8022" height="25.1209" fill="#DFE2EC" stroke="#B9BAD6" stroke-width="2"/>
+<path d="M105.756 39.3553L127.947 39.3553L99.172 3.55559V27.2254L105.756 39.3553Z" fill="#E7E8F2" stroke="#B9BAD6" strokeWidth="2"/>
+<path d="M25.029 39.3553L2.83774 39.3553L31.6127 3.55559V27.2254L25.029 39.3553Z" fill="#E7E8F2" stroke="#B9BAD6" strokeWidth="2"/>
+<rect x="3.06396" y="39.8986" width="125.754" height="47.2458" fill="#F1F2F4" stroke="#B9BAD6" strokeWidth="2"/>
+<rect x="32.4404" y="2.07208" width="65.8022" height="25.1209" fill="#DFE2EC" stroke="#B9BAD6" strokeWidth="2"/>
 </g>
 <defs>
 <linearGradient id="paint0_linear_90_385" x1="126.274" y1="49.6042" x2="149.024" y2="38.1219" gradientUnits="userSpaceOnUse">
 <stop stop-color="#D9DDE6"/>
-<stop offset="1" stop-color="#D9DDE6" stop-opacity="0"/>
+<stop offset="1" stop-color="#D9DDE6" stopOpacity="0"/>
 </linearGradient>
 </defs>
 </svg>

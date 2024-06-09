@@ -6,7 +6,7 @@ export default function EmptyContainerGraphic() {
         d="M29.1084 107.887V57.9489L79.1121 82.1443V132.082L29.1084 107.887Z"
         fill="#1D1D1D"
         stroke="#505050"
-        stroke-width="0.59176"
+        strokeWidth="0.59176"
       />
       <mask id="path-3-inside-1_515_478" fill="white">
         <path
@@ -30,7 +30,7 @@ export default function EmptyContainerGraphic() {
         d="M129.708 107.887V57.9489L79.7039 82.1443V132.082L129.708 107.887Z"
         fill="#333333"
         stroke="#505050"
-        stroke-width="0.59176"
+        strokeWidth="0.59176"
       />
       <path d="M31.2607 57.3852L76.1438 34.2197V79.1028L31.2607 57.3852Z" fill="url(#paint1_linear_515_478)" />
       <g opacity="0.9" filter="url(#filter0_f_515_478)">
@@ -83,8 +83,8 @@ export default function EmptyContainerGraphic() {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(79 79) rotate(90) scale(79)"
         >
-          <stop stop-color="#72B7FA" stop-opacity="0.58" />
-          <stop offset="1" stop-color="#72B7FA" stop-opacity="0" />
+          <stop stop-color="#72B7FA" stopOpacity="0.58" />
+          <stop offset="1" stop-color="#72B7FA" stopOpacity="0" />
         </radialGradient>
         <linearGradient
           id="paint1_linear_515_478"
@@ -95,7 +95,7 @@ export default function EmptyContainerGraphic() {
           gradientUnits="userSpaceOnUse"
         >
           <stop stop-color="#312B2B" />
-          <stop offset="1" stop-color="#312B2B" stop-opacity="0" />
+          <stop offset="1" stop-color="#312B2B" stopOpacity="0" />
         </linearGradient>
       </defs>
     </svg>

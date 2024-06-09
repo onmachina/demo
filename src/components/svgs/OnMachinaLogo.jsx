@@ -1,6 +1,6 @@
 function OnmachinaLogo() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="34" fill="none" viewBox="0 0 35 34">
+    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="34" fill="none" viewBox="0 0 35 34" className="mx-auto">
       <mask
         id="mask0_1_449"
         style={{ maskType: 'alpha' }}
