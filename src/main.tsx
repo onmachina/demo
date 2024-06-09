@@ -14,6 +14,7 @@ import SettingsPage from './routes/settings';
 import { LoggingIn } from './components/AppMessages';
 import { AccountStatus, loader as accountStatusLoader } from './routes/accountStatus';
 import { Checkout } from './routes/checkout';
+import UsagePage from './routes/usage';
 
 // authentication
 import { auth0AuthProvider } from '../lib/auth';
@@ -23,7 +24,6 @@ import './index.css';
 import ShardList from './routes/shardList';
 
 const BASE_URL = 'http://localhost:3000';
-console.log('base url is ' + BASE_URL);
 
 const authRoutes: RouteObject[] = [
   {
@@ -103,6 +103,10 @@ const router = createBrowserRouter([
       {
         path: 'settings',
         element: <SettingsPage />,
+      },
+      {
+        path: 'usage',
+        element: <UsagePage />,
       },
       {
         path: ':container',
