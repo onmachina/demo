@@ -18,6 +18,7 @@ module.exports = {
           base: 'var(--color-background)',
           active: 'var(--color-background-active)',
           selected: 'var(--color-background-selected)',
+          hover: 'var(--color-background-hover)',
         },
       },
       borderColor: {
