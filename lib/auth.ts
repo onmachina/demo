@@ -161,6 +161,7 @@ export const auth0AuthProvider: AuthProvider = {
   async fetchMetrics() {
     const accountID = await auth0AuthProvider.username();
     const token = await auth0AuthProvider.accessToken();
+    console.log('metrics url', `https://api.global01.onmachina.io/metrics/${accountID}`);
     const response = await fetch(`https://api.global01.onmachina.io/metrics/${accountID}`, {
       headers: {
         'x-auth-token': token || '',

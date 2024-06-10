@@ -60,11 +60,11 @@ export default function UsageView() {
 
       <Line
         data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [
             {
               label: 'Bandwidth',
-              data: [65, 100, 70, 81, 84, 83, 89],
+              data: [65, 100, 70, 81, 84, 83],
               fill: false,
               borderColor: 'rgb(75, 192, 192)',
               tension: 0,
@@ -98,11 +98,11 @@ export default function UsageView() {
 
       <Line
         data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [
             {
               label: 'Storage',
-              data: [65, 70, 80, 81, 84, 83, 89],
+              data: [65, 70, 80, 81, 84, 83],
               fill: false,
               borderColor: 'rgb(255 170 1)',
               tension: 0,
