@@ -11,7 +11,7 @@ import SidebarLayout from './components/layouts/SidebarLayout';
 // Imports for elements used for routes
 import Root from './routes/root';
 import ObjectDetails, { loader as objectLoader, action as objectAction } from './routes/objectDetails';
-import ContainersView, { loader as containersLoader, action as containersAction } from './routes/containerView';
+import ContainersView, { loader as containersLoader, action as containersAction } from './routes/containersView';
 import ObjectsView, { loader as objectsLoader, action as objectsAction } from './routes/objectsView';
 import SettingsView from './routes/settingsView';
 import { LoggingIn } from './components/AppMessages';

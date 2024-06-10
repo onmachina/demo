@@ -20,7 +20,8 @@ import UploadObjectForm from '../components/UploadObjectForm';
 import { uploadObject } from '../../lib/onmachina';
 
 export default function ObjectsView() {
-  const objects = useLoaderData();
+  const { objects, token, accountId } = useLoaderData();
+
   const navigate = useNavigate();
   const params = useParams();
 
@@ -56,12 +57,12 @@ export default function ObjectsView() {
             <HiPlus size={22} style={{ display: 'inline-block' }} /> Upload Files
           </button>
         </div>
-        {showUpload && <UploadObjectForm containerName={params.container} />}
+        {showUpload && <UploadObjectForm containerName={params.container} token={token} accountId={accountId} />}
         <Outlet />
         {showDelete && (
           <DeleteObjectForm
             authToken={authToken}
-            accountID={accountID}
+            accountId={accountId}
             containerName={params.container}
             objectName={objectName}
           />
@@ -88,11 +89,13 @@ function EmptyMessage({ objects }) {
 
 // Called for any GET request
 export async function loader(params) {
+  const token = await auth0AuthProvider.accessToken();
+  const accountId = await auth0AuthProvider.username();
   const req = await auth0AuthProvider.authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
   });
   const objects = await req.json();
-  return objects;
+  return { objects, token, accountId };
 }
 
 // Called for any POST request
