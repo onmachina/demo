@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 export default function ShardCard({ name, decsription, url, isActive }) {
   if (isActive)
     return (
-      <div className="max-w-sm bg-ui-active rounded-lg shadow">
-        <a href="#">
-          <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
-        </a>
+      <div className="max-w-sm bg-ui-active shadow">
+        <a href="#">{/* <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" /> */}</a>
         <div className="p-5">
           <a href="#">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">{name}</h5>
@@ -37,10 +35,8 @@ export default function ShardCard({ name, decsription, url, isActive }) {
 
   // diaabled card view
   return (
-    <div className="max-w-sm bg-ui-active opacity-50 rounded-lg shadow ">
-      <a href="#">
-        <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
-      </a>
+    <div className="max-w-sm bg-ui-active opacity-50 shadow ">
+      <a href="#">{/* <img className="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" /> */}</a>
       <div className="p-5">
         <a href="#">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-400 ">
