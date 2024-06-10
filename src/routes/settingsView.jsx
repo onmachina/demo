@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import CodeBlock from '../components/CodeBlock';
 import { auth0AuthProvider } from '../../lib/auth';
 
-export default function SettingsPage() {
+export default function SettingsView() {
   const [accountID, setAccountId] = useState(null);
   const [authToken, setAuthToken] = useState(null);
 

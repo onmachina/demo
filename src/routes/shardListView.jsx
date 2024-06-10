@@ -1,6 +1,6 @@
 import ShardCard from '../components/ShardCard';
 
-export default function ShardList() {
+export default function ShardListView() {
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold text-white">Available Shards</h1>

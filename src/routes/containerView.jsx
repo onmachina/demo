@@ -7,16 +7,13 @@ import NewContainerForm from '../components/NewContainerForm';
 import { useSearchParams } from 'react-router-dom';
 import { auth0AuthProvider } from '../../lib/auth';
 
-export default function AccountPage() {
+export default function ContainerView() {
   const { containers } = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const showDelete = searchParams.get('action') === 'delete-container';
   const showCreate = searchParams.get('action') === 'create-container';
-  const containerName = searchParams.get('container');
-  const location = useLocation();
-  const path = location.pathname;
 
   const selectedContainer = params.container;
 
@@ -25,37 +22,34 @@ export default function AccountPage() {
   };
 
   const pageType = params.container ? 'container-page' : 'shard-page';
-  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mx-6' : 'w-full mr-1';
+  const flexClasses = params.container ? 'flex-shrink-0 min-w-fit mx-6' : 'w-full mx-6';
 
-  if (!path.includes('shard-list') && !path.includes('settings') && !path.includes('usage'))
-    return (
-      <>
-        <main className={`${pageType} text-ui-muted bg-ui-base`}>
-          {showCreate && <NewContainerForm />}
-          {showDelete && <DeleteContainerForm />}
+  return (
+    <>
+      <main className={`${pageType} text-ui-muted bg-ui-base`}>
+        {showCreate && <NewContainerForm />}
+        {showDelete && <DeleteContainerForm />}
 
-          <div className="flex">
-            <div className={flexClasses}>
-              <div className="mb-4 mt-2.5">
-                <button
-                  className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-md w-full"
-                  onClick={handleAddContainer}
-                >
-                  <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
-                </button>
-                <h2 className="text-center">
-                  {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
-                </h2>
-              </div>
-              <ContainerTable containers={containers} selectedContainer={selectedContainer} />
+        <div className="flex">
+          <div className={flexClasses}>
+            <div className="mb-4 mt-2.5">
+              <button
+                className="mb-4 px-4 py-2 text-sm bg-ui-base border border-ui-base text-ui-active rounded-sm shadow-md w-full max-w-[15em]"
+                onClick={handleAddContainer}
+              >
+                <HiPlus size={22} style={{ display: 'inline-block' }} /> Create Container
+              </button>
+              <h2 className="text-center">
+                {containers.length} {containers.length != 1 ? 'Containers' : 'Container'}
+              </h2>
             </div>
-            <Outlet />
+            <ContainerTable containers={containers} selectedContainer={selectedContainer} />
           </div>
-        </main>
-      </>
-    );
-
-  return <Outlet />;
+          <Outlet />
+        </div>
+      </main>
+    </>
+  );
 }
 
 export async function loader() {

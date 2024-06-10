@@ -34,13 +34,13 @@ export default function ObjectTable({ objects, selectedObject }) {
 }
 
 function Row({ last_modified, bytes, name, content_type, selected }) {
-  let selectedClass = selected ? 'bg-ui-selected text-black' : 'bg-ui-base hover:bg-ui-active';
+  let selectedClass = selected ? 'bg-ui-active' : 'bg-ui-base hover:bg-ui-hover';
 
   return (
     <tr className={`text-center ${selectedClass}`}>
       <td className="px-2 py-2 flex flex-row items-center">
         <Link to={`${name}/`}>
-          <HiOutlineDocument size={22} className="text-ui-icon" />
+          <HiOutlineDocument size={22} className="text-sky-400" />
         </Link>
         <Link to={`${name}/`}>
           <span className="text-center ml-2 font-semibold whitespace-nowrap text-ellipsis text-nowrap">

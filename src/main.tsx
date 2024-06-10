@@ -5,23 +5,26 @@ import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom'
 // import types from react-router
 import type { RouteObject } from 'react-router-dom';
 
+// Imports for layouts
+import SidebarLayout from './components/layouts/SidebarLayout';
+
 // Imports for elements used for routes
 import Root from './routes/root';
-import Details, { loader as detailsLoader, action as objectPostAction } from './routes/objectDetails';
-import ShardPage, { loader as shardLoader, action as shardAction } from './routes/shard';
-import ContainerPage, { loader as containerLoader, action as containerPostAction } from './routes/container';
-import SettingsPage from './routes/settings';
+import ObjectDetails, { loader as objectLoader, action as objectAction } from './routes/objectDetails';
+import ContainersView, { loader as containersLoader, action as containersAction } from './routes/containerView';
+import ObjectsView, { loader as objectsLoader, action as objectsAction } from './routes/objectsView';
+import SettingsView from './routes/settingsView';
 import { LoggingIn } from './components/AppMessages';
 import { AccountStatus, loader as accountStatusLoader } from './routes/accountStatus';
 import { Checkout } from './routes/checkout';
-import UsagePage from './routes/usage';
+import UsageView from './routes/usageView';
+import ShardListView from './routes/shardListView';
 
 // authentication
 import { auth0AuthProvider } from '../lib/auth';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
-import ShardList from './routes/shardList';
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -87,43 +90,44 @@ const router = createBrowserRouter([
   ...authRoutes,
   ...signUpRoutes,
   {
-    path: '/',
-    element: (
-      <Root>
-        <ShardPage />
-      </Root>
-    ),
-    loader: shardLoader,
-    action: shardAction,
+    element: <SidebarLayout />,
     children: [
       {
         path: 'shard-list',
-        element: <ShardList />,
+        element: <ShardListView />,
       },
       {
         path: 'settings',
-        element: <SettingsPage />,
+        element: <SettingsView />,
       },
       {
         path: 'usage',
-        element: <UsagePage />,
+        element: <UsageView />,
       },
       {
-        path: ':container',
-        element: <ContainerPage />,
-        loader: async ({ params }) => {
-          return containerLoader(params);
-        },
-        action: containerPostAction,
+        path: '/',
+        element: <ContainersView />,
+        loader: containersLoader,
+        action: containersAction,
         children: [
           {
-            path: ':object',
-            element: <Details />,
+            path: ':container',
+            element: <ObjectsView />,
             loader: async ({ params }) => {
-              console.log('object loader');
-              return detailsLoader(params);
+              return objectsLoader(params);
             },
-            action: objectPostAction,
+            action: objectsAction,
+            children: [
+              {
+                path: ':object',
+                element: <ObjectDetails />,
+                loader: async ({ params }) => {
+                  console.log('object loader');
+                  return objectLoader(params);
+                },
+                action: objectAction,
+              },
+            ],
           },
         ],
       },

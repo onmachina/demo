@@ -45,9 +45,9 @@ export default function ObjectDetials({ accountId, authKey }) {
         ref={ref}
       >
         <Outlet />
-        <div className="p-5 mt-5 w-full text-ui-muted">
-          <h2 className="border-b pb-2 mb-2 border-ui-base flex justify-between">
-            <div className="text-ui-muted mb-2">
+        <div className="p-5 pt-7 mt-5 w-full text-ui-muted">
+          <h2 className="border-b pb-4 mb-2 border-ui-base flex justify-between items-center">
+            <div className="text-ui-muted">
               Details for <strong className="text-white font-normal">{object}</strong>
             </div>
             <Link to={`/${container}`}>

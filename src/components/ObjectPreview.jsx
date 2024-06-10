@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import FileIcon from '../assets/file-icon.svg';
+import FileIcon from './FileIcon';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import LoadingPreviewGraphic from './LoadingPreviewGraphic';
 import { auth0AuthProvider } from '../../lib/auth';
 
-export default function ObjectPreview({ accountId, authKey, objectData, container, object }) {
+export default function ObjectPreview({ objectData, container, object }) {
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
   const ref = useRef();
   const [isLoaded, setIsLoaded] = useState(false);
+  const isImage = fileType === 'image/jpeg' || fileType === 'image/png';
+  // split by . and get the last element
+  const fileExtension = object.split('.').pop();
+
   useOnClickOutside(ref, () => navigate(`/${container}`));
 
   useEffect(() => {
@@ -23,7 +27,7 @@ export default function ObjectPreview({ accountId, authKey, objectData, containe
       previewImage.src = objectUrl;
       setIsLoaded(true);
     };
-    if (fileType === 'image/jpeg' || fileType === 'image/png') fetchImage();
+    if (isImage) fetchImage();
   }, [object]);
 
   return (
@@ -35,7 +39,8 @@ export default function ObjectPreview({ accountId, authKey, objectData, containe
         src={FileIcon}
         alt={`preview for the object ${object}`}
       />
-      {!isLoaded && <LoadingPreviewGraphic />}
+      {isImage && !isLoaded && <LoadingPreviewGraphic />}
+      {!isImage && <FileIcon type={fileExtension} />}
     </div>
   );
 }

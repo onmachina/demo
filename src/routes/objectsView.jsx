@@ -19,7 +19,7 @@ import { deleteObject } from '../../lib/onmachina';
 import UploadObjectForm from '../components/UploadObjectForm';
 import { uploadObject } from '../../lib/onmachina';
 
-export default function ContainerPage() {
+export default function ObjectsView() {
   const objects = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
@@ -42,8 +42,8 @@ export default function ContainerPage() {
 
   return (
     <>
-      <main className={`${pageType} flex-1 h-screen -mt-12 px-6 pt-12 bg-ui-base border-l border-ui-base`}>
-        <div className="flex flex-row items-center my-2 px-2">
+      <main className={`${pageType} flex-1 h-screen -mt-6 px-6 pt-6 bg-ui-base border-l border-ui-base`}>
+        <div className="flex flex-row items-center my-3 px-2">
           <HiOutlineCube size={22} />
           <h2 className="ml-2 mr-4 text-ui-muted">
             <div className="inline-block mr-3 text-ui-base">{container}</div>
