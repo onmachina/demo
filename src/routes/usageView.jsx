@@ -10,114 +10,33 @@ import {
 } from '../../lib/utils';
 
 export const UsageView = () => {
-  // const { metrics } = useLoaderData();
+  const { metrics } = useLoaderData();
 
-  const usageData = {
-    bandwidth: [
-      {
-        total_usage: 26804483,
-        period: {
-          end: null,
-          start: 1716550904,
-        },
-      },
-      {
-        total_usage: 292731,
-        period: {
-          end: 1716550904,
-          start: 1713959137,
-        },
-      },
-    ],
-    storage: [
-      {
-        total_usage: 26804483,
-        period: {
-          end: null,
-          start: 1716550904,
-        },
-      },
-      {
-        total_usage: 292731,
-        period: {
-          end: 1716550904,
-          start: 1713959137,
-        },
-      },
-    ],
-    download: [
-      {
-        ts: '1718021700',
-        bytes: '398538',
-      },
-      {
-        ts: '1718022000',
-        bytes: '2313980',
-      },
-      {
-        ts: '1718022300',
-        bytes: '4627960',
-      },
-      {
-        ts: '1718023200',
-        bytes: '2911787',
-      },
-      {
-        ts: '1718035500',
-        bytes: '2313980',
-      },
-      {
-        ts: '1718045700',
-        bytes: '2313980',
-      },
-      {
-        ts: '1718047800',
-        bytes: '2313980',
-      },
-      {
-        ts: '1718320800',
-        bytes: '2500600',
-      },
-      {
-        ts: '1718321100',
-        bytes: '2712518',
-      },
-      {
-        ts: '1718321400',
-        bytes: '1177382',
-      },
-      {
-        ts: '1718839200',
-        bytes: '1064238',
-      },
-      {
-        ts: '1718839500',
-        bytes: '665700',
-      },
-    ],
-    upload: [
-      {
-        ts: '1718022000',
-        bytes: '1156990',
-      },
-      {
-        ts: '1718321400',
-        bytes: '332850',
-      },
-    ],
-  };
+  let billingPeriod, metricsByDate, largestValue;
 
-  console.log(usageData.bandwidth[0].period.start);
+  try {
+    billingPeriod = {
+      start: dayAndMonth(timeStampToDate(metrics.bandwidth[0].period.start)),
+    };
 
-  const billingPeriod = {
-    start: dayAndMonth(timeStampToDate(usageData.bandwidth[0].period.start)),
-  };
-
-  const metricsByDate = organizeMetricsByDate(usageData).data;
-  const laregestCombinedTotal = organizeMetricsByDate(usageData).largestCombinedTotal;
-  const barWidth = (total) => Math.round((total / laregestCombinedTotal) * 200);
+    const { data, largestCombinedTotal } = organizeMetricsByDate(metrics);
+    metricsByDate = data;
+    largestValue = largestCombinedTotal;
+  } catch (error) {
+    console.log(error);
+    return (
+      <div className="container ml-8  text-slate-400 max-w-3xl">
+        <h1 className="text-3xl mb-4 font-bold text-white">Account usage</h1>
+        <p>Usage data is processing and not yet available for this account.</p>
+      </div>
+    );
+  }
 
   console.log(metricsByDate);
+  console.log('LARGEST COMBINED', largestValue);
+
+  const barWidth = (total) => Math.round((total / largestValue) * 200);
+
   return (
     <div className="container ml-8  text-slate-400 max-w-3xl">
       <h1 className="text-3xl mb-4 font-bold text-white">Account usage</h1>
@@ -131,7 +50,7 @@ export const UsageView = () => {
         <div className="p-8 bg-ui-active w-1/2">
           <h3 className="text-cyan-300 text-xl">Bandwidth</h3>
           <p>
-            <span className="text-slate-300">{formatFileSize(usageData.bandwidth[0].total_usage)}</span> transferred so
+            <span className="text-slate-300">{formatFileSize(metrics.bandwidth[0].total_usage)}</span> transferred so
             far
           </p>
         </div>
@@ -139,7 +58,7 @@ export const UsageView = () => {
         <div className="p-8 bg-ui-active w-1/2">
           <h3 className="text-orange-400 text-xl">Storage</h3>
           <p>
-            <span className="text-slate-300">{formatFileSize(usageData.storage[0].total_usage)}</span> average stored
+            <span className="text-slate-300">{formatFileSize(metrics.storage[0].total_usage)}</span> average stored
           </p>
         </div>
       </div>

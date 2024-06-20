@@ -103,6 +103,7 @@ const router = createBrowserRouter([
       {
         path: 'usage',
         element: <UsageView />,
+        loader: usageLoader,
       },
       {
         path: '/',
