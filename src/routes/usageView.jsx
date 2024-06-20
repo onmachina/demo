@@ -157,22 +157,24 @@ export const UsageView = () => {
             </p>
           </summary>
           <table className="ml-6 my-4 w-3/4">
-            {metricsByDate[date].events.map((event) => (
-              <tr>
-                <td className="pr-8">{event.ts}</td>
-                <td className="pr-1">
-                  <EventArrow event={event} />
-                </td>
-                <td className="pr-8">{event.type}</td>
-                <td className="pr-8">{formatFileSize(event.bytes)}</td>
-                <td className=" text-cyan-300 pr-4">
-                  <svg width="200" height="6" viewBox="0 0 200 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width={barWidth(event.bytes)} height="6" fill="currentColor" />
-                    <rect x="0.5" y="0.5" width="200" height="5" stroke="#494949" />
-                  </svg>
-                </td>
-              </tr>
-            ))}
+            <tbody>
+              {metricsByDate[date].events.map((event) => (
+                <tr>
+                  <td className="pr-8">{event.ts}</td>
+                  <td className="pr-1">
+                    <EventArrow event={event} />
+                  </td>
+                  <td className="pr-8">{event.type}</td>
+                  <td className="pr-8">{formatFileSize(event.bytes)}</td>
+                  <td className=" text-cyan-300 pr-4">
+                    <svg width="200" height="6" viewBox="0 0 200 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width={barWidth(event.bytes)} height="6" fill="currentColor" />
+                      <rect x="0.5" y="0.5" width="200" height="5" stroke="#494949" />
+                    </svg>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </details>
       ))}
