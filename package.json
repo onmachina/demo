@@ -23,6 +23,7 @@
     "bn.js": "^5.2.1",
     "buffer": "^6.0.3",
     "chartjs": "^0.3.24",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",

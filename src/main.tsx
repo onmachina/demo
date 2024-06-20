@@ -17,7 +17,7 @@ import SettingsView from './routes/settingsView';
 import { LoggingIn } from './components/AppMessages';
 import { AccountStatus, loader as accountStatusLoader } from './routes/accountStatus';
 import { Checkout } from './routes/checkout';
-import UsageView from './routes/usageView';
+import { UsageView, loader as usageLoader } from './routes/usageView';
 import ShardListView from './routes/shardListView';
 
 // authentication
