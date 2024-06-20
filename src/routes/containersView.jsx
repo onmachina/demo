@@ -14,6 +14,7 @@ export default function ContainerView() {
   const [searchParams] = useSearchParams();
   const showDelete = searchParams.get('action') === 'delete-container';
   const showCreate = searchParams.get('action') === 'create-container';
+  const selectedContainerName = searchParams.get('container');
 
   const selectedContainer = params.container;
 
@@ -28,7 +29,7 @@ export default function ContainerView() {
     <>
       <main className={`${pageType} text-ui-muted bg-ui-base`}>
         {showCreate && <NewContainerForm />}
-        {showDelete && <DeleteContainerForm />}
+        {showDelete && selectedContainerName && <DeleteContainerForm containerName={selectedContainerName} />}
 
         <div className="flex">
           <div className={flexClasses}>
@@ -93,7 +94,7 @@ export async function action({ request }) {
   if (action === 'Delete Container') {
     console.log('delete container');
     const containerName = Object.fromEntries(formData).name;
-    await deleteContainer(containerName, accountId, token);
+    await deleteContainer(containerName);
     return redirect(`/`);
   }
 }

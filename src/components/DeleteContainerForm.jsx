@@ -26,7 +26,7 @@ export default function DeleteContainerForm({ containerName }) {
 
   return (
     <div className="w-2/4">
-      <div className="drop-shadow-xl border border-red-400 bg-red-100 p-5 mb-5">
+      <div className="m-6 drop-shadow-xl border border-red-400 bg-red-100 p-5 mb-5">
         <h2 className="border-b pb-2 mb-2 border-red-400 text-red-700">Delete {containerName}</h2>
         <p>
           Are you sure you want to delete the container <strong>{containerName}</strong>? It contains{' '}
