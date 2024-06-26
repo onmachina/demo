@@ -106,6 +106,12 @@ export const auth0AuthProvider: AuthProvider = {
     return user?.name || null;
   },
 
+  async email() {
+    let auth0 = await auth0Client();
+    let user = await auth0.getUser();
+    return user?.email || null;
+  },
+
   async avatarUrl() {
     let auth0 = await auth0Client();
     let user = await auth0.getUser();
