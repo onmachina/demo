@@ -78,7 +78,7 @@ export default function SettingsView() {
       </h3>
       <p className="mb-4 mt-4">Both values have been prepopulated for you in the following shell command:</p>
       <CodeBlock
-        code={`export NEAR_ACCOUNT=${accountID || ''} && export DSN_API_TOKEN=${authToken} && export OS_AUTH_TOKEN=${
+        code={`export DSN_ACCOUNT=${accountID || ''} && export DSN_API_TOKEN=${authToken} && export OS_AUTH_TOKEN=${
           authToken || ''
         } && export OS_STORAGE_URL=https://api.global01.onmachina.io/v1/${accountID}`}
       />
@@ -88,11 +88,11 @@ export default function SettingsView() {
       </p>
       <p className="mb-4 mt-4">View an overview of your account:</p>
       <CodeBlock
-        code={`curl -i https://api.global01.onmachina.io/v1/$NEAR_ACCOUNT -X GET -H "X-Auth-Token: $DSN_API_TOKEN"`}
+        code={`curl -i https://api.global01.onmachina.io/v1/$DSN_ACCOUNT -X GET -H "X-Auth-Token: $DSN_API_TOKEN"`}
       />
       <p className="mb-4 mt-4">Create a new container called "test-container":</p>
       <CodeBlock
-        code={`curl -i https://api.global01.onmachina.io/v1/$NEAR_ACCOUNT/test-container -X PUT -H "X-Auth-Token: $DSN_API_TOKEN"`}
+        code={`curl -i https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/test-container -X PUT -H "X-Auth-Token: $DSN_API_TOKEN"`}
       />
       <p className="mb-4 mt-4">
         Add an object into the container:
@@ -100,7 +100,7 @@ export default function SettingsView() {
         (Be sure to include a proper content type for the data to be accessible)
       </p>
       <CodeBlock
-        code={`curl -i https://api.global01.onmachina.io/v1/$NEAR_ACCOUNT/test-container/test.txt -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "Content-Type: text/plain" -T ~/tmp`}
+        code={`curl -i https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/test-container/test.txt -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "Content-Type: text/plain" -T ~/tmp`}
       />
     </div>
   );
