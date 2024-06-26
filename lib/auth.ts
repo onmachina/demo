@@ -9,6 +9,7 @@ interface AuthProvider {
   stripeCheckoutUrl(request: Request): Promise<null | string>;
   stripeCheckoutSessionDetails(request: Request): Promise<null | stripeCheckoutSessionDetails>;
   stripeFinishRedirectUrl(request: Request): Promise<null | string>;
+  email(): Promise<null | string>;
   username(): Promise<null | string>;
   avatarUrl(): Promise<null | string>;
   emailVerified(): Promise<boolean>;
@@ -154,12 +155,12 @@ export const auth0AuthProvider: AuthProvider = {
         'x-auth-token': token || '',
       },
     };
-    const userName = await auth0AuthProvider.username();
-    return fetch(`https://api.global01.onmachina.io/v1/${userName}${path}`, requestOpts);
+    const userEmail = await auth0AuthProvider.email();
+    return fetch(`https://api.global01.onmachina.io/v1/${userEmail}${path}`, requestOpts);
   },
 
   async fetchMetrics() {
-    const accountID = await auth0AuthProvider.username();
+    const accountID = await auth0AuthProvider.email();
     const token = await auth0AuthProvider.accessToken();
     console.log('metrics url', `https://api.global01.onmachina.io/metrics/${accountID}`);
     const response = await fetch(`https://api.global01.onmachina.io/metrics/${accountID}`, {
