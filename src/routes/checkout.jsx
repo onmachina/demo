@@ -99,10 +99,10 @@ export const Checkout = function () {
           </ul>
           <ul className="border border-gray-300 rounded-lg">
             <li className="p-4 border-b border-gray-300">
-              <span className="text-black">$0.004/GiB</span> storage
+              <span className="text-black">$0.02/GB per month</span> storage
             </li>
             <li className="p-4 ">
-              <span className="text-black">$0.007/GiB</span> bandwidth
+              <span className="text-black">$0.02/GB</span> bandwidth
             </li>
           </ul>
         </div>
