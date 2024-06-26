@@ -15,7 +15,7 @@ export const Checkout = function () {
 
       // client-safe stripe "publishable" API key
       const stripe = await loadStripe(
-        'pk_test_51OkWELDS1kjgsFiFxMUkKroMrTOOiJKZ1UjHpJ5NON4CW7jlmKMZ7fcZrdvxHqHPqDn66YyCUhzoAl24sEq53NkL00OW4PGwzc',
+        'pk_live_51OkWELDS1kjgsFiFkILU6vic638ZPsSz7TNCbUkEadet1zBp6dRznCTa6jBiNxuLBLeQrCZZ3TtSTcWYrDSYfDji00Dbj9DOZF',
       );
 
       // Initialize Checkout
