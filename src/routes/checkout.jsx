@@ -35,7 +35,7 @@ export const Checkout = function () {
   }, [stripe_client_secret]);
 
   return (
-    <div className="h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50  lg:flex items-stretch">
+    <div className="min-h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50  lg:flex items-stretch">
       <div className="lg:w-1/2 bg-slate-100 p-8">
         <p className="mx-auto w-10 aspect-square text-2xl text-cyan-400 text-center rounded-full border-cyan-400 border-4 mb-2">
           1
