@@ -67,7 +67,7 @@ export default function SettingsView() {
         Below are the steps to explore the OnMachina API using the cURL command in your terminal.
       </p>
       <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
-        <span class="font-medium">Note:</span> Full docmentation can be found at{' '}
+        <span class="font-medium">Note:</span> Full documentation can be found at{' '}
         <a href="https://docs.onmachina.io/" className="underline" target="_blank">
           docs.onmachina.io
         </a>
