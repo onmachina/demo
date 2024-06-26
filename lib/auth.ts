@@ -38,6 +38,7 @@ function auth0Client() {
       clientId: AUTH0_CLIENT_ID,
       useRefreshTokens: true,
       cacheLocation: 'localstorage',
+      authorizationParams: { scope: 'openid email' },
     });
   }
   return auth0ClientPromise;
