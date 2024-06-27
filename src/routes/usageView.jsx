@@ -32,9 +32,6 @@ export const UsageView = () => {
     );
   }
 
-  console.log(metricsByDate);
-  console.log('LARGEST COMBINED', largestValue);
-
   const barWidth = (total) => Math.round((total / largestValue) * 200);
 
   return (
@@ -97,6 +94,16 @@ export const UsageView = () => {
           </table>
         </details>
       ))}
+
+      <h2 className="text-xl text-slate-400 mt-12 mb-8">More details</h2>
+
+      <details>
+        <summary className="flex justify-between text-white w-3/4 cursor-pointer opacity-60 p-2 transition-colors hover:bg-ui-active border-ui-base border border-l-2">
+          <h2>Raw data</h2>
+          <p>(JSON format)</p>
+        </summary>
+        <pre className="ml-6 my-4 w-3/4">{JSON.stringify(metrics, null, 2)}</pre>
+      </details>
     </div>
   );
 };
