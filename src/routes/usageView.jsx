@@ -12,16 +12,17 @@ import {
 export const UsageView = () => {
   const { metrics } = useLoaderData();
 
-  let billingPeriod, metricsByDate, largestValue;
+  let billingPeriod, metricsByDate, largestValue, totalBandwidthForPeriod;
 
   try {
     billingPeriod = {
-      start: dayAndMonth(timeStampToDate(metrics.bandwidth[0].period.start)),
+      start: dayAndMonth(timeStampToDate(metrics.current_period.start)),
     };
 
-    const { data, largestCombinedTotal } = organizeMetricsByDate(metrics);
+    const { data, largestCombinedTotal, totalBandwidth } = organizeMetricsByDate(metrics);
     metricsByDate = data;
     largestValue = largestCombinedTotal;
+    totalBandwidthForPeriod = totalBandwidth;
   } catch (error) {
     console.log(error);
     return (
@@ -47,15 +48,14 @@ export const UsageView = () => {
         <div className="p-8 bg-ui-active w-1/2">
           <h3 className="text-cyan-300 text-xl">Bandwidth</h3>
           <p>
-            <span className="text-slate-300">{formatFileSize(metrics.bandwidth[0].total_usage)}</span> transferred so
-            far
+            <span className="text-slate-300">{formatFileSize(totalBandwidthForPeriod)}</span> transferred so far
           </p>
         </div>
 
         <div className="p-8 bg-ui-active w-1/2">
           <h3 className="text-orange-400 text-xl">Storage</h3>
           <p>
-            <span className="text-slate-300">{formatFileSize(metrics.storage[0].total_usage)}</span> average stored
+            <span className="text-slate-300">{formatFileSize(metrics.storage.total_usage)}</span> average stored
           </p>
         </div>
       </div>

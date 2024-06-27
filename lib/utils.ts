@@ -53,6 +53,7 @@ export function fileListTotalSize(fileList: File[]): string {
 export function organizeMetricsByDate(metrics) {
   const result = {};
   let largestCombinedTotal = 0;
+  let totalBandwidth = 0;
 
   function processEvent(event, type) {
     const date = new Date(Number(event.ts) * 1000).toISOString().split('T')[0]; // Convert timestamp to date string
@@ -76,6 +77,8 @@ export function organizeMetricsByDate(metrics) {
       };
     }
 
+    totalBandwidth += event.bytes;
+
     result[date].events.push({
       type: type,
       ts: time,
@@ -91,12 +94,13 @@ export function organizeMetricsByDate(metrics) {
     }
   }
 
-  metrics.download.forEach((event) => processEvent(event, 'download'));
-  metrics.upload.forEach((event) => processEvent(event, 'upload'));
+  metrics.current_period.download.forEach((event) => processEvent(event, 'download'));
+  metrics.current_period.upload.forEach((event) => processEvent(event, 'upload'));
 
   return {
     data: Object.values(result),
     largestCombinedTotal: largestCombinedTotal,
+    totalBandwidth: totalBandwidth,
   };
 }
 
