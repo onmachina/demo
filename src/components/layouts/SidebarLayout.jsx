@@ -2,7 +2,40 @@ import Logo from '../svgs/OnMachinaLogo.jsx';
 import PrimaryNavigation from '../PrimaryNavigation';
 import { Outlet } from 'react-router-dom';
 import { auth0AuthProvider } from '../../../lib/auth.ts';
-import { redirect, useLoaderData, Link } from 'react-router-dom';
+import { useNavigate, redirect, useLoaderData, Link } from 'react-router-dom';
+
+import {
+  Cloud,
+  CreditCard,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Settings,
+  User,
+  UserPlus,
+  Users,
+} from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export const SidebarLayout = function () {
   const { username, avatarUrl } = useLoaderData();
@@ -15,33 +48,7 @@ export const SidebarLayout = function () {
           <Logo />
           <PrimaryNavigation />
           <div className="fixed bottom-8 w-[4em]">
-            <Link to="/account-status/" className="hover:text-white text-ui-muted">
-              {avatarUrl && (
-                <img
-                  src={avatarUrl}
-                  alt="Circular Image"
-                  className="mx-auto w-12 h-12 rounded-full border-4 border-ui-base shadow-lg"
-                ></img>
-              )}
-              {!avatarUrl && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1}
-                  stroke="currentColor"
-                  className="w-10 h-10 mx-auto"
-                  width={22}
-                  height={22}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                </svg>
-              )}
-            </Link>
+            <DropdownMenuDemo />
           </div>
         </div>
       </div>
@@ -61,4 +68,46 @@ export async function accountLoader() {
   const avatarUrl = await auth0AuthProvider.avatarUrl();
 
   return { username, avatarUrl };
+}
+
+function DropdownMenuDemo() {
+  const navigate = useNavigate();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1}
+          stroke="currentColor"
+          className="w-10 h-10 mx-auto"
+          width={22}
+          height={22}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56">
+        <DropdownMenuItem onClick={() => navigate('/usage')}>
+          <Cloud className="mr-2 h-4 w-4" />
+          <span>Usage</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/settings')}>
+          <Settings className="mr-2 h-4 w-4" />
+          <span>Settings</span>
+        </DropdownMenuItem>{' '}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate('/logout')}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
