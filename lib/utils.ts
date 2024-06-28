@@ -77,8 +77,6 @@ export function organizeMetricsByDate(metrics) {
       };
     }
 
-    totalBandwidth += event.bytes;
-
     result[date].events.push({
       type: type,
       ts: time,
@@ -86,6 +84,8 @@ export function organizeMetricsByDate(metrics) {
     });
 
     const bytes = Number(event.bytes);
+    totalBandwidth += bytes;
+
     result[date].totals[type] += bytes;
     result[date].totals.combined += bytes;
 
