@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom'
 import type { RouteObject } from 'react-router-dom';
 
 // Imports for layouts
-import SidebarLayout from './components/layouts/SidebarLayout';
+import { SidebarLayout, accountLoader } from './components/layouts/SidebarLayout';
 
 // Imports for elements used for routes
 import Root from './routes/root';
@@ -91,6 +91,7 @@ const router = createBrowserRouter([
   ...signUpRoutes,
   {
     element: <SidebarLayout />,
+    loader: accountLoader,
     children: [
       {
         path: 'shard-list',
