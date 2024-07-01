@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function EmailNotVerified({ error }) {
   return (
     <div className="flex flex-col items-center pb-5">
-      <div className="m-4 font-bold text-slate-500">Please verify your email</div>
+      <div className="m-4 font-bold text-white">Please verify your email</div>
       <div className="mt-0 m-4 flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 " role="alert">
         <svg
           aria-hidden="true"
@@ -20,15 +20,17 @@ export default function EmailNotVerified({ error }) {
         </svg>
         <span className="sr-only">Info</span>
         <div>
-          <span className="font-medium">You need to verify your email account before you can use the application.</span>
+          <span className="font-medium text-white">
+            You need to verify your email account before you can use the application.
+          </span>
         </div>
       </div>
-      <div className="m-6 mt-0 text-sm">
+      <div className="m-6 mt-0 text-sm text-gray-400">
         Look for an email sent with the subject "Verify your email" sent from decentralinfra.com. That email contains a
         link you can click to verify your account.
       </div>
       <Link
-        className="px-4 py-2 font-semibold text-sm bg-white rounded-full shadow-sm border border-slate-300"
+        className="px-4 py-2 font-semibold text-sm  text-white rounded-full shadow-sm border border-slate-300"
         to="/account-status"
       >
         Check again
