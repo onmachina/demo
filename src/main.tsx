@@ -9,7 +9,7 @@ import type { RouteObject } from 'react-router-dom';
 import { SidebarLayout, accountLoader } from './components/layouts/SidebarLayout';
 
 // Imports for errors
-import ErrorWindow from './components/errors/ErrorWindow';
+import { ErrorWindow } from './components/errors/ErrorWindow';
 
 // Imports for elements used for routes
 import Root from './routes/root';
