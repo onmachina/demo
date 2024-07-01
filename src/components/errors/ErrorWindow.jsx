@@ -17,7 +17,7 @@ export function ErrorWindow() {
 
   return (
     <div className="grid h-screen place-items-center top-0 bottom-0 left-0 right-0 absolute z-50">
-      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+      <div className="w-full max-w-sm bg-ui-active rounded-lg shadow">
         <React.Suspense fallback={<div>Loading...</div>}>
           <ErrorComponent error={error} />
         </React.Suspense>
