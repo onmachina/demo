@@ -40,7 +40,7 @@ export const Checkout = function () {
         <p className="mx-auto w-10 aspect-square text-2xl text-cyan-400 text-center rounded-full border-cyan-400 border-4 mb-2">
           1
         </p>
-        <p className="text-3xl text-center">Review your plan</p>
+        <p className="text-3xl text-center text-black">Review your plan</p>
         <p className="text-center mb-8 text-slate-500 text-lg">Simple monthly subscription. Cancel any time.</p>
 
         <div className="w-full flex-1 p-8 order-1 shadow-lg rounded-xl bg-white text-gray-400 max-w-lg mx-auto">
