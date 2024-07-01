@@ -20,7 +20,7 @@ export default function EmailNotVerified({ error }) {
         </svg>
         <span className="sr-only">Info</span>
         <div>
-          <span className="font-medium text-white">
+          <span className="font-medium text-blue-900">
             You need to verify your email account before you can use the application.
           </span>
         </div>
