@@ -3,6 +3,8 @@ import PrimaryNavigation from '../PrimaryNavigation';
 import { Outlet } from 'react-router-dom';
 import { auth0AuthProvider } from '../../../lib/auth.ts';
 import { useNavigate, redirect, useLoaderData, Link } from 'react-router-dom';
+import Banner from '../Banner.jsx';
+import { useState, useEffect } from 'react';
 
 import {
   Cloud,
@@ -38,10 +40,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export const SidebarLayout = function () {
-  const { username, avatarUrl } = useLoaderData();
+  const { username, avatarUrl, emailVerified } = useLoaderData();
+
+  const [showBanner, setShowBanner] = useState(true);
+  const toggleBanner = () => setShowBanner(!showBanner);
 
   return (
     <div className="flex h-screen">
+      {/* Banner */}
+      {!emailVerified && showBanner && <Banner action={toggleBanner} />}
       {/* Sidebar */}
       <div className="pt-4 w-[6em] h-full bg-ui-base border-r border-ui-base flex-shrink-0 flex flex-col items-center">
         <div className="fixed pt-5">
@@ -66,8 +73,9 @@ export async function accountLoader() {
 
   const username = await auth0AuthProvider.email();
   const avatarUrl = await auth0AuthProvider.avatarUrl();
+  const emailVerified = await auth0AuthProvider.emailVerified();
 
-  return { username, avatarUrl };
+  return { username, avatarUrl, emailVerified };
 }
 
 function DropdownMenuDemo() {
