@@ -8,6 +8,9 @@ import type { RouteObject } from 'react-router-dom';
 // Imports for layouts
 import { SidebarLayout, accountLoader } from './components/layouts/SidebarLayout';
 
+// Imports for errors
+import ErrorWindow from './components/errors/ErrorWindow';
+
 // Imports for elements used for routes
 import Root from './routes/root';
 import ObjectDetails, { loader as objectLoader, action as objectAction } from './routes/objectDetails';
@@ -92,6 +95,7 @@ const router = createBrowserRouter([
   {
     element: <SidebarLayout />,
     loader: accountLoader,
+    errorElement: <ErrorWindow />,
     children: [
       {
         path: 'shard-list',
