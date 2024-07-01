@@ -4,7 +4,7 @@ export default function Banner({ action }) {
     <div
       id="banner"
       tabindex="-1"
-      class="banner flex fixed z-50 gap-8 justify-between items-start py-3 px-4 w-full bg-indigo-600 text-white border border-b border-gray-200 sm:items-center"
+      class="banner flex fixed z-50 gap-8 justify-between items-start py-3 px-4 w-full bg-indigo-700 text-white border border-b border-indigo-600 sm:items-center"
     >
       <div className="text-indigo-300">
         <svg
