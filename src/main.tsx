@@ -39,6 +39,7 @@ const authRoutes: RouteObject[] = [
       return null;
     },
     element: <LoggingIn />,
+    errorElement: <ErrorWindow />,
   },
   {
     path: '/finish-auth',
