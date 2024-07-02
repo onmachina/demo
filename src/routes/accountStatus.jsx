@@ -1,8 +1,8 @@
 import UseEscape from '../hooks/useEscape';
-import { Link, useNavigate, useLoaderData, redirect } from 'react-router-dom';
+import { useNavigate, useLoaderData, redirect } from 'react-router-dom';
 import { auth0AuthProvider } from '../../lib/auth';
-import { Children } from 'react';
 import { DecentralLogo } from '../components/DecentralLogo';
+import { ButtonLink } from '../components/Button';
 
 export const AccountStatus = function AccountStatus() {
   const navigate = useNavigate();
@@ -50,12 +50,9 @@ export const AccountStatus = function AccountStatus() {
         )}
 
         <div className="mx-4 mt-8">
-          <Link
-            to="/"
-            className="block w-full px-4 py-3 text-sm font-medium text-center text-cyan-200 border-cyan-600 border focus:ring-4 focus:outline-none focus:slate-800"
-          >
-            Continue to the application
-          </Link>
+          <ButtonLink bg="active" to="/">
+            Continue to the applicaiton
+          </ButtonLink>
         </div>
       </div>
     </div>
@@ -64,8 +61,8 @@ export const AccountStatus = function AccountStatus() {
 
 const Incomplete = (props) => {
   return (
-    <div className="m-4 flex gap-2  items-start py-3 px-4 text-gray-400 border border-gray-600 sm:items-center">
-      <div className="text-red-500">
+    <div className="flex gap-3  items-full py-3 px-4  text-gray-400">
+      <div className="text-red-300 bg-red-900 bg-opacity-20 rounded-md p-2 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -91,8 +88,8 @@ const Incomplete = (props) => {
 
 const Complete = (props) => {
   return (
-    <div className="m-4 flex gap-2  items-start py-3 px-4 bg-emerald-900 bg-opacity-30  text-emerald-200 sm:items-center">
-      <div className="text-emerald-300">
+    <div className="flex gap-3  items-full py-3 px-4  text-gray-400">
+      <div className="text-emerald-300 bg-emerald-900 bg-opacity-20 rounded-md p-2 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -109,7 +106,7 @@ const Complete = (props) => {
         </svg>
       </div>
       <div>
-        <p className="text-emerald-100">{props.titleText}</p>
+        <p className="text-white">{props.titleText}</p>
         {props.children}
       </div>
     </div>

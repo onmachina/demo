@@ -78,6 +78,7 @@ module.exports = {
       borderColor: {
         ui: {
           base: 'var(--color-ui-lines)',
+          active: 'var(--color-text-active)',
         },
       },
     },
