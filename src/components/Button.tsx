@@ -1,5 +1,6 @@
 import { HiPlus } from 'react-icons/hi2';
 import { HiXMark } from 'react-icons/hi2';
+import { HiArrowRight } from 'react-icons/hi2';
 import { Link } from 'react-router-dom';
 
 interface ButtonProps {
@@ -46,9 +47,18 @@ export const ButtonLink = function (props: ButtonProps) {
 
   const deleteStyles = `${baseStyles} border-red-500 text-red-500`;
 
-  return (
-    <Link className={normalStyles} {...props} style={{ maxWidth: props.maxWidth }}>
-      {props.children}
-    </Link>
-  );
+  switch (props.variant) {
+    case 'arrow':
+      return (
+        <Link className={normalStyles} {...props} style={{ maxWidth: props.maxWidth }}>
+          <span className="mr-2">{props.children}</span> <HiArrowRight size={22} style={{ display: 'inline-block' }} />
+        </Link>
+      );
+    default:
+      return (
+        <Link className={normalStyles} {...props} style={{ maxWidth: props.maxWidth }}>
+          {props.children}
+        </Link>
+      );
+  }
 };
