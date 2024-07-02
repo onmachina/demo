@@ -22,13 +22,13 @@ export const Button = function (props: ButtonProps) {
     case 'add':
       return (
         <button className={normalStyles} {...props} style={{ maxWidth: props.maxWidth }}>
-          <HiPlus size={22} style={{ display: 'inline-block' }} /> {props.children}
+          <HiPlus size={20} style={{ display: 'inline-block' }} /> {props.children}
         </button>
       );
     case 'delete':
       return (
         <button className={deleteStyles} {...props} style={{ maxWidth: props.maxWidth }}>
-          <HiXMark size={22} style={{ display: 'inline-block' }} /> {props.children}
+          <HiXMark size={20} style={{ display: 'inline-block' }} /> {props.children}
         </button>
       );
     default:
