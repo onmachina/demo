@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ButtonLink } from '../components/Button';
 
 export default function ShardCard({ name, decsription, url, isActive }) {
   if (isActive)
@@ -10,10 +11,7 @@ export default function ShardCard({ name, decsription, url, isActive }) {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">{name}</h5>
           </a>
           <p className="mb-6 font-normal text-gray-300 ">{decsription}</p>
-          <Link
-            to={url}
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 "
-          >
+          <ButtonLink bg="active" to={url}>
             Select shard
             <svg
               aria-hidden="true"
@@ -28,7 +26,7 @@ export default function ShardCard({ name, decsription, url, isActive }) {
                 clipRule="evenodd"
               ></path>
             </svg>
-          </Link>
+          </ButtonLink>
         </div>
       </div>
     );
@@ -45,7 +43,7 @@ export default function ShardCard({ name, decsription, url, isActive }) {
           </h5>
         </a>
         <p className="mb-6 font-normal text-gray-400 ">{decsription}</p>
-        <span className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-500 rounded-lg opacity-40">
+        <ButtonLink bg="active" to="#">
           Select shard
           <svg
             aria-hidden="true"
@@ -60,7 +58,7 @@ export default function ShardCard({ name, decsription, url, isActive }) {
               clipRule="evenodd"
             ></path>
           </svg>
-        </span>
+        </ButtonLink>
       </div>
     </div>
   );
