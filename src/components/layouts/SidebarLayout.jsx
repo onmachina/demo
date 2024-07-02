@@ -50,7 +50,7 @@ export const SidebarLayout = function () {
       {/* Banner */}
       {!emailVerified && showBanner && <Banner action={toggleBanner} />}
       {/* Sidebar */}
-      <div className="pt-4 w-[6em] h-full bg-ui-base border-r border-ui-base flex-shrink-0 flex flex-col items-center">
+      <div className="pt-4 w-[6em] h-full bg-ui-base flex-shrink-0 flex flex-col items-center">
         <div className="fixed pt-5">
           <Logo />
           <PrimaryNavigation />
@@ -60,7 +60,7 @@ export const SidebarLayout = function () {
         </div>
       </div>
       {/* Content Area */}
-      <div className="flex-1 h-full bg-ui-base pt-6">
+      <div className="flex-1 h-full bg-ui-base pt-6 border-l border-ui-base min-h-full">
         <Outlet />
       </div>
     </div>

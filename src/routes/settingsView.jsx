@@ -22,7 +22,7 @@ export default function SettingsView() {
   }, [accountID, authToken]);
 
   return (
-    <div className="container ml-8 max-w-2xl text-slate-400">
+    <div className="container ml-8 max-w-2xl text-slate-400 mb-4">
       <h1 className="text-3xl mb-4 font-bold text-white">Account Settings</h1>
 
       <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
