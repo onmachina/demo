@@ -22,13 +22,17 @@ export default function GenericError({ error }) {
             <span className="font-medium">Application error.</span> There was an error fulfilling your request.
           </p>
           <p className="mt-2">
-            <i>
+            <i className="text-blue-700">
               {error.statusText || error.message} ({error.status})
             </i>
           </p>
         </div>
       </div>
-      <ButtonLink to="/">Back to application</ButtonLink>
+      <div className="p-4 pb-0 w-full">
+        <ButtonLink bg="active" to="/">
+          Back to application
+        </ButtonLink>
+      </div>
     </div>
   );
 }
