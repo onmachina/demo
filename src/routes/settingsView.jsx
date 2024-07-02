@@ -83,9 +83,9 @@ export default function SettingsView() {
         } && export OS_STORAGE_URL=https://api.global01.onmachina.io/v1/${accountID}`}
       />
 
-      <p className="mb-4 mt-8 text-white">
+      <h3 className="mb-4 mt-8 text-white">
         2. Now you can run API commands against the OnMachina distributed storage network.
-      </p>
+      </h3>
       <p className="mb-4 mt-4">View an overview of your account:</p>
       <CodeBlock
         code={`curl -i https://api.global01.onmachina.io/v1/$DSN_ACCOUNT -X GET -H "X-Auth-Token: $DSN_API_TOKEN"`}
@@ -102,9 +102,23 @@ export default function SettingsView() {
       <CodeBlock
         code={`curl -i https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/test-container/test.txt -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "Content-Type: text/plain" -T ~/tmp`}
       />
-      <p className="mb-4 mt-4">Uploading an archive file that will be extracted automatically:</p>
+      <h2 className="mt-10 text-2xl mb-4 font-bold text-white">Working with larger file sets</h2>
+      <h3 className="mb-4 mt-8 text-white">Uploading multiple files at once</h3>
+      <p className="mb-4 mt-4">
+        You can upload an archive file that will be extracted automatically into multiple objects inside the container:
+      </p>
       <CodeBlock
         code={`curl -i "https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/container-name?extract-archive=tar.gz" -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "X-Detect-Content-Type: true" -T ./1000files.tar.gz`}
+      />
+      <h3 className="mb-4 mt-8 text-white">Deleting files in batches</h3>
+      <p className="mb-4 mt-4">
+        First create a text file containing the paths of the objects you want to delete, one per line.
+      </p>
+      <CodeBlock code={`container1/object1.txt\ncontainer2/object2.txt`} />
+
+      <p className="mb-4 mt-4">Then, use the following command to delete the objects in the batch:</p>
+      <CodeBlock
+        code={`curl -i "https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/" -X DELETE -H "X-Auth-Token: <TOKEN>" --data-binary ./objects_to_delete.txt`}
       />
     </div>
   );
