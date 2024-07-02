@@ -2,7 +2,7 @@ import { ButtonLink } from '../Button';
 export default function GenericError({ error }) {
   return (
     <div className="flex flex-col items-center pb-4">
-      <div className="m-4 font-bold text-white">Something went wrong</div>
+      <div className="m-4 mb-0 font-bold text-white">Something went wrong</div>
       <div className="m-4 flex p-4 mb-4 text-sm text-blue-800 rounded-sm bg-blue-300 " role="alert">
         <svg
           aria-hidden="true"
