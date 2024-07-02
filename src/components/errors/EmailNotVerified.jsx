@@ -25,11 +25,13 @@ export default function EmailNotVerified({ error }) {
           </span>
         </div>
       </div>
-      <div className="m-6 mt-0 text-sm text-gray-400">
+      <div className="m-4 mt-0 text-sm text-gray-400">
         Look for an email sent with the subject "Verify your email" sent from decentralinfra.com. That email contains a
         link you can click to verify your account.
       </div>
-      <ButtonLink to="/account-status">Check again</ButtonLink>
+      <div className="m-4">
+        <ButtonLink to="/account-status">Check again</ButtonLink>
+      </div>
     </div>
   );
 }
