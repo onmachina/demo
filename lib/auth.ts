@@ -167,6 +167,15 @@ export const auth0AuthProvider: AuthProvider = {
   },
 
   async fetchMetrics() {
+    const email_verified = await auth0AuthProvider.emailVerified();
+    if (!email_verified) {
+      throw json(
+        {
+          code: 'ERR_EMAIL_NOT_VERIFIED',
+        },
+        { status: 401 },
+      );
+    }
     const accountID = await auth0AuthProvider.email();
     const token = await auth0AuthProvider.accessToken();
     console.log('metrics url', `https://api.global01.onmachina.io/metrics/${accountID}`);
