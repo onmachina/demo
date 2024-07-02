@@ -128,8 +128,6 @@ export const auth0AuthProvider: AuthProvider = {
   async hasSubscription() {
     let auth0 = await auth0Client();
     const claims = await auth0.getIdTokenClaims();
-    console.log('HERE ARE THE CLAIMS:');
-    console.log(claims);
     const subscribed = claims ? claims['has_subscription'] : false;
     return subscribed;
   },
