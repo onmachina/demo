@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
+import { ButtonLink } from '../Button';
 
 export default function EmailNotVerified({ error }) {
   return (
     <div className="flex flex-col items-center pb-5">
       <div className="m-4 font-bold text-white">Please verify your email</div>
-      <div className="mt-0 m-4 flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 " role="alert">
+      <div className="mt-0 m-4 flex p-4 mb-4 text-sm text-blue-800 rounded-sm bg-blue-300 " role="alert">
         <svg
           aria-hidden="true"
           className="flex-shrink-0 inline w-5 h-5 mr-3"
@@ -29,12 +29,7 @@ export default function EmailNotVerified({ error }) {
         Look for an email sent with the subject "Verify your email" sent from decentralinfra.com. That email contains a
         link you can click to verify your account.
       </div>
-      <Link
-        className="px-4 py-2 font-semibold text-sm  text-white rounded-full shadow-sm border border-slate-300"
-        to="/account-status"
-      >
-        Check again
-      </Link>
+      <ButtonLink to="/account-status">Check again</ButtonLink>
     </div>
   );
 }

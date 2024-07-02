@@ -1,7 +1,8 @@
+import { ButtonLink } from '../Button';
 export default function GenericError({ error }) {
   return (
     <div className="flex flex-col items-center pb-10">
-      <div className="m-8 flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 " role="alert">
+      <div className="m-8 flex p-4 mb-4 text-sm text-blue-800 rounded-sm bg-blue-300 " role="alert">
         <svg
           aria-hidden="true"
           className="flex-shrink-0 inline w-5 h-5 mr-3"
@@ -27,6 +28,7 @@ export default function GenericError({ error }) {
           </p>
         </div>
       </div>
+      <ButtonLink to="/">Back to application</ButtonLink>
     </div>
   );
 }
