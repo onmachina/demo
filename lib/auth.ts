@@ -175,6 +175,14 @@ export const auth0AuthProvider: AuthProvider = {
         'x-auth-token': token || '',
       },
     });
+    if (!response.ok) {
+      throw json(
+        {
+          code: 'ERR_STATS_UNAVAILABLE',
+        },
+        { status: 401 },
+      );
+    }
     const data = await response.json();
     return data;
   },

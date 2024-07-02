@@ -11,6 +11,8 @@ export function ErrorWindow() {
     ErrorComponent = React.lazy(() => import('./EmailNotVerified.jsx'));
   } else if (error?.data?.code === 'ERR_UNAUTHORIZED') {
     ErrorComponent = React.lazy(() => import('./GenericError.jsx'));
+  } else if (error?.data?.code === 'ERR_STATS_UNAVAILABLE') {
+    ErrorComponent = React.lazy(() => import('./StatsNotAvailable.jsx'));
   } else {
     ErrorComponent = React.lazy(() => import('./GenericError.jsx'));
   }
