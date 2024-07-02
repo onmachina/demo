@@ -26,8 +26,8 @@ export default function SettingsView() {
       <h1 className="text-3xl mb-4 font-bold text-white">Account Settings</h1>
 
       <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
-        <span class="font-medium">Note:</span> Your API key from OnMachina will change and need to be refreshed about
-        once every two hours. On this page, you can see your current API key.
+        <span class="font-medium">Note:</span> Your API access token from OnMachina will change and need to be refreshed
+        every 24 hours. On this page, you can see your current API key.
       </div>
 
       <table class="min-w-full table-auto mt-8">
@@ -101,6 +101,10 @@ export default function SettingsView() {
       </p>
       <CodeBlock
         code={`curl -i https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/test-container/test.txt -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "Content-Type: text/plain" -T ~/tmp`}
+      />
+      <p className="mb-4 mt-4">Uploading an archive file that will be extracted automatically:</p>
+      <CodeBlock
+        code={`curl -i "https://api.global01.onmachina.io/v1/$DSN_ACCOUNT/container-name?extract-archive=tar.gz" -X PUT -H "X-Auth-Token: $DSN_API_TOKEN" -H "X-Detect-Content-Type: true" -T ./1000files.tar.gz`}
       />
     </div>
   );
