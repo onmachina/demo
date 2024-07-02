@@ -22,7 +22,7 @@ export default function GenericError({ error }) {
             <span className="font-medium">Application error.</span> There was an error fulfilling your request.
           </p>
           <p className="mt-2">
-            <i className="text-blue-700">
+            <i className="text-blue-800 opacity-70">
               {error.statusText || error.message} ({error.status})
             </i>
           </p>
