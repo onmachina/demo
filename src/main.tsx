@@ -24,7 +24,7 @@ import { UsageView, loader as usageLoader } from './routes/usageView';
 import ShardListView from './routes/shardListView';
 
 // authentication
-import { auth0AuthProvider } from '../lib/auth';
+import { authProvider } from '../lib/auth';
 
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
@@ -35,7 +35,7 @@ const authRoutes: RouteObject[] = [
   {
     path: '/login',
     async loader() {
-      await auth0AuthProvider.startAuth('login', `${BASE_URL}/finish-auth`);
+      await authProvider.startAuth('login', `${BASE_URL}/finish-auth`);
       return null;
     },
     element: <LoggingIn />,
@@ -44,15 +44,15 @@ const authRoutes: RouteObject[] = [
   {
     path: '/finish-auth',
     async loader() {
-      await auth0AuthProvider.finishAuth();
-      return (await auth0AuthProvider.isAuthenticated()) ? redirect('/') : null;
+      await authProvider.finishAuth();
+      return (await authProvider.isAuthenticated()) ? redirect('/') : null;
     },
     element: <p>redirecting...</p>,
   },
   {
     path: '/logout',
     async loader() {
-      await auth0AuthProvider.logout();
+      await authProvider.logout();
       return redirect('/');
     },
   },
@@ -67,7 +67,7 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/signup',
     async loader() {
-      await auth0AuthProvider.startAuth('signup', `${BASE_URL}/finish-auth`);
+      await authProvider.startAuth('signup', `${BASE_URL}/finish-auth`);
       return null;
     },
     element: <LoggingIn />,
@@ -75,7 +75,7 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/start-checkout',
     async loader({ request }) {
-      const details = await auth0AuthProvider.stripeCheckoutSessionDetails(request);
+      const details = await authProvider.stripeCheckoutSessionDetails(request);
       return details;
     },
     element: <Checkout />,
@@ -83,7 +83,7 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/finish-checkout',
     async loader({ request }) {
-      const url = await auth0AuthProvider.stripeFinishRedirectUrl(request);
+      const url = await authProvider.stripeFinishRedirectUrl(request);
       return url ? redirect(url) : redirect('/');
     },
     element: <p>redirecting...</p>,

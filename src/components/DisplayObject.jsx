@@ -4,10 +4,10 @@ import MetaDataTable from '../components/tables/MetaDataTable';
 import UseEscape from '../hooks/useEscape';
 import { HiOutlinePencilSquare, HiOutlineArrowDownTray, HiOutlineTrash, HiXMark } from 'react-icons/hi2';
 import useOnClickOutside from '../hooks/useOnClickOutside';
-import { auth0AuthProvider } from '../../lib/auth';
+import { authProvider } from '../../lib/auth';
 
 async function downloadFile(authKey, accountId, container, object) {
-  const response = await auth0AuthProvider.authenticatedFetch(`/${container}/${object}`, {
+  const response = await authProvider.authenticatedFetch(`/${container}/${object}`, {
     method: 'GET',
   });
 

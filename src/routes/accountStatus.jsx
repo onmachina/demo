@@ -1,6 +1,6 @@
 import UseEscape from '../hooks/useEscape';
 import { useNavigate, useLoaderData, redirect } from 'react-router-dom';
-import { auth0AuthProvider } from '../../lib/auth';
+import { authProvider } from '../../lib/auth';
 import { DecentralLogo } from '../components/DecentralLogo';
 import { ButtonLink } from '../components/Button';
 
@@ -114,15 +114,15 @@ const Complete = (props) => {
 };
 
 export async function loader() {
-  const isAuthenticated = await auth0AuthProvider.isAuthenticated();
+  const isAuthenticated = await authProvider.isAuthenticated();
   if (!isAuthenticated) return redirect('/login');
 
-  await auth0AuthProvider.refreshToken();
+  await authProvider.refreshToken();
 
-  const username = await auth0AuthProvider.username();
-  const token = await auth0AuthProvider.accessToken();
-  const emailVerified = await auth0AuthProvider.emailVerified();
-  const activeSubscription = await auth0AuthProvider.hasSubscription();
+  const username = await authProvider.username();
+  const token = await authProvider.accessToken();
+  const emailVerified = await authProvider.emailVerified();
+  const activeSubscription = await authProvider.hasSubscription();
 
   return { token, username, emailVerified, activeSubscription };
 }

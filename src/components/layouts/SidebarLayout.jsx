@@ -1,7 +1,7 @@
 import Logo from '../svgs/OnMachinaLogo.jsx';
 import PrimaryNavigation from '../PrimaryNavigation';
 import { Outlet } from 'react-router-dom';
-import { auth0AuthProvider } from '../../../lib/auth.ts';
+import { authProvider } from '../../../lib/auth.ts';
 import { useNavigate, redirect, useLoaderData, Link } from 'react-router-dom';
 import Banner from '../Banner.jsx';
 import { useState, useEffect } from 'react';
@@ -68,12 +68,12 @@ export const SidebarLayout = function () {
 };
 
 export async function accountLoader() {
-  const isAuthenticated = await auth0AuthProvider.isAuthenticated();
+  const isAuthenticated = await authProvider.isAuthenticated();
   if (!isAuthenticated) return redirect('/login');
 
-  const username = await auth0AuthProvider.email();
-  const avatarUrl = await auth0AuthProvider.avatarUrl();
-  const emailVerified = await auth0AuthProvider.emailVerified();
+  const username = await authProvider.email();
+  const avatarUrl = await authProvider.avatarUrl();
+  const emailVerified = await authProvider.emailVerified();
 
   return { username, avatarUrl, emailVerified };
 }

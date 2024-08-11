@@ -5,7 +5,7 @@ import { addContainer, deleteContainer } from '../../lib/onmachina';
 import DeleteContainerForm from '../components/DeleteContainerForm';
 import NewContainerForm from '../components/NewContainerForm';
 import { useSearchParams } from 'react-router-dom';
-import { auth0AuthProvider } from '../../lib/auth';
+import { authProvider } from '../../lib/auth';
 
 export default function ContainerView() {
   const { containers } = useLoaderData();
@@ -54,18 +54,18 @@ export default function ContainerView() {
 }
 
 export async function loader() {
-  const isAuthenticated = await auth0AuthProvider.isAuthenticated();
+  const isAuthenticated = await authProvider.isAuthenticated();
   if (!isAuthenticated) return redirect('/login');
 
-  const username = await auth0AuthProvider.username();
-  const token = await auth0AuthProvider.accessToken();
-  const avatarUrl = await auth0AuthProvider.avatarUrl();
-  const emailVerified = await auth0AuthProvider.emailVerified();
+  const username = await authProvider.username();
+  const token = await authProvider.accessToken();
+  const avatarUrl = await authProvider.avatarUrl();
+  const emailVerified = await authProvider.emailVerified();
 
   // return empty json if email not verified
   if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
 
-  const res = await auth0AuthProvider.authenticatedFetch(`/?format=json`, {
+  const res = await authProvider.authenticatedFetch(`/?format=json`, {
     method: 'GET',
   });
 

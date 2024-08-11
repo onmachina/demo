@@ -1,7 +1,7 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiOutlineCube, HiPlus } from 'react-icons/hi2';
 import EmptyContainerGraphic from '../components/EmptyContainerGraphic';
-import { auth0AuthProvider } from '../../lib/auth';
+import { authProvider } from '../../lib/auth';
 
 import {
   redirect,
@@ -89,9 +89,9 @@ function EmptyMessage({ objects }) {
 
 // Called for any GET request
 export async function loader(params) {
-  const token = await auth0AuthProvider.accessToken();
-  const accountId = await auth0AuthProvider.email();
-  const req = await auth0AuthProvider.authenticatedFetch(`/${params.container}/?format=json`, {
+  const token = await authProvider.accessToken();
+  const accountId = await authProvider.email();
+  const req = await authProvider.authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
   });
   const objects = await req.json();

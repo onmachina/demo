@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CodeBlock from '../components/CodeBlock';
-import { auth0AuthProvider } from '../../lib/auth';
+import { authProvider } from '../../lib/auth';
 
 export default function SettingsView() {
   const [accountID, setAccountId] = useState(null);
@@ -9,8 +9,8 @@ export default function SettingsView() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const authToken = await auth0AuthProvider.accessToken();
-        const accountID = await auth0AuthProvider.email();
+        const authToken = await authProvider.accessToken();
+        const accountID = await authProvider.email();
         setAccountId(accountID);
         setAuthToken(authToken);
       } catch (error) {

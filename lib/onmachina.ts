@@ -1,5 +1,5 @@
-import { auth0AuthProvider } from './auth';
-const authenticatedFetch = auth0AuthProvider.authenticatedFetch;
+import { authProvider } from './auth';
+const authenticatedFetch = authProvider.authenticatedFetch;
 
 export const apiURL = 'https://api.global01.onmachina.io/v1';
 
