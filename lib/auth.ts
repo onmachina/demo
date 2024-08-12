@@ -1,5 +1,5 @@
 import { Auth0Client } from '@auth/auth-spa-js';
-\import { json } from 'react-router-dom';
+import { json } from 'react-router-dom';
 
 interface StripeCheckoutSessionDetails {
   stripe_client_secret: string | null;
@@ -38,7 +38,7 @@ class AuthProvider {
     }
   }
 
-  private async getAuthClient(): Promise<AuthClientType> {
+  private async getAuthClient(): Promise<any> {
     if (!this.authClient) {
       await this.initAuthClient();
     }
