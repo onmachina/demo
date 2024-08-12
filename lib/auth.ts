@@ -12,6 +12,7 @@ class AuthProvider {
   private readonly AUTH0_CLIENT_ID: string;
   private readonly AUTH0_STATE_KEY = 'auth.session.state';
   private readonly AUTH_TYPE_KEY = 'auth.session.type';
+  private readonly NEARAUTH_URL = 'http://localhost:5000';
 
   constructor() {
     this.AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -23,7 +24,12 @@ class AuthProvider {
     const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
 
     if (authType === 'near') {
-      // Add NearAuth specific configuration here
+      // Near account based authentication
+      const { NearAuthClient } = await import('@onmachina/nearauth-sdk-wallet');
+      this.authClient = new NearAuthClient({
+        baseUrl: this.NEARAUTH_URL,
+        nearNetworkId: 'testnet',
+      });
     } else {
       // Default to Auth0 if no type is set or if it's set to 'auth0'
       const { createAuth0Client }: typeof Auth0Client = await import('@auth0/auth0-spa-js');
