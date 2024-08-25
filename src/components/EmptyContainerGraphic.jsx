@@ -10,14 +10,14 @@ export default function EmptyContainerGraphic() {
       />
       <mask id="path-3-inside-1_515_478" fill="white">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M79 31.3633L28.4045 57.4771L79 81.9588V81.9588L79 81.9588L129.596 57.4771L79 31.3633V31.3633L79 31.3633Z"
         />
       </mask>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M79 31.3633L28.4045 57.4771L79 81.9588V81.9588L79 81.9588L129.596 57.4771L79 31.3633V31.3633L79 31.3633Z"
         fill="#1D1D1D"
       />
@@ -36,8 +36,8 @@ export default function EmptyContainerGraphic() {
       <g opacity="0.9" filter="url(#filter0_f_515_478)">
         <mask id="path-7-inside-2_515_478" fill="white">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M78.4082 31.3633L27.8127 57.4771L28.2207 57.6745V108.073L78.8162 132.554L129.412 108.073V57.477L128.601 57.6722L129.004 57.4771L78.4082 31.3633Z"
           />
         </mask>
@@ -50,8 +50,8 @@ export default function EmptyContainerGraphic() {
       <g opacity="0.9">
         <mask id="path-9-inside-3_515_478" fill="white">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M78.4082 31.3633L27.8127 57.4771L28.2207 57.6745V108.073L78.8162 132.554L129.412 108.073V57.477L128.601 57.6722L129.004 57.4771L78.4082 31.3633Z"
           />
         </mask>
