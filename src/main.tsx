@@ -17,6 +17,7 @@ import ObjectDetails, { loader as objectLoader, action as objectAction } from '.
 import ContainersView, { loader as containersLoader, action as containersAction } from './routes/containersView';
 import ObjectsView, { loader as objectsLoader, action as objectsAction } from './routes/objectsView';
 import SettingsView from './routes/settingsView';
+import { LoginOptions } from './routes/loginOptions';
 import { LoggingIn } from './components/AppMessages';
 import { AccountStatus, loader as accountStatusLoader } from './routes/accountStatus';
 import { Checkout } from './routes/checkout';
@@ -35,11 +36,17 @@ const authRoutes: RouteObject[] = [
   {
     path: '/login',
     async loader() {
-      await authProvider.startAuth('login', `${BASE_URL}/finish-auth`);
+      const authType = authProvider.getAuthType();
+      if (authType != 'near' && authType != 'auth0') return redirect('/login-options');
+      await authProvider.startAuth();
       return null;
     },
     element: <LoggingIn />,
     errorElement: <ErrorWindow />,
+  },
+  {
+    path: '/login-options',
+    element: <LoginOptions />,
   },
   {
     path: '/finish-auth',
@@ -67,7 +74,7 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/signup',
     async loader() {
-      await authProvider.startAuth('signup', `${BASE_URL}/finish-auth`);
+      await authProvider.startSignup();
       return null;
     },
     element: <LoggingIn />,
@@ -75,16 +82,14 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/start-checkout',
     async loader({ request }) {
-      const details = await authProvider.stripeCheckoutSessionDetails(request);
-      return details;
+      // to be implemented
     },
     element: <Checkout />,
   },
   {
     path: '/finish-checkout',
     async loader({ request }) {
-      const url = await authProvider.stripeFinishRedirectUrl(request);
-      return url ? redirect(url) : redirect('/');
+      return authProvider.finishCheckout(request);
     },
     element: <p>redirecting...</p>,
   },
