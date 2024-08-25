@@ -89,8 +89,9 @@ function EmptyMessage({ objects }) {
 
 // Called for any GET request
 export async function loader(params) {
-  const token = await authProvider.accessToken();
-  const accountId = await authProvider.email();
+  const user = await authProvider.getUser();
+  const token = user.accessToken.value;
+  const accountId = user.accountId;
   const req = await authProvider.authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
   });

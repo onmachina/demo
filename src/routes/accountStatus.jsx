@@ -119,10 +119,11 @@ export async function loader() {
 
   await authProvider.refreshToken();
 
-  const username = await authProvider.username();
-  const token = await authProvider.accessToken();
-  const emailVerified = await authProvider.emailVerified();
-  const activeSubscription = await authProvider.hasSubscription();
+  const user = await authProvider.getUser();
+  const username = user.username;
+  const token = user.accessToken.value;
+  const emailVerified = user.emailVerified;
+  const activeSubscription = user.hasSubscription;
 
   return { token, username, emailVerified, activeSubscription };
 }

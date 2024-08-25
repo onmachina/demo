@@ -57,10 +57,12 @@ export async function loader() {
   const isAuthenticated = await authProvider.isAuthenticated();
   if (!isAuthenticated) return redirect('/login');
 
-  const username = await authProvider.username();
-  const token = await authProvider.accessToken();
-  const avatarUrl = await authProvider.avatarUrl();
-  const emailVerified = await authProvider.emailVerified();
+  const user = await authProvider.getUser();
+
+  const username = user.username;
+  const token = user.accessToken;
+  const avatarUrl = user.avatarUrl;
+  const emailVerified = user.emailVerified;
 
   // return empty json if email not verified
   if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };

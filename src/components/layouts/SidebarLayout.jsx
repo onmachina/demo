@@ -71,9 +71,12 @@ export async function accountLoader() {
   const isAuthenticated = await authProvider.isAuthenticated();
   if (!isAuthenticated) return redirect('/login');
 
-  const username = await authProvider.email();
-  const avatarUrl = await authProvider.avatarUrl();
-  const emailVerified = await authProvider.emailVerified();
+  const user = await authProvider.getUser();
+  console.log('accountLoader user:', user);
+
+  const username = user.username;
+  const avatarUrl = user.avatarUrl;
+  const emailVerified = user.emailVerified;
 
   return { username, avatarUrl, emailVerified };
 }

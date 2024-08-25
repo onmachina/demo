@@ -1,9 +1,36 @@
+interface AuthAdapter {
+  isAuthenticated(): Promise<boolean>;
+  startAuth(): Promise<void>;
+  finishAuth(): Promise<void>;
+  logout(): Promise<void>;
+  getUser(): Promise<User>;
+  refreshToken(): Promise<void>;
+  postCheckoutUrl(): Promise<string>;
+  startSignup(): Promise<void>;
+  startCheckout(): Promise<void>;
+  finishCheckout(request: Request): Promise<Response>;
+  getAuthType(): string;
+}
+
+interface User {
+  name: string | null;
+  email: string | null;
+  avatarUrl: string | null;
+  emailVerified: boolean;
+  hasSubscription: boolean;
+  accessToken: {
+    value: string | null;
+    expiresAt: number | null;
+  };
+}
+
 class AuthProvider {
   private readonly AUTH_TYPE_KEY = 'auth.type';
-  private authAdapter: any;
+  private authAdapter: AuthAdapter | null = null;
+  private initPromise: Promise<void>;
 
   constructor() {
-    this.initAuthClient();
+    this.initPromise = this.initAuthClient();
   }
 
   private async initAuthClient(): Promise<void> {
@@ -20,27 +47,52 @@ class AuthProvider {
     }
   }
 
+  private ensureInitialized(): void {
+    if (!this.authAdapter) {
+      throw new Error('AuthProvider not initialized');
+    }
+  }
+
   async isAuthenticated(): Promise<boolean> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.isAuthenticated();
   }
 
   async startAuth(): Promise<void> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.startAuth();
   }
 
   async finishAuth(): Promise<void> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.finishAuth();
   }
 
   async logout(): Promise<void> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.logout();
   }
 
-  async getUser(): Promise<any> {
-    return this.authAdapter.getUser();
+  async getUser(): Promise<User> {
+    await this.initPromise;
+    this.ensureInitialized();
+    return this.authAdapter.getUser() as Promise<User>;
+  }
+
+  async accessToken(): Promise<string> {
+    await this.initPromise;
+    this.ensureInitialized();
+    const user = await this.authAdapter.getUser();
+    return user.accessToken.value;
   }
 
   async refreshToken(): Promise<void> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.refreshToken();
   }
 
@@ -49,18 +101,25 @@ class AuthProvider {
   }
 
   async startSignup(): Promise<void> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.startSignup();
   }
 
   async startCheckout(): Promise<void> {
+    await this.initPromise;
+    this.ensureInitialized();
     await this.authAdapter.startCheckout();
   }
 
   async finishCheckout(request: Request): Promise<Response> {
+    await this.initPromise;
+    this.ensureInitialized();
     return this.authAdapter.finishCheckout(request);
   }
 
   getAuthType(): string {
+    this.ensureInitialized();
     return this.authAdapter.getAuthType();
   }
 }

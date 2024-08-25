@@ -88,12 +88,12 @@ class AuthAdapter {
     await auth.logout();
   }
 
-  async getUser(): Promise<any> {
+  async getUser(): Promise<User> {
     const auth = await this.getAuthClient();
-    const user = auth.getUser();
+    const user = await auth.getUser();
     const accessToken = await auth.getTokenSilently({ cacheMode: 'on' });
     return {
-      name: user?.name || null,
+      name: user?.email || null,
       email: user?.email || null,
       avatarUrl: user?.picture || null,
       emailVerified: user?.email_verified || false,
