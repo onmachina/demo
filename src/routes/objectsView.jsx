@@ -1,6 +1,7 @@
 import ObjectTable from '../components/tables/ObjectTable';
 import { HiOutlineCube, HiPlus } from 'react-icons/hi2';
 import EmptyContainerGraphic from '../components/EmptyContainerGraphic';
+import { authenticatedFetch } from '../../lib/onmachina';
 import { authProvider } from '../../lib/auth';
 
 import {
@@ -92,7 +93,7 @@ export async function loader(params) {
   const user = await authProvider.getUser();
   const token = user.accessToken.value;
   const accountId = user.accountId;
-  const req = await authProvider.authenticatedFetch(`/${params.container}/?format=json`, {
+  const req = await authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
   });
   const objects = await req.json();

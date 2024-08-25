@@ -1,5 +1,5 @@
 import { authProvider } from './auth';
-const authenticatedFetch = authProvider.authenticatedFetch;
+import { json } from 'react-router-dom';
 
 export const apiURL = 'https://api.global01.onmachina.io/v1';
 
@@ -99,4 +99,55 @@ export async function fetchObjectMetadata(containerName: string, objectName: str
   }
 
   return metadata;
+}
+
+export async function authenticatedFetch(path: string, options?: RequestInit) {
+  const user = await authProvider.getUser();
+  if (!user.emailVerified) {
+    throw json(
+      {
+        code: 'ERR_EMAIL_NOT_VERIFIED',
+      },
+      { status: 401 },
+    );
+  }
+  const token = await authProvider.accessToken();
+  const requestOpts = {
+    ...options,
+    headers: {
+      ...options?.headers,
+      'x-auth-token': token || '',
+    },
+  };
+  return fetch(`https://api.global01.onmachina.io/v1/${user.name}${path}`, requestOpts);
+}
+
+export async function fetchMetrics() {
+  const user = await authProvider.getUser();
+  if (!user.emailVerified) {
+    throw json(
+      {
+        code: 'ERR_EMAIL_NOT_VERIFIED',
+      },
+      { status: 401 },
+    );
+  }
+  const accountID = user.name;
+  const token = user.accessToken.value;
+  console.log('metrics url', `https://api.global01.onmachina.io/metrics/${accountID}`);
+  const response = await fetch(`https://api.global01.onmachina.io/metrics/${accountID}`, {
+    headers: {
+      'x-auth-token': token || '',
+    },
+  });
+  if (!response.ok) {
+    throw json(
+      {
+        code: 'ERR_STATS_UNAVAILABLE',
+      },
+      { status: 401 },
+    );
+  }
+  const data = await response.json();
+  return data;
 }

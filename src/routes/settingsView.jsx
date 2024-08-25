@@ -9,8 +9,9 @@ export default function SettingsView() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const authToken = await authProvider.accessToken();
-        const accountID = await authProvider.email();
+        const user = await authProvider.getUser();
+        const authToken = user.accessToken.value;
+        const accountID = user.name;
         setAccountId(accountID);
         setAuthToken(authToken);
       } catch (error) {

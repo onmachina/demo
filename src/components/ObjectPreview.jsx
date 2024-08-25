@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import FileIcon from './FileIcon';
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import LoadingPreviewGraphic from './LoadingPreviewGraphic';
-import { authProvider } from '../../lib/auth';
+import { authenticatedFetch } from '../../lib/onmachina';
 
 export default function ObjectPreview({ objectData, container, object }) {
   const fileType = objectData.find((obj) => obj.name === 'content-type').value;
@@ -17,7 +17,7 @@ export default function ObjectPreview({ objectData, container, object }) {
   useEffect(() => {
     const previewImage = document.querySelector('#preview-image');
     const fetchImage = async () => {
-      const response = await authProvider.authenticatedFetch(`/${container}/${object}`, {
+      const response = await authenticatedFetch(`/${container}/${object}`, {
         method: 'GET',
       });
       // Create an object URL from the data.

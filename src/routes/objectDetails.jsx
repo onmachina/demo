@@ -10,7 +10,7 @@ import DisplayObject from '../components/DisplayObject';
 const DeleteComponent = React.lazy(() => import('../components/DeleteObject'));
 const RenameComponent = React.lazy(() => import('../components/RenameObject'));
 
-import { authProvider } from '../../lib/auth';
+import { authenticatedFetch } from '../../lib/onmachina';
 
 export default function ObjectDetials({ accountId, authKey }) {
   const [mode, setMode] = useState('display');
@@ -79,7 +79,7 @@ export default function ObjectDetials({ accountId, authKey }) {
 
 // Called to load data for any GET request
 export async function loader(params, accountId, x_auth_token) {
-  const response = await authProvider.authenticatedFetch(`/${params.container}/${params.object}`, {
+  const response = await authenticatedFetch(`/${params.container}/${params.object}`, {
     method: 'HEAD',
   });
   const headersArray = [];

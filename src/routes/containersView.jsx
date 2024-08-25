@@ -5,6 +5,7 @@ import { addContainer, deleteContainer } from '../../lib/onmachina';
 import DeleteContainerForm from '../components/DeleteContainerForm';
 import NewContainerForm from '../components/NewContainerForm';
 import { useSearchParams } from 'react-router-dom';
+import { authenticatedFetch } from '../../lib/onmachina';
 import { authProvider } from '../../lib/auth';
 
 export default function ContainerView() {
@@ -67,7 +68,7 @@ export async function loader() {
   // return empty json if email not verified
   if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
 
-  const res = await authProvider.authenticatedFetch(`/?format=json`, {
+  const res = await authenticatedFetch(`/?format=json`, {
     method: 'GET',
   });
 

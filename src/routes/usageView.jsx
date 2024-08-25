@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router-dom';
-import { authProvider } from '../../lib/auth';
+import { fetchMetrics } from '../../lib/onmachina';
 import {
   organizeMetricsByDate,
   dayAndMonth,
@@ -143,6 +143,6 @@ const EventArrow = ({ event }) => {
 };
 
 export async function loader(params) {
-  const metrics = await authProvider.fetchMetrics();
+  const metrics = await fetchMetrics();
   return { metrics };
 }
