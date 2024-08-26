@@ -78,7 +78,7 @@ class AuthAdapter {
     });
   }
 
-  async finishAuth(): Promise<void> {
+  async finishAuth(request: Request): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.handleRedirectCallback();
   }

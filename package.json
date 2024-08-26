@@ -17,6 +17,7 @@
     "@near-wallet-selector/modal-ui": "^7.8.2",
     "@near-wallet-selector/near-wallet": "^7.8.2",
     "@near-wallet-selector/wallet-connect": "^7.8.2",
+    "@onmachina/nearauth-sdk-wallet": "file:../nearauth-sdk-js/wallet",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@rollup/plugin-commonjs": "^24.0.1",

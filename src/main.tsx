@@ -36,7 +36,7 @@ const authRoutes: RouteObject[] = [
   {
     path: '/login',
     async loader() {
-      const authType = authProvider.getAuthType();
+      const authType = await authProvider.getAuthType();
       if (authType != 'near' && authType != 'auth0') return redirect('/login-options');
       await authProvider.startAuth();
       return null;
@@ -50,8 +50,8 @@ const authRoutes: RouteObject[] = [
   },
   {
     path: '/finish-auth',
-    async loader() {
-      await authProvider.finishAuth();
+    async loader({ request }) {
+      await authProvider.finishAuth(request);
       return (await authProvider.isAuthenticated()) ? redirect('/') : null;
     },
     element: <p>redirecting...</p>,

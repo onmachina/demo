@@ -1,15 +1,15 @@
 interface AuthAdapter {
   isAuthenticated(): Promise<boolean>;
   startAuth(): Promise<void>;
-  finishAuth(): Promise<void>;
+  finishAuth(request: Request): Promise<void>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
   postCheckoutUrl(): Promise<string>;
   startSignup(): Promise<void>;
   startCheckout(): Promise<void>;
-  finishCheckout(request: Request): Promise<Response>;
-  getAuthType(): string;
+  finishCheckout(request: Request): Promise<any>;
+  getAuthType(): Promise<string>;
 }
 
 interface User {
@@ -36,15 +36,18 @@ class AuthProvider {
   private async initAuthClient(): Promise<void> {
     const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
 
-    if (authType === 'near') {
-      // Near account based authentication to be done later
-    } else if (authType === 'auth0' || !authType) {
-      const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
-      this.authAdapter = auth0Adapter;
-      if (!authType) {
-        sessionStorage.setItem(this.AUTH_TYPE_KEY, 'auth0');
-      }
-    }
+    const { authAdapter: NearAuthAdapter } = await import('./plugins/near');
+    this.authAdapter = NearAuthAdapter;
+
+    // if (authType === 'near') {
+    //   // Near account based authentication to be done later
+    // } else if (authType === 'auth0' || !authType) {
+    //   const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
+    //   this.authAdapter = auth0Adapter;
+    //   if (!authType) {
+    //     sessionStorage.setItem(this.AUTH_TYPE_KEY, 'auth0');
+    //   }
+    // }
   }
 
   private ensureInitialized(): void {
@@ -65,10 +68,10 @@ class AuthProvider {
     return this.authAdapter.startAuth();
   }
 
-  async finishAuth(): Promise<void> {
+  async finishAuth(request: Request): Promise<void> {
     await this.initPromise;
     this.ensureInitialized();
-    return this.authAdapter.finishAuth();
+    return this.authAdapter.finishAuth(request);
   }
 
   async logout(): Promise<void> {
@@ -118,7 +121,8 @@ class AuthProvider {
     return this.authAdapter.finishCheckout(request);
   }
 
-  getAuthType(): string {
+  async getAuthType(): Promise<string> {
+    await this.initPromise;
     this.ensureInitialized();
     return this.authAdapter.getAuthType();
   }

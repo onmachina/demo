@@ -1,5 +1,4 @@
 import { NearAuthClient } from '@onmachina/nearauth-sdk-wallet';
-import { redirect } from 'react-router-dom';
 
 interface User {
   name: string | null;
@@ -45,7 +44,7 @@ class AuthAdapter {
   async isAuthenticated(): Promise<boolean> {
     const auth = await this.getAuthClient();
     console.log('checking if authenticated');
-    return auth?.isAuthenticated();
+    return auth.isAuthenticated();
   }
 
   async startAuth(): Promise<void> {
@@ -53,9 +52,12 @@ class AuthAdapter {
     await auth.loginWithRedirect();
   }
 
-  async finishAuth(): Promise<void> {
+  async finishAuth(request: Request): Promise<void> {
     const auth = await this.getAuthClient();
-    await auth.handleRedirectCallback();
+    const url = new URL(request.url);
+    const sessionId = url.searchParams.get('session_id') ?? undefined; // After Stripe checkout.
+    const accountId = url.searchParams.get('account_id') ?? undefined; // After NEAR Wallet Selector.
+    await auth.handleRedirect(accountId, sessionId);
   }
 
   async logout(): Promise<void> {
@@ -82,7 +84,7 @@ class AuthAdapter {
 
   async refreshToken(): Promise<void> {
     const auth = await this.getAuthClient();
-    return await auth.getTokenSilently({ cacheMode: 'off' });
+    await auth.loginWithRedirect();
   }
 
   async postCheckoutUrl(): Promise<string> {
@@ -101,13 +103,14 @@ class AuthAdapter {
   }
 
   async startCheckout(): Promise<void> {
-    this.saveState();
+    return;
   }
-  async finishCheckout(request: Request): Promise<Response> {
-    const state = await this.getState();
+
+  async finishCheckout(request: Request): Promise<void> {
+    const auth = await this.getAuthClient();
     const url = new URL(request.url);
     const stripe_session_id = url.searchParams.get('session_id');
-    return redirect(`https://${this.AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`);
+    await auth.handleRedirect(stripe_session_id);
   }
 }
 
