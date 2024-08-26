@@ -1,7 +1,8 @@
 import { authProvider } from './auth';
 import { json } from 'react-router-dom';
 
-export const apiURL = 'https://api.global01.onmachina.io/v1';
+// export const apiURL = 'https://api.global01.onmachina.io/v1';
+export const apiURL = import.meta.env.VITE_API_URL;
 
 export async function addContainer(containerName: string, isPublic: boolean): Promise<{ ok: boolean }> {
   let headers = [];
@@ -119,7 +120,7 @@ export async function authenticatedFetch(path: string, options?: RequestInit) {
       'x-auth-token': token || '',
     },
   };
-  return fetch(`https://api.global01.onmachina.io/v1/${user.name}${path}`, requestOpts);
+  return fetch(`${apiURL}/${user.name}${path}`, requestOpts);
 }
 
 export async function fetchMetrics() {
@@ -134,8 +135,8 @@ export async function fetchMetrics() {
   }
   const accountID = user.name;
   const token = user.accessToken.value;
-  console.log('metrics url', `https://api.global01.onmachina.io/metrics/${accountID}`);
-  const response = await fetch(`https://api.global01.onmachina.io/metrics/${accountID}`, {
+  console.log('metrics url', `${apiURL}/${accountID}`);
+  const response = await fetch(`${apiURL}/${accountID}`, {
     headers: {
       'x-auth-token': token || '',
     },

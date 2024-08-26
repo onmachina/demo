@@ -1,4 +1,4 @@
-import { NearAuthClient } from '@onmachina/nearauth-sdk-wallet';
+import { NearAuthClient } from '../mock-near-sdk';
 
 interface User {
   name: string | null;
@@ -68,13 +68,14 @@ class AuthAdapter {
   async getUser(): Promise<User> {
     const auth = await this.getAuthClient();
     const user = await auth.getUser();
+    console.log('user from NEAR auth plugin', user);
     const accessToken = await auth.getTokenSilently({ cacheMode: 'on' });
     return {
-      name: user?.email || null,
-      email: user?.email || null,
+      name: 'toddmorey.testnet',
+      email: 'todd@onmachina.io',
       avatarUrl: user?.picture || null,
-      emailVerified: user?.email_verified || false,
-      hasSubscription: user?.['has_subscription'] || false,
+      emailVerified: true,
+      hasSubscription: true,
       accessToken: {
         value: accessToken || null,
         expiresAt: user?.access_token_expires_at || null,
