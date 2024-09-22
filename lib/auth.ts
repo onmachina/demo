@@ -1,4 +1,4 @@
-interface AuthAdapter {
+export interface AuthAdapter {
   isAuthenticated(): Promise<boolean>;
   startAuth(): Promise<void>;
   finishAuth(request: Request): Promise<void>;
@@ -9,7 +9,7 @@ interface AuthAdapter {
   startSignup(): Promise<void>;
   startCheckout(): Promise<void>;
   finishCheckout(request: Request): Promise<any>;
-  getAuthType(): Promise<string>;
+  getAuthType(): string;
 }
 
 interface User {
@@ -36,8 +36,11 @@ class AuthProvider {
   private async initAuthClient(): Promise<void> {
     const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
 
-    const { authAdapter: NearAuthAdapter } = await import('./plugins/near');
-    this.authAdapter = NearAuthAdapter;
+    // const { authAdapter: NearAuthAdapter } = await import('./plugins/near');
+    // this.authAdapter = NearAuthAdapter;
+
+    const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
+    this.authAdapter = auth0Adapter;
 
     // if (authType === 'near') {
     //   // Near account based authentication to be done later
@@ -90,6 +93,20 @@ class AuthProvider {
     await this.initPromise;
     this.ensureInitialized();
     const user = await this.authAdapter.getUser();
+
+    // Check if the token is expired or about to expire (within 5 minutes)
+    const now = Date.now();
+    const expiresAt = user.accessToken.expiresAt;
+    const isExpired = expiresAt && expiresAt - now < 5 * 60 * 1000;
+
+    if (!user.accessToken.value || isExpired) {
+      // Token is missing or expired, refresh it
+      await this.authAdapter.refreshToken();
+      // Get the updated user info with the new token
+      const updatedUser = await this.authAdapter.getUser();
+      return updatedUser.accessToken.value;
+    }
+
     return user.accessToken.value;
   }
 

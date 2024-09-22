@@ -2,6 +2,8 @@ import { Auth0Client } from '@auth0/auth0-spa-js';
 import { createAuth0Client } from '@auth0/auth0-spa-js';
 import { redirect } from 'react-router-dom';
 
+import { AuthAdapter as AuthAdapterType } from '../auth';
+
 interface User {
   name: string | null;
   email: string | null;
@@ -136,4 +138,4 @@ class AuthAdapter {
   }
 }
 
-export const authAdapter = new AuthAdapter();
+export const authAdapter: AuthAdapterType = new AuthAdapter();

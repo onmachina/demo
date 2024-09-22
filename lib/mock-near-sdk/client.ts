@@ -91,6 +91,13 @@ export class NearAuthClient {
     return this.handleRedirect(true);
   }
 
+  async logout(): Promise<void> {
+    this.cache.remove(CacheKey.USER);
+    const selector = await getWalletSelector(this.nearNetworkId);
+    const wallet = await selector.wallet();
+    await wallet.signOut();
+  }
+
   async isAuthenticated(): Promise<boolean> {
     return !!this.cache.get(CacheKey.USER);
   }
@@ -128,7 +135,7 @@ export class NearAuthClient {
       params = '?' + new URLSearchParams({ session_id: stripeSessionId }).toString();
     }
 
-    const response = await fetch(`${this.baseUrl}/${params}`, {
+    const response = await fetch(`${this.baseUrl}${params}`, {
       headers: {
         'x-auth-user': 'any',
         'x-auth-key': credentials,

@@ -1,4 +1,5 @@
 import { NearAuthClient } from '../mock-near-sdk';
+import { redirect } from 'react-router-dom';
 
 interface User {
   name: string | null;
