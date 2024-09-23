@@ -93,7 +93,6 @@ class AuthProvider {
   async logout(): Promise<void> {
     await this.initPromise;
     this.ensureInitialized();
-    sessionStorage.removeItem(this.AUTH_TYPE_KEY);
     return this.authAdapter.logout();
   }
 
