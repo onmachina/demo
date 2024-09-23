@@ -1,5 +1,5 @@
 import { Link, Form } from 'react-router-dom';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 
 export default function NewContainerForm() {
   // ensure the container name is URL apporpriate

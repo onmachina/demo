@@ -21,7 +21,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@onmachina/nearauth-sdk-wallet': path.resolve(__dirname, '../nearauth-sdk-js/wallet'),
     },
   },
 });

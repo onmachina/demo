@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 
 import { Link, redirect, Form } from 'react-router-dom';
 
