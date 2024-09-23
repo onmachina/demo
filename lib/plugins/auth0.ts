@@ -4,6 +4,10 @@ import { redirect } from 'react-router-dom';
 
 import { AuthAdapter as AuthAdapterType } from '../auth';
 
+/* sets unique API URLs for the auth provider */
+const apiURL: string = import.meta.env.VITE_API_URL + '/v1';
+const metricsURL: string = import.meta.env.VITE_API_URL + '/metrics';
+
 interface User {
   name: string | null;
   email: string | null;
@@ -53,6 +57,8 @@ class AuthAdapter {
     return sessionStorage.getItem(this.AUTH0_STATE_KEY);
   }
 
+  /* returns an instance of the Auth0Client, 
+     initializing it if necessary */
   private async getAuthClient(): Promise<any> {
     if (!this.authClient) {
       await this.initAuthClient();
@@ -60,16 +66,30 @@ class AuthAdapter {
     return this.authClient!;
   }
 
+  /* Public methods used by the app */
+  /* all plugins must implement these methods */
+
+  /* returns a string indicating the type of auth provider */
   getAuthType(): 'auth0' {
     return 'auth0';
   }
 
+  getApiUrl(): string {
+    return apiURL;
+  }
+
+  getMetricsUrl(): string {
+    return metricsURL;
+  }
+
+  /* returns true if the user is authenticated */
   async isAuthenticated(): Promise<boolean> {
     const auth = await this.getAuthClient();
     console.log('checking if authenticated');
     return auth?.isAuthenticated();
   }
 
+  /* called from the login page to authenticate the user */
   async startAuth(): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.loginWithRedirect({
@@ -80,16 +100,19 @@ class AuthAdapter {
     });
   }
 
+  /* called from '/finish-auth' as a callback from Auth0 */
   async finishAuth(request: Request): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.handleRedirectCallback();
   }
 
+  /* logs the user out, in use on the '/logout' route  */
   async logout(): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.logout();
   }
 
+  /* returns a user object containing the user's information */
   async getUser(): Promise<User> {
     const auth = await this.getAuthClient();
     const user = await auth.getUser();
@@ -107,17 +130,21 @@ class AuthAdapter {
     } as User;
   }
 
+  /* refreshes the user's access token */
   async refreshToken(): Promise<void> {
     const auth = await this.getAuthClient();
     return await auth.getTokenSilently({ cacheMode: 'off' });
   }
 
+  /* returns the URL to redirect to after a successful checkout */
   async postCheckoutUrl(): Promise<string> {
     const state = await this.getState();
     return `https://${this.AUTH0_DOMAIN}/continue?state=${state}`;
   }
 
-  async startSignup(): Promise<void> {
+  /* called from the signup page to bring users
+     to Auth0 in signup mode */
+  async startSignup(email: string | null): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.loginWithRedirect({
       authorizationParams: {
@@ -130,6 +157,8 @@ class AuthAdapter {
   async startCheckout(): Promise<void> {
     this.saveState();
   }
+
+  /* called from '/finish-checkout' as a callback from Stripe */
   async finishCheckout(request: Request): Promise<Response> {
     const state = await this.getState();
     const url = new URL(request.url);

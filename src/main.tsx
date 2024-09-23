@@ -19,6 +19,7 @@ import ObjectsView, { loader as objectsLoader, action as objectsAction } from '.
 import SettingsView from './routes/settingsView';
 import { LoginOptions } from './routes/loginOptions';
 import { LoggingIn } from './components/AppMessages';
+import { SignupOptions, action as signupAction } from './routes/signupOptions';
 import { AccountStatus, loader as accountStatusLoader } from './routes/accountStatus';
 import { Checkout } from './routes/checkout';
 import { UsageView, loader as usageLoader } from './routes/usageView';
@@ -37,6 +38,7 @@ const authRoutes: RouteObject[] = [
     path: '/login',
     async loader() {
       const authType = await authProvider.getAuthType();
+      console.log(authType + ' is the auth type.');
       if (authType != 'near' && authType != 'auth0') return redirect('/login-options');
       await authProvider.startAuth();
       return null;
@@ -73,11 +75,8 @@ const authRoutes: RouteObject[] = [
 const signUpRoutes: RouteObject[] = [
   {
     path: '/signup',
-    async loader() {
-      await authProvider.startSignup();
-      return null;
-    },
-    element: <LoggingIn />,
+    element: <SignupOptions />,
+    action: signupAction,
   },
   {
     path: '/start-checkout',

@@ -1,5 +1,6 @@
-import { NearAuthClient } from '../mock-near-sdk';
-import { redirect } from 'react-router-dom';
+// import { NearAuthClient } from '@onmachina/mock-near-sdk';
+
+import { AuthAdapter as AuthAdapterType } from '../auth';
 
 interface User {
   name: string | null;
@@ -12,6 +13,10 @@ interface User {
     expiresAt: number | null;
   };
 }
+
+/* sets unique API URLs for the auth provider */
+const apiURL: string = import.meta.env.VITE_NEAR_API_URL + '/v1';
+const metricsURL: string = import.meta.env.VITE_NEAR_API_URL + '/metrics';
 
 class AuthAdapter {
   private authClient: NearAuthClient | null = null;
@@ -40,6 +45,14 @@ class AuthAdapter {
 
   getAuthType(): 'near' {
     return 'near';
+  }
+
+  getApiUrl(): string {
+    return apiURL;
+  }
+
+  getMetricsUrl(): string {
+    return metricsURL;
   }
 
   async isAuthenticated(): Promise<boolean> {
@@ -116,4 +129,4 @@ class AuthAdapter {
   }
 }
 
-export const authAdapter = new AuthAdapter();
+export const authAdapter: AuthAdapterType = new AuthAdapter();

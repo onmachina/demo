@@ -4,14 +4,23 @@ import { HiXMark } from 'react-icons/hi2';
 import { useState } from 'react';
 import { fileListTotalSize } from '../../lib/utils.ts';
 import FileUpload from './FileUpload.jsx';
-import { apiURL } from '../../lib/onmachina.ts';
+import { authProvider } from '../../lib/auth';
 
 export default function UploadObjectForm({ containerName, accountId, token }) {
   const [uploadList, setUploadList] = useState([]);
+  const [apiURL, setApiURL] = useState('');
   const [uploadStatus, setUploadStatus] = useState({ totalSize: '0', isComplete: false });
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const initializeApiUrl = async () => {
+    setApiURL(await authProvider.getApiUrl());
+  };
+
+  useEffect(() => {
+    initializeApiUrl();
+  }, []);
 
   const generateUploadList = (files) => {
     let fileList = [];

@@ -1,3 +1,4 @@
+/* all auth adapters (plugins) should implement this interface */
 export interface AuthAdapter {
   isAuthenticated(): Promise<boolean>;
   startAuth(): Promise<void>;
@@ -10,6 +11,23 @@ export interface AuthAdapter {
   startCheckout(): Promise<void>;
   finishCheckout(request: Request): Promise<any>;
   getAuthType(): string;
+  getApiUrl(): string;
+  getMetricsUrl(): string;
+}
+interface AuthProviderType {
+  isAuthenticated(): Promise<boolean>;
+  startAuth(): Promise<void>;
+  finishAuth(request: Request): Promise<void>;
+  logout(): Promise<void>;
+  getUser(): Promise<User>;
+  refreshToken(): Promise<void>;
+  postCheckoutUrl(): Promise<string>;
+  startSignup(): Promise<void>;
+  startCheckout(): Promise<void>;
+  finishCheckout(request: Request): Promise<any>;
+  getAuthType(): Promise<string>;
+  getApiUrl(): Promise<string>;
+  getMetricsUrl(): Promise<string>;
 }
 
 interface User {
@@ -25,7 +43,7 @@ interface User {
 }
 
 class AuthProvider {
-  private readonly AUTH_TYPE_KEY = 'auth.type';
+  private readonly AUTH_TYPE_KEY = 'auth.session.type';
   private authAdapter: AuthAdapter | null = null;
   private initPromise: Promise<void>;
 
@@ -36,21 +54,16 @@ class AuthProvider {
   private async initAuthClient(): Promise<void> {
     const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
 
-    // const { authAdapter: NearAuthAdapter } = await import('./plugins/near');
-    // this.authAdapter = NearAuthAdapter;
-
-    const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
-    this.authAdapter = auth0Adapter;
-
-    // if (authType === 'near') {
-    //   // Near account based authentication to be done later
-    // } else if (authType === 'auth0' || !authType) {
-    //   const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
-    //   this.authAdapter = auth0Adapter;
-    //   if (!authType) {
-    //     sessionStorage.setItem(this.AUTH_TYPE_KEY, 'auth0');
-    //   }
-    // }
+    if (authType === 'near') {
+      const { authAdapter: nearAdapter } = await import('./plugins/near');
+      this.authAdapter = nearAdapter;
+    } else if (authType === 'auth0' || !authType) {
+      const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
+      this.authAdapter = auth0Adapter;
+      if (!authType) {
+        sessionStorage.setItem(this.AUTH_TYPE_KEY, 'auth0');
+      }
+    }
   }
 
   private ensureInitialized(): void {
@@ -80,6 +93,7 @@ class AuthProvider {
   async logout(): Promise<void> {
     await this.initPromise;
     this.ensureInitialized();
+    sessionStorage.removeItem(this.AUTH_TYPE_KEY);
     return this.authAdapter.logout();
   }
 
@@ -120,10 +134,10 @@ class AuthProvider {
     return this.authAdapter.postCheckoutUrl();
   }
 
-  async startSignup(): Promise<void> {
+  async startSignup(email: string | null): Promise<void> {
     await this.initPromise;
     this.ensureInitialized();
-    return this.authAdapter.startSignup();
+    return this.authAdapter.startSignup(email);
   }
 
   async startCheckout(): Promise<void> {
@@ -139,10 +153,22 @@ class AuthProvider {
   }
 
   async getAuthType(): Promise<string> {
+    const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
+    //resolove the promise
+    return this.initPromise.then(() => authType);
+  }
+
+  async getApiUrl(): Promise<string> {
     await this.initPromise;
     this.ensureInitialized();
-    return this.authAdapter.getAuthType();
+    return this.authAdapter.getApiUrl();
+  }
+
+  async getMetricsUrl(): Promise<string> {
+    await this.initPromise;
+    this.ensureInitialized();
+    return this.authAdapter.getMetricsUrl();
   }
 }
 
-export const authProvider = new AuthProvider();
+export const authProvider: AuthProviderType = new AuthProvider();

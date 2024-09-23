@@ -14,11 +14,9 @@ import {
   useSearchParams,
   json,
 } from 'react-router-dom';
-import emptyImage from '../assets/empty-container.svg';
 import DeleteObjectForm from '../components/DeleteObjectForm';
 import { deleteObject } from '../../lib/onmachina';
 import UploadObjectForm from '../components/UploadObjectForm';
-import { uploadObject } from '../../lib/onmachina';
 
 export default function ObjectsView() {
   const { objects, token, accountId } = useLoaderData();
@@ -92,7 +90,8 @@ function EmptyMessage({ objects }) {
 export async function loader(params) {
   const user = await authProvider.getUser();
   const token = user.accessToken.value;
-  const accountId = user.accountId;
+  const accountId = user.name;
+  console.log(accountId + ' is the account id from the loader.');
   const req = await authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
   });

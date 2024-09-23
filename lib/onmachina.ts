@@ -1,8 +1,5 @@
-import { authProvider } from './auth';
 import { json } from 'react-router-dom';
-
-export const apiURL = import.meta.env.VITE_API_URL + '/v1';
-export const metricsURL = import.meta.env.VITE_API_URL + '/metrics';
+import { authProvider } from './auth';
 
 export async function addContainer(containerName: string, isPublic: boolean): Promise<{ ok: boolean }> {
   let headers = [];
@@ -102,8 +99,13 @@ export async function fetchObjectMetadata(containerName: string, objectName: str
   return metadata;
 }
 
+/*
+  Authenticates a fetch request by adding an access token to the request headers and returns the response from the API server.
+  Throws an error if the user is not authenticated.
+*/
 export async function authenticatedFetch(path: string, options?: RequestInit) {
   const user = await authProvider.getUser();
+  const apiURL = await authProvider.getApiUrl();
   if (!user.emailVerified) {
     throw json(
       {
@@ -134,7 +136,8 @@ export async function fetchMetrics() {
     );
   }
   const accountID = user.name;
-  const token = await authProvider.accessToken();
+  const metricsURL = await authProvider.getMetricsUrl();
+  const token = (await authProvider.getUser()).accessToken.value;
   console.log('metrics url', `${metricsURL}/${accountID}`);
   const response = await fetch(`${metricsURL}/${accountID}`, {
     headers: {
