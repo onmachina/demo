@@ -20,7 +20,7 @@ export function SignupOptions() {
 
   const handleAuth0Signup = () => {
     sessionStorage.setItem('auth.session.type', 'auth0');
-    document.getElementById('signup-form').submit();
+    authProvider.startSignup();
   };
 
   const handleNearSignup = () => {
@@ -60,7 +60,7 @@ export function SignupOptions() {
         <div className={`flex flex-col items-center p-8 pt-0 ${showEmailForm ? '' : 'hidden'}`}>
           <div className="mx-2 my-4 font-bold text-white">Please enter your email address to sign up.</div>
 
-          <Form className="flex flex-col w-full items-center my-4" id="signup-form" method="POST" action="/signup">
+          <Form className="flex flex-col w-full items-center my-4" id="signup-form" method="POST" action={`/signup`}>
             <input
               type="email"
               placeholder="Email"
