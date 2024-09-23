@@ -31,8 +31,6 @@ import { authProvider } from '../lib/auth';
 // Styles (index.css handles tailwindcss imports)
 import './index.css';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
 const authRoutes: RouteObject[] = [
   {
     path: '/login',

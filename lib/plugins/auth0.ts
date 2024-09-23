@@ -5,8 +5,8 @@ import { redirect } from 'react-router-dom';
 import { AuthAdapter as AuthAdapterType } from '../auth';
 
 /* sets unique API URLs for the auth provider */
-const apiURL: string = import.meta.env.VITE_API_URL + '/v1';
-const metricsURL: string = import.meta.env.VITE_API_URL + '/metrics';
+const apiURL: string = import.meta.env.VITE_AUTH0_API_URL + '/v1';
+const metricsURL: string = import.meta.env.VITE_AUTH0_API_URL + '/metrics';
 
 interface User {
   name: string | null;
@@ -30,7 +30,7 @@ class AuthAdapter {
   constructor() {
     this.AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN;
     this.AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID;
-    this.BASE_URL = import.meta.env.VITE_BASE_URL;
+    this.BASE_URL = import.meta.env.BASE_URL || import.meta.env.VITE_AUTH0_DEV_BASE_URL;
     this.initAuthClient();
   }
 
@@ -138,7 +138,7 @@ class AuthAdapter {
 
   /* called from the signup page to bring users
      to Auth0 in signup mode */
-  async startSignup(email: string | null): Promise<void> {
+  async startSignup(_email: string | null): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.loginWithRedirect({
       authorizationParams: {

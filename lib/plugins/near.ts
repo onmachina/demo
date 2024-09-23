@@ -20,12 +20,10 @@ const metricsURL: string = import.meta.env.VITE_NEAR_API_URL + '/metrics';
 
 class AuthAdapter {
   private authClient: NearAuthClient | null = null;
-  private readonly BASE_URL: string;
   private readonly NEARAUTH_URL: string;
   private readonly NEAR_NETWORK_ID: NetworkId;
 
   constructor() {
-    this.BASE_URL = import.meta.env.VITE_BASE_URL;
     this.NEARAUTH_URL = import.meta.env.VITE_NEARAUTH_URL;
     this.NEAR_NETWORK_ID = import.meta.env.VITE_NEAR_NETWORK_ID as NetworkId;
     this.initAuthClient();

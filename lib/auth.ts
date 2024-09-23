@@ -134,10 +134,10 @@ class AuthProvider {
     return this.authAdapter.startSignup(email);
   }
 
-  async startCheckout(): Promise<void> {
+  async startCheckout(request: Request): Promise<string | null> {
     await this.initPromise;
     this.ensureInitialized();
-    await this.authAdapter.startCheckout();
+    return await this.authAdapter.startCheckout(request);
   }
 
   async finishCheckout(request: Request): Promise<Response> {
