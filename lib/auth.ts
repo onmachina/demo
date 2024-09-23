@@ -1,15 +1,13 @@
 /* all auth adapters (plugins) should implement this interface */
 export interface AuthAdapter {
   isAuthenticated(): Promise<boolean>;
-  startAuth(): Promise<void>;
+  startLogin(): Promise<void>;
   finishAuth(request: Request): Promise<void>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
-  accessToken(): Promise<string>;
-  postCheckoutUrl(): Promise<string>;
   startSignup(email: string | null): Promise<void>;
-  startCheckout(): Promise<void>;
+  startCheckout(request: Request): Promise<string | null>;
   finishCheckout(request: Request): Promise<any>;
   getAuthType(): string;
   getApiUrl(): string;
@@ -17,16 +15,15 @@ export interface AuthAdapter {
 }
 interface AuthProviderType {
   isAuthenticated(): Promise<boolean>;
-  startAuth(): Promise<void>;
+  startLogin(): Promise<void>;
   finishAuth(request: Request): Promise<void>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
   accessToken(): Promise<string>;
-  postCheckoutUrl(): Promise<string>;
   startSignup(email: string | null): Promise<void>;
-  startCheckout(): Promise<void>;
-  finishCheckout(request: Request): Promise<any>;
+  startCheckout(request: Request): Promise<string | null>;
+  finishCheckout(request: Request): Promise<Response | null>;
   getAuthType(): Promise<string>;
   getApiUrl(): Promise<string>;
   getMetricsUrl(): Promise<string>;
@@ -80,10 +77,10 @@ class AuthProvider {
     return this.authAdapter.isAuthenticated();
   }
 
-  async startAuth(): Promise<void> {
+  async startLogin(): Promise<void> {
     await this.initPromise;
     this.ensureInitialized();
-    return this.authAdapter.startAuth();
+    return this.authAdapter.startLogin();
   }
 
   async finishAuth(request: Request): Promise<void> {
@@ -129,10 +126,6 @@ class AuthProvider {
     await this.initPromise;
     this.ensureInitialized();
     return this.authAdapter.refreshToken();
-  }
-
-  async postCheckoutUrl(): Promise<string> {
-    return this.authAdapter.postCheckoutUrl();
   }
 
   async startSignup(email: string | null): Promise<void> {

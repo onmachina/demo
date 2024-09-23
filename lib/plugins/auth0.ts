@@ -57,7 +57,7 @@ class AuthAdapter {
     return sessionStorage.getItem(this.AUTH0_STATE_KEY);
   }
 
-  /* returns an instance of the Auth0Client, 
+  /* returns an instance of the Auth0Client,
      initializing it if necessary */
   private async getAuthClient(): Promise<any> {
     if (!this.authClient) {
@@ -90,7 +90,7 @@ class AuthAdapter {
   }
 
   /* called from the login page to authenticate the user */
-  async startAuth(): Promise<void> {
+  async startLogin(): Promise<void> {
     const auth = await this.getAuthClient();
     await auth.loginWithRedirect({
       authorizationParams: {
@@ -136,12 +136,6 @@ class AuthAdapter {
     return await auth.getTokenSilently({ cacheMode: 'off' });
   }
 
-  /* returns the URL to redirect to after a successful checkout */
-  async postCheckoutUrl(): Promise<string> {
-    const state = await this.getState();
-    return `https://${this.AUTH0_DOMAIN}/continue?state=${state}`;
-  }
-
   /* called from the signup page to bring users
      to Auth0 in signup mode */
   async startSignup(email: string | null): Promise<void> {
@@ -154,12 +148,13 @@ class AuthAdapter {
     });
   }
 
-  async startCheckout(): Promise<void> {
+  async startCheckout(_request: Request): Promise<string | null> {
     this.saveState();
+    return null;
   }
 
   /* called from '/finish-checkout' as a callback from Stripe */
-  async finishCheckout(request: Request): Promise<Response> {
+  async finishCheckout(request: Request): Promise<Response | null> {
     const state = await this.getState();
     const url = new URL(request.url);
     const stripe_session_id = url.searchParams.get('session_id');

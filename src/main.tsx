@@ -40,7 +40,7 @@ const authRoutes: RouteObject[] = [
       const authType = await authProvider.getAuthType();
       console.log(authType + ' is the auth type.');
       if (authType != 'near' && authType != 'auth0') return redirect('/login-options');
-      await authProvider.startAuth();
+      await authProvider.startLogin();
       return null;
     },
     element: <LoggingIn />,
@@ -81,7 +81,10 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/start-checkout',
     async loader({ request }) {
-      await authProvider.startCheckout();
+      const redirect_url = await authProvider.startCheckout(request);
+      if (redirect_url) {
+        return redirect(redirect_url);
+      }
       return null;
     },
     element: <Checkout />,
