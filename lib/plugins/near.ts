@@ -1,4 +1,5 @@
-// import { NearAuthClient } from '@onmachina/mock-near-sdk';
+// TODO: import library from https://github.com/onmachina/nearauth-sdk-js
+// import { NearAuthClient } from '@onmachina/nearauth-sdk-js';
 
 import { AuthAdapter as AuthAdapterType } from '../auth';
 

@@ -6,6 +6,7 @@ export interface AuthAdapter {
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
+  accessToken(): Promise<string>;
   postCheckoutUrl(): Promise<string>;
   startSignup(email: string | null): Promise<void>;
   startCheckout(): Promise<void>;
@@ -21,6 +22,7 @@ interface AuthProviderType {
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
+  accessToken(): Promise<string>;
   postCheckoutUrl(): Promise<string>;
   startSignup(email: string | null): Promise<void>;
   startCheckout(): Promise<void>;
