@@ -81,7 +81,8 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/start-checkout',
     async loader({ request }) {
-      // to be implemented
+      await authProvider.startCheckout();
+      return null;
     },
     element: <Checkout />,
   },
