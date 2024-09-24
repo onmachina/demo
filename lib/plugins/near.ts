@@ -67,10 +67,7 @@ class AuthAdapter {
   }
 
   async finishAuth(request: Request): Promise<void> {
-    const url = new URL(request.url);
-    const afterWalletRedirect = url.searchParams.get('account_id') ? true : false; // After NEAR Wallet Selector.
-    const sessionId = url.searchParams.get('session_id') ?? undefined; // After Stripe checkout.
-    await this.authClient.handleRedirect(afterWalletRedirect, sessionId);
+    console.log('finishing auth should not be called for NEAR');
     return null;
   }
 
