@@ -9,7 +9,7 @@ export interface AuthAdapter {
   startSignup(email: string | null): Promise<void>;
   startCheckout(request: Request): Promise<string | null>;
   finishCheckout(request: Request): Promise<any>;
-  handleCustomRedirect(request: Request): Promise<Response | null>;
+  handleCustomRedirect(request: Request): Promise<boolean>;
   getAuthType(): string;
   getApiUrl(): string;
   getMetricsUrl(): string;
@@ -25,7 +25,7 @@ interface AuthProviderType {
   startSignup(email: string | null): Promise<void>;
   startCheckout(request: Request): Promise<string | null>;
   finishCheckout(request: Request): Promise<Response | null>;
-  handleCustomRedirect(request: Request): Promise<Response | null>;
+  handleCustomRedirect(request: Request): Promise<boolean>;
   getAuthType(): Promise<string>;
   getApiUrl(): Promise<string>;
   getMetricsUrl(): Promise<string>;
@@ -78,7 +78,8 @@ class AuthProvider {
   async startLogin(): Promise<void> {
     await this.initAuthClient();
     this.ensureInitialized();
-    return this.authAdapter.startLogin();
+    await this.authAdapter.startLogin();
+    console.log('HASNT AWAITED START LOGIN');
   }
 
   async finishAuth(request: Request): Promise<void> {
@@ -144,7 +145,7 @@ class AuthProvider {
     return this.authAdapter.finishCheckout(request);
   }
 
-  async handleCustomRedirect(request: Request): Promise<Response | null> {
+  async handleCustomRedirect(request: Request): Promise<boolean> {
     await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.handleCustomRedirect(request);

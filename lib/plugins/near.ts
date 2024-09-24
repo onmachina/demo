@@ -56,14 +56,11 @@ class AuthAdapter {
   }
 
   async isAuthenticated(): Promise<boolean> {
-    const auth = await this.getAuthClient();
-    console.log('checking if authenticated');
-    return await auth.isAuthenticated();
+    return this.authClient.isAuthenticated();
   }
 
   async startLogin(): Promise<void> {
-    const auth = await this.getAuthClient();
-    await auth.loginWithRedirect();
+    await this.authClient.loginWithRedirect();
   }
 
   async finishAuth(request: Request): Promise<void> {
@@ -72,15 +69,13 @@ class AuthAdapter {
   }
 
   async logout(): Promise<void> {
-    const auth = await this.getAuthClient();
-    await auth.logout();
+    await this.authClient.logout();
   }
 
   async getUser(): Promise<User> {
-    const auth = await this.getAuthClient();
-    const user = await auth.getUser();
+    const user = await this.authClient.getUser();
     console.log('user from NEAR auth plugin', user);
-    const accessToken = await auth.getTokenSilently();
+    const accessToken = await this.authClient.getTokenSilently();
     return {
       name: user?.accountId || null,
       email: null,
@@ -95,13 +90,11 @@ class AuthAdapter {
   }
 
   async refreshToken(): Promise<void> {
-    const auth = await this.getAuthClient();
-    await auth.loginWithRedirect(); // Just get the new JWT.
+    return this.authClient.loginWithRedirect(); // Just get the new JWT.
   }
 
   async startSignup(email: string): Promise<void> {
-    const auth = await this.getAuthClient();
-    await auth.signupWithRedirect(email);
+    return this.authClient.signupWithRedirect(email);
   }
 
   async startCheckout(request: Request): Promise<string | null> {
@@ -114,12 +107,11 @@ class AuthAdapter {
     return null;
   }
 
-  async handleCustomRedirect(request: Request): Promise<Response | null> {
+  async handleCustomRedirect(request: Request): Promise<boolean> {
     const url = new URL(request.url);
     const afterWalletRedirect = url.searchParams.get('account_id') ? true : false; // After NEAR Wallet Selector.
     const sessionId = url.searchParams.get('session_id') ?? undefined; // After Stripe checkout.
-    await this.authClient.handleRedirect(afterWalletRedirect, sessionId);
-    return null;
+    return this.authClient.handleRedirect(afterWalletRedirect, sessionId);
   }
 }
 

@@ -161,8 +161,8 @@ class AuthAdapter {
     return redirect(`https://${this.AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`);
   }
 
-  async handleCustomRedirect(request: Request): Promise<Response | null> {
-    return null;
+  async handleCustomRedirect(request: Request): Promise<boolean> {
+    return false;
   }
 }
 

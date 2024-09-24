@@ -37,11 +37,22 @@ const authRoutes: RouteObject[] = [
     async loader({ request }) {
       const authType = await authProvider.getAuthType();
       console.log(authType + ' is the auth type.');
+
       if (authType != 'near' && authType != 'auth0') return redirect('/login-options');
-      console.log('login loader may try to handle a redirect');
-      await authProvider.handleCustomRedirect(request);
-      await authProvider.startLogin();
-      return null;
+
+      const handled = await authProvider.handleCustomRedirect(request);
+      if (!handled) {
+        // Always for Auth0. For NEAR, only if not authenticated.
+        await authProvider.startLogin();
+      }
+
+      // If not authenticated yet, continue with the Wallet Selector modal (no redirect).
+      if (!(await authProvider.isAuthenticated())) {
+          return null;
+      }
+
+      // Redirect to the main page if authenticated.
+      return redirect('/');
     },
     element: <LoggingIn />,
     errorElement: <ErrorWindow />,
@@ -76,12 +87,15 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/signup',
     element: <SignupOptions />,
-    action: signupAction,
     loader: async ({ request }) => {
       console.log('signup loader may try to handle a redirect');
       await authProvider.handleCustomRedirect(request);
-      return null;
+      if (!(await authProvider.isAuthenticated())) {
+        return null;
+      }
+      return redirect('/');
     },
+    action: signupAction,
   },
   {
     path: '/start-checkout',
