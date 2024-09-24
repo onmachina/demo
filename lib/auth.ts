@@ -46,11 +46,8 @@ interface User {
 class AuthProvider {
   private readonly AUTH_TYPE_KEY = 'auth.session.type';
   private authAdapter: AuthAdapter | null = null;
-  private initPromise: Promise<void>;
 
-  constructor() {
-    this.initPromise = this.initAuthClient();
-  }
+  constructor() {}
 
   private async initAuthClient(): Promise<void> {
     const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
@@ -58,12 +55,9 @@ class AuthProvider {
     if (authType === 'near') {
       const { authAdapter: nearAdapter } = await import('./plugins/near');
       this.authAdapter = nearAdapter;
-    } else if (authType === 'auth0' || !authType) {
+    } else if (authType === 'auth0') {
       const { authAdapter: auth0Adapter } = await import('./plugins/auth0');
       this.authAdapter = auth0Adapter;
-      if (!authType) {
-        sessionStorage.setItem(this.AUTH_TYPE_KEY, 'auth0');
-      }
     }
   }
 
@@ -74,37 +68,39 @@ class AuthProvider {
   }
 
   async isAuthenticated(): Promise<boolean> {
-    await this.initPromise;
-    this.ensureInitialized();
+    await this.initAuthClient();
+    if (!this.authAdapter) {
+      return false;
+    }
     return this.authAdapter.isAuthenticated();
   }
 
   async startLogin(): Promise<void> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.startLogin();
   }
 
   async finishAuth(request: Request): Promise<void> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.finishAuth(request);
   }
 
   async logout(): Promise<void> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.logout();
   }
 
   async getUser(): Promise<User> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.getUser() as Promise<User>;
   }
 
   async accessToken(): Promise<string> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     const user = await this.authAdapter.getUser();
 
@@ -125,43 +121,49 @@ class AuthProvider {
   }
 
   async refreshToken(): Promise<void> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.refreshToken();
   }
 
   async startSignup(email: string | null): Promise<void> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.startSignup(email);
   }
 
   async startCheckout(request: Request): Promise<string | null> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return await this.authAdapter.startCheckout(request);
   }
 
   async finishCheckout(request: Request): Promise<Response> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.finishCheckout(request);
   }
 
+  async handleCustomRedirect(request: Request): Promise<Response | null> {
+    await this.initAuthClient();
+    this.ensureInitialized();
+    return this.authAdapter.handleCustomRedirect(request);
+  }
+
   async getAuthType(): Promise<string> {
     const authType = sessionStorage.getItem(this.AUTH_TYPE_KEY);
-    //resolove the promise
-    return this.initPromise.then(() => authType);
+    await this.initAuthClient();
+    return authType;
   }
 
   async getApiUrl(): Promise<string> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.getApiUrl();
   }
 
   async getMetricsUrl(): Promise<string> {
-    await this.initPromise;
+    await this.initAuthClient();
     this.ensureInitialized();
     return this.authAdapter.getMetricsUrl();
   }
