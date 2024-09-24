@@ -100,6 +100,10 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/start-checkout',
     async loader({ request }) {
+      if (!(await authProvider.getAuthType())) {
+        // Default to NEAR Wallet when redirect comes from nowhere.
+        sessionStorage.setItem('auth.session.type', 'near');
+      }
       const redirect_url = await authProvider.startCheckout(request);
       if (redirect_url) {
         console.log('/start-checkout redirecting to ' + redirect_url);
