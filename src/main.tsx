@@ -88,6 +88,7 @@ const signUpRoutes: RouteObject[] = [
     async loader({ request }) {
       const redirect_url = await authProvider.startCheckout(request);
       if (redirect_url) {
+        console.log('/start-checkout redirecting to ' + redirect_url);
         return redirect(redirect_url);
       }
       return null;

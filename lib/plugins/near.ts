@@ -109,7 +109,7 @@ class AuthAdapter {
 
   async startCheckout(request: Request): Promise<string | null> {
     const url = new URL(request.url);
-    return url.searchParams.get('checkout_url') || '/welcome';
+    return url.searchParams.get('checkout_url') || '/';
   }
 
   async finishCheckout(request: Request): Promise<Response | null> {
