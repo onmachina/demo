@@ -34,7 +34,9 @@ import './index.css';
 const authRoutes: RouteObject[] = [
   {
     path: '/login',
-    async loader() {
+    async loader({ request }) {
+      console.log('login loader may try to handle a redirect');
+      await authProvider.handleCustomRedirect(request);
       const authType = await authProvider.getAuthType();
       console.log(authType + ' is the auth type.');
       if (authType != 'near' && authType != 'auth0') return redirect('/login-options');
@@ -75,6 +77,11 @@ const signUpRoutes: RouteObject[] = [
     path: '/signup',
     element: <SignupOptions />,
     action: signupAction,
+    loader: async ({ request }) => {
+      console.log('signup loader may try to handle a redirect');
+      await authProvider.handleCustomRedirect(request);
+      return null;
+    },
   },
   {
     path: '/start-checkout',

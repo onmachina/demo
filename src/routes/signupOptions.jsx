@@ -101,6 +101,6 @@ function NearLogo() {
 export async function action({ request, params }) {
   const formData = await request.formData();
   const email = Object.fromEntries(formData).email;
-  authProvider.startSignup(email);
+  await authProvider.startSignup(email);
   return null;
 }

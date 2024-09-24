@@ -160,6 +160,10 @@ class AuthAdapter {
     const stripe_session_id = url.searchParams.get('session_id');
     return redirect(`https://${this.AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`);
   }
+
+  async handleCustomRedirect(request: Request): Promise<Response | null> {
+    return null;
+  }
 }
 
 export const authAdapter: AuthAdapterType = new AuthAdapter();

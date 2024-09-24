@@ -9,6 +9,7 @@ export interface AuthAdapter {
   startSignup(email: string | null): Promise<void>;
   startCheckout(request: Request): Promise<string | null>;
   finishCheckout(request: Request): Promise<any>;
+  handleCustomRedirect(request: Request): Promise<Response | null>;
   getAuthType(): string;
   getApiUrl(): string;
   getMetricsUrl(): string;
@@ -24,6 +25,7 @@ interface AuthProviderType {
   startSignup(email: string | null): Promise<void>;
   startCheckout(request: Request): Promise<string | null>;
   finishCheckout(request: Request): Promise<Response | null>;
+  handleCustomRedirect(request: Request): Promise<Response | null>;
   getAuthType(): Promise<string>;
   getApiUrl(): Promise<string>;
   getMetricsUrl(): Promise<string>;

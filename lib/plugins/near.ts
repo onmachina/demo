@@ -58,7 +58,7 @@ class AuthAdapter {
   async isAuthenticated(): Promise<boolean> {
     const auth = await this.getAuthClient();
     console.log('checking if authenticated');
-    return auth.isAuthenticated();
+    return await auth.isAuthenticated();
   }
 
   async startLogin(): Promise<void> {
@@ -67,11 +67,11 @@ class AuthAdapter {
   }
 
   async finishAuth(request: Request): Promise<void> {
-    const auth = await this.getAuthClient();
     const url = new URL(request.url);
     const afterWalletRedirect = url.searchParams.get('account_id') ? true : false; // After NEAR Wallet Selector.
     const sessionId = url.searchParams.get('session_id') ?? undefined; // After Stripe checkout.
-    await auth.handleRedirect(afterWalletRedirect, sessionId);
+    await this.authClient.handleRedirect(afterWalletRedirect, sessionId);
+    return null;
   }
 
   async logout(): Promise<void> {
@@ -113,11 +113,15 @@ class AuthAdapter {
   }
 
   async finishCheckout(request: Request): Promise<Response | null> {
-    const client = await this.getAuthClient();
+    await this.handleCustomRedirect(request);
+    return null;
+  }
+
+  async handleCustomRedirect(request: Request): Promise<Response | null> {
     const url = new URL(request.url);
     const afterWalletRedirect = url.searchParams.get('account_id') ? true : false; // After NEAR Wallet Selector.
     const sessionId = url.searchParams.get('session_id') ?? undefined; // After Stripe checkout.
-    await client.handleRedirect(afterWalletRedirect, sessionId);
+    await this.authClient.handleRedirect(afterWalletRedirect, sessionId);
     return null;
   }
 }
