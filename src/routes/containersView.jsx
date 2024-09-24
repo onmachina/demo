@@ -65,22 +65,21 @@ export async function loader() {
   const avatarUrl = user.avatarUrl;
   const emailVerified = user.emailVerified;
 
+  let containers = [];
+
   // return empty json if email not verified
-  if (!emailVerified) return { containers: [], token, username, avatarUrl, emailVerified };
+  if (!emailVerified) return { containers, token, username, avatarUrl, emailVerified };
 
   const res = await authenticatedFetch(`/?format=json`, {
     method: 'GET',
   });
 
-  // return 404 if an account isn't found
-  if (!res.ok) {
-    throw new Response('', {
-      status: 404,
-      statusText: 'Not Found',
-    });
+  if (res.ok) {
+    containers = await res.json();
+  } else {
+    console.log(res);
+    throw res;
   }
-
-  const containers = await res.json();
 
   return { containers, token, username, avatarUrl, emailVerified };
 }
