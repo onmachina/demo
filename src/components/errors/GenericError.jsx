@@ -24,7 +24,7 @@ export default function GenericError({ error }) {
           </p>
           <p className="mt-2">
             <i className="text-blue-800 opacity-70">
-               ({error.status}, {error.statusText || error.message || error.data})
+               ({error.status}, {error.data || error.statusText || error.message})
             </i>
           </p>
         </div>

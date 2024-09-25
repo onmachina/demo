@@ -92,10 +92,16 @@ export async function loader(params) {
   const token = user.accessToken.value;
   const accountId = user.name;
   console.log(accountId + ' is the account id from the loader.');
-  const req = await authenticatedFetch(`/${params.container}/?format=json`, {
+  const res = await authenticatedFetch(`/${params.container}/?format=json`, {
     method: 'GET',
   });
-  const objects = await req.json();
+  let objects;
+  if (res.ok) {
+    objects = await res.json();
+  } else {
+    console.log(res);
+    throw res;
+  }
   return { objects, token, accountId };
 }
 
