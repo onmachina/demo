@@ -26,18 +26,18 @@ export default function SettingsView() {
     <div className="container ml-8 max-w-2xl text-slate-400 mb-4">
       <h1 className="text-3xl mb-4 font-bold text-white">Account Settings</h1>
 
-      <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
-        <span class="font-medium">Note:</span> Your API access token from OnMachina will change and need to be refreshed
+      <div className="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
+        <span className="font-medium">Note:</span> Your API access token from OnMachina will change and need to be refreshed
         every 24 hours. On this page, you can see your current API key.
       </div>
 
-      <table class="min-w-full table-auto mt-8">
+      <table className="min-w-full table-auto mt-8">
         <thead>
           <tr>
-            <th class="sr-only">
+            <th className="sr-only">
               <span>Name</span>
             </th>
-            <th class="sr-only">
+            <th className="sr-only">
               <span>Value</span>
             </th>
           </tr>
@@ -67,8 +67,8 @@ export default function SettingsView() {
       <p className="mb-4 mt-4">
         Below are the steps to explore the OnMachina API using the cURL command in your terminal.
       </p>
-      <div class="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
-        <span class="font-medium">Note:</span> Full documentation can be found at{' '}
+      <div className="p-4 mb-4  text-cyan-100 border border-cyan-800 bg-cyan-700" role="alert">
+        <span className="font-medium">Note:</span> Full documentation can be found at{' '}
         <a href="https://docs.onmachina.io/" className="underline" target="_blank">
           docs.onmachina.io
         </a>
