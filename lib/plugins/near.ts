@@ -63,7 +63,7 @@ class AuthAdapter {
     await this.authClient.loginWithRedirect();
   }
 
-  async finishAuth(request: Request): Promise<void> {
+  async finishAuth(): Promise<void> {
     console.log('finishing auth should not be called for NEAR');
     return null;
   }

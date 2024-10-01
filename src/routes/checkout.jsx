@@ -14,9 +14,7 @@ export const Checkout = function () {
       }
 
       // client-safe stripe "publishable" API key
-      const stripe = await loadStripe(
-        'pk_live_51OkWELDS1kjgsFiFkILU6vic638ZPsSz7TNCbUkEadet1zBp6dRznCTa6jBiNxuLBLeQrCZZ3TtSTcWYrDSYfDji00Dbj9DOZF',
-      );
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY);
 
       // Initialize Checkout
       const checkout = await stripe.initEmbeddedCheckout({ clientSecret: stripe_client_secret });

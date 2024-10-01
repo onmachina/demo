@@ -48,7 +48,7 @@ const authRoutes: RouteObject[] = [
 
       // If not authenticated yet, continue with the Wallet Selector modal (no redirect).
       if (!(await authProvider.isAuthenticated())) {
-          return null;
+        return null;
       }
 
       // Redirect to the main page if authenticated.
@@ -63,8 +63,8 @@ const authRoutes: RouteObject[] = [
   },
   {
     path: '/finish-auth',
-    async loader({ request }) {
-      await authProvider.finishAuth(request);
+    async loader() {
+      await authProvider.finishAuth();
       return (await authProvider.isAuthenticated()) ? redirect('/') : null;
     },
     element: <p>redirecting...</p>,
@@ -101,13 +101,14 @@ const signUpRoutes: RouteObject[] = [
     path: '/start-checkout',
     async loader({ request }) {
       if (!(await authProvider.getAuthType())) {
-        // Default to NEAR Wallet when redirect comes from nowhere.
+        // Default to NEAR Wallet when redirect comes from "nowhere" (email link).
         sessionStorage.setItem('auth.session.type', 'near');
       }
-      const redirect_url = await authProvider.startCheckout(request);
-      if (redirect_url) {
-        console.log('/start-checkout redirecting to ' + redirect_url);
-        return redirect(redirect_url);
+      const redirect_url_or_params = await authProvider.startCheckout(request);
+      if (typeof redirect_url_or_params === 'string') {
+        return redirect(redirect_url_or_params);
+      } else if (redirect_url_or_params) {
+        return redirect_url_or_params;
       }
       return null;
     },
@@ -116,8 +117,7 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/finish-checkout',
     async loader({ request }) {
-      await authProvider.finishCheckout(request);
-      return null;
+      return await authProvider.finishCheckout(request); // Possible redirect, need to return.
     },
     element: <p>redirecting...</p>,
   },

@@ -5,8 +5,13 @@ import { redirect } from 'react-router-dom';
 import { AuthAdapter as AuthAdapterType } from '../auth';
 
 /* sets unique API URLs for the auth provider */
-const apiURL: string = import.meta.env.VITE_AUTH0_API_URL + '/v1';
-const metricsURL: string = import.meta.env.VITE_AUTH0_API_URL + '/metrics';
+const AUDIENCE: string = import.meta.env.VITE_AUTH0_API_URL + '/';
+const API_URL: string = import.meta.env.VITE_AUTH0_API_URL + '/v1';
+const METRICS_URL: string = import.meta.env.VITE_AUTH0_API_URL + '/metrics';
+const AUTH0_DOMAIN: string = import.meta.env.VITE_AUTH0_DOMAIN;
+const AUTH0_STATE_KEY: string = 'auth0.session.state';
+const AUTH0_CLIENT_ID: string = import.meta.env.VITE_AUTH0_CLIENT_ID;
+const BASE_URL: string = import.meta.env.VITE_AUTH0_DEV_BASE_URL;
 
 interface User {
   name: string | null;
@@ -21,26 +26,21 @@ interface User {
 }
 
 class AuthAdapter {
-  private readonly AUTH0_DOMAIN: string;
-  private readonly AUTH0_CLIENT_ID: string;
-  private readonly AUTH0_STATE_KEY = 'auth.session.state';
   private authClient: Auth0Client | null = null;
-  private readonly BASE_URL: string;
 
   constructor() {
-    this.AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN;
-    this.AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID;
-    this.BASE_URL = import.meta.env.BASE_URL || import.meta.env.VITE_AUTH0_DEV_BASE_URL;
     this.initAuthClient();
   }
 
   private async initAuthClient(): Promise<void> {
     this.authClient = await createAuth0Client({
-      domain: this.AUTH0_DOMAIN,
-      clientId: this.AUTH0_CLIENT_ID,
+      domain: AUTH0_DOMAIN,
+      clientId: AUTH0_CLIENT_ID,
       useRefreshTokens: true,
       cacheLocation: 'localstorage',
-      authorizationParams: { scope: 'openid email' },
+      authorizationParams: {
+        audience: AUDIENCE,
+      },
     });
   }
 
@@ -50,11 +50,11 @@ class AuthAdapter {
     if (!state) {
       throw new Error('Cannot save state. No state parameter found.');
     }
-    sessionStorage.setItem(this.AUTH0_STATE_KEY, state);
+    sessionStorage.setItem(AUTH0_STATE_KEY, state);
   }
 
   private async getState(): Promise<string | null> {
-    return sessionStorage.getItem(this.AUTH0_STATE_KEY);
+    return sessionStorage.getItem(AUTH0_STATE_KEY);
   }
 
   /* returns an instance of the Auth0Client,
@@ -75,11 +75,11 @@ class AuthAdapter {
   }
 
   getApiUrl(): string {
-    return apiURL;
+    return API_URL;
   }
 
   getMetricsUrl(): string {
-    return metricsURL;
+    return METRICS_URL;
   }
 
   /* returns true if the user is authenticated */
@@ -94,16 +94,16 @@ class AuthAdapter {
     const auth = await this.getAuthClient();
     await auth.loginWithRedirect({
       authorizationParams: {
-        redirect_uri: `${this.BASE_URL}/finish-auth`,
+        redirect_uri: `${BASE_URL}/finish-auth`,
         screen_hint: 'login',
       },
     });
   }
 
   /* called from '/finish-auth' as a callback from Auth0 */
-  async finishAuth(request: Request): Promise<void> {
+  async finishAuth(): Promise<void> {
     const auth = await this.getAuthClient();
-    await auth.handleRedirectCallback();
+    return auth.handleRedirectCallback();
   }
 
   /* logs the user out, in use on the '/logout' route  */
@@ -142,15 +142,22 @@ class AuthAdapter {
     const auth = await this.getAuthClient();
     await auth.loginWithRedirect({
       authorizationParams: {
-        redirect_uri: `${this.BASE_URL}/finish-auth`,
+        redirect_uri: `${BASE_URL}/finish-auth`,
         screen_hint: 'signup',
       },
     });
   }
 
-  async startCheckout(_request: Request): Promise<string | null> {
+  async startCheckout(request: Request): Promise<any> {
     this.saveState();
-    return null;
+    const url = new URL(request.url);
+    const stripe_client_secret = url.searchParams.get('client_secret');
+    const stripe_session_id = url.searchParams.get('session_id');
+    if (!stripe_client_secret || !stripe_client_secret) {
+      return null;
+    }
+    return { stripe_client_secret, stripe_session_id }
+
   }
 
   /* called from '/finish-checkout' as a callback from Stripe */
@@ -158,10 +165,10 @@ class AuthAdapter {
     const state = await this.getState();
     const url = new URL(request.url);
     const stripe_session_id = url.searchParams.get('session_id');
-    return redirect(`https://${this.AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`);
+    return redirect(`https://${AUTH0_DOMAIN}/continue?state=${state}&stripe_session_id=${stripe_session_id}`);
   }
 
-  async handleCustomRedirect(request: Request): Promise<boolean> {
+  async handleCustomRedirect(_request: Request): Promise<boolean> {
     return false;
   }
 }

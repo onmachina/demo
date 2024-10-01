@@ -2,12 +2,12 @@
 export interface AuthAdapter {
   isAuthenticated(): Promise<boolean>;
   startLogin(): Promise<void>;
-  finishAuth(request: Request): Promise<void>;
+  finishAuth(): Promise<void>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
   startSignup(email: string | null): Promise<void>;
-  startCheckout(request: Request): Promise<string | null>;
+  startCheckout(request: Request): Promise<any>;
   finishCheckout(request: Request): Promise<any>;
   handleCustomRedirect(request: Request): Promise<boolean>;
   getAuthType(): string;
@@ -17,13 +17,13 @@ export interface AuthAdapter {
 interface AuthProviderType {
   isAuthenticated(): Promise<boolean>;
   startLogin(): Promise<void>;
-  finishAuth(request: Request): Promise<void>;
+  finishAuth(): Promise<void>;
   logout(): Promise<void>;
   getUser(): Promise<User>;
   refreshToken(): Promise<void>;
   accessToken(): Promise<string>;
   startSignup(email: string | null): Promise<void>;
-  startCheckout(request: Request): Promise<string | null>;
+  startCheckout(request: Request): Promise<any>;
   finishCheckout(request: Request): Promise<Response | null>;
   handleCustomRedirect(request: Request): Promise<boolean>;
   getAuthType(): Promise<string>;
@@ -79,13 +79,12 @@ class AuthProvider {
     await this.initAuthClient();
     this.ensureInitialized();
     await this.authAdapter.startLogin();
-    console.log('HASNT AWAITED START LOGIN');
   }
 
-  async finishAuth(request: Request): Promise<void> {
+  async finishAuth(): Promise<void> {
     await this.initAuthClient();
     this.ensureInitialized();
-    return this.authAdapter.finishAuth(request);
+    return this.authAdapter.finishAuth();
   }
 
   async logout(): Promise<void> {
