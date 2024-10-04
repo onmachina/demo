@@ -12,14 +12,13 @@ import { SidebarLayout, accountLoader } from './components/layouts/SidebarLayout
 import { ErrorWindow } from './components/errors/ErrorWindow';
 
 // Imports for elements used for routes
-import Root from './routes/root';
 import ObjectDetails, { loader as objectLoader, action as objectAction } from './routes/objectDetails';
 import ContainersView, { loader as containersLoader, action as containersAction } from './routes/containersView';
 import ObjectsView, { loader as objectsLoader, action as objectsAction } from './routes/objectsView';
 import SettingsView from './routes/settingsView';
 import { LoginOptions } from './routes/loginOptions';
 import { LoggingIn } from './components/AppMessages';
-import { SignupOptions, action as signupAction } from './routes/signupOptions';
+import { SignupOptions, action as signupOptions } from './routes/signupOptions';
 import { AccountStatus, loader as accountStatusLoader } from './routes/accountStatus';
 import { Checkout } from './routes/checkout';
 import { UsageView, loader as usageLoader } from './routes/usageView';
@@ -87,15 +86,18 @@ const signUpRoutes: RouteObject[] = [
   {
     path: '/signup',
     element: <SignupOptions />,
+    errorElement: <ErrorWindow />,
     loader: async ({ request }) => {
-      console.log('signup loader may try to handle a redirect');
+      if (!(await authProvider.getAuthType())) {
+        return null;
+      }
       await authProvider.handleCustomRedirect(request);
       if (!(await authProvider.isAuthenticated())) {
         return null;
       }
       return redirect('/');
     },
-    action: signupAction,
+    action: signupOptions,
   },
   {
     path: '/start-checkout',
