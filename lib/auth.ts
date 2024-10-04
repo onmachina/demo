@@ -84,7 +84,7 @@ class AuthProvider {
   async finishAuth(): Promise<void> {
     await this.initAuthClient();
     this.ensureInitialized();
-    return this.authAdapter.finishAuth();
+    await this.authAdapter.finishAuth();
   }
 
   async logout(): Promise<void> {

@@ -59,7 +59,7 @@ class AuthAdapter {
 
   /* returns an instance of the Auth0Client,
      initializing it if necessary */
-  private async getAuthClient(): Promise<any> {
+  private async getAuthClient(): Promise<Auth0Client> {
     if (!this.authClient) {
       await this.initAuthClient();
     }
@@ -103,7 +103,7 @@ class AuthAdapter {
   /* called from '/finish-auth' as a callback from Auth0 */
   async finishAuth(): Promise<void> {
     const auth = await this.getAuthClient();
-    return auth.handleRedirectCallback();
+    await auth.handleRedirectCallback();
   }
 
   /* logs the user out, in use on the '/logout' route  */
@@ -133,7 +133,7 @@ class AuthAdapter {
   /* refreshes the user's access token */
   async refreshToken(): Promise<void> {
     const auth = await this.getAuthClient();
-    return await auth.getTokenSilently({ cacheMode: 'off' });
+    await auth.getTokenSilently({ cacheMode: 'off' });
   }
 
   /* called from the signup page to bring users
@@ -156,8 +156,7 @@ class AuthAdapter {
     if (!stripe_client_secret || !stripe_client_secret) {
       return null;
     }
-    return { stripe_client_secret, stripe_session_id }
-
+    return { stripe_client_secret, stripe_session_id };
   }
 
   /* called from '/finish-checkout' as a callback from Stripe */
