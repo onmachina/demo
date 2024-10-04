@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouteError, Link } from 'react-router-dom';
+import { useRouteError, redirect } from 'react-router-dom';
 
 export function ErrorWindow() {
   const error = useRouteError();

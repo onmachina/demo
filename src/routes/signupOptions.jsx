@@ -1,14 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ButtonLink } from '../components/Button';
-import { useNavigate, Link, Form } from 'react-router-dom';
+import { Link, Form } from 'react-router-dom';
 
 import { User } from 'lucide-react';
 import { Button } from '../components/Button';
 import { authProvider } from '../../lib/auth';
 
 export function SignupOptions() {
-  const navigate = useNavigate();
-
   const [showEmailForm, setShowEmailForm] = useState(false);
   const emailInputRef = useRef(null);
 
