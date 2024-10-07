@@ -15,8 +15,9 @@ interface User {
 }
 
 /* sets unique API URLs for the auth provider */
-const apiURL: string = import.meta.env.VITE_NEAR_API_URL + '/v1';
-const metricsURL: string = import.meta.env.VITE_NEAR_API_URL + '/metrics';
+const API_URL: string = import.meta.env.VITE_NEAR_API_URL + '/v1';
+const METRICS_URL: string = import.meta.env.VITE_NEAR_API_URL + '/metrics';
+const BASE_URL: string = import.meta.env.VITE_BASE_URL;
 
 class AuthAdapter {
   private authClient: NearAuthClient | null = null;
@@ -48,11 +49,11 @@ class AuthAdapter {
   }
 
   getApiUrl(): string {
-    return apiURL;
+    return API_URL;
   }
 
   getMetricsUrl(): string {
-    return metricsURL;
+    return METRICS_URL;
   }
 
   async isAuthenticated(): Promise<boolean> {
@@ -94,7 +95,7 @@ class AuthAdapter {
   }
 
   async startSignup(email: string): Promise<void> {
-    return this.authClient.signupWithRedirect(email);
+    return this.authClient.signupWithRedirect(email, BASE_URL);
   }
 
   async startCheckout(request: Request): Promise<string | null> {

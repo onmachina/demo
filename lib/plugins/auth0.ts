@@ -11,7 +11,7 @@ const METRICS_URL: string = import.meta.env.VITE_AUTH0_API_URL + '/metrics';
 const AUTH0_DOMAIN: string = import.meta.env.VITE_AUTH0_DOMAIN;
 const AUTH0_STATE_KEY: string = 'auth0.session.state';
 const AUTH0_CLIENT_ID: string = import.meta.env.VITE_AUTH0_CLIENT_ID;
-const BASE_URL: string = import.meta.env.VITE_AUTH0_DEV_BASE_URL;
+const BASE_URL: string = import.meta.env.VITE_BASE_URL;
 
 interface User {
   name: string | null;
