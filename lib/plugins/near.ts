@@ -1,4 +1,5 @@
 import { NearAuthClient, NetworkId } from '@onmachina/nearauth-sdk-wallet';
+import { redirect } from 'react-router-dom';
 
 import { AuthAdapter as AuthAdapterType } from '../auth';
 
@@ -105,7 +106,7 @@ class AuthAdapter {
 
   async finishCheckout(request: Request): Promise<Response | null> {
     await this.handleCustomRedirect(request);
-    return null;
+    return redirect('/');
   }
 
   async handleCustomRedirect(request: Request): Promise<boolean> {
