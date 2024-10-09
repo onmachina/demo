@@ -88,6 +88,9 @@ function EmptyMessage({ objects }) {
 
 // Called for any GET request
 export async function loader(params) {
+  const isAuthenticated = await authProvider.isAuthenticated();
+  if (!isAuthenticated) return redirect('/login');
+
   const user = await authProvider.getUser();
   const token = user.accessToken.value;
   const accountId = user.name;
