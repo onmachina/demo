@@ -87,7 +87,10 @@ class AuthAdapter {
     const auth = await this.getAuthClient();
     console.log('checking if authenticated');
     try {
-      return auth ? auth.isAuthenticated() : false;
+      // Check any refresh token exceptions which might hit later.
+      // isAuthenticated reads from the local storage (getUser).
+      await auth.getTokenSilently({ cacheMode: 'on' });
+      return auth.isAuthenticated();
     } catch (e) {
       return false;
     }

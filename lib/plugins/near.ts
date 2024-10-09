@@ -38,13 +38,6 @@ class AuthAdapter {
     });
   }
 
-  private async getAuthClient(): Promise<NearAuthClient> {
-    if (!this.authClient) {
-      await this.initAuthClient();
-    }
-    return this.authClient!;
-  }
-
   getAuthType(): 'near' {
     return 'near';
   }
