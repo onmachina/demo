@@ -86,7 +86,11 @@ class AuthAdapter {
   async isAuthenticated(): Promise<boolean> {
     const auth = await this.getAuthClient();
     console.log('checking if authenticated');
-    return auth?.isAuthenticated();
+    try {
+      return auth ? auth.isAuthenticated() : false;
+    } catch (e) {
+      return false;
+    }
   }
 
   /* called from the login page to authenticate the user */
